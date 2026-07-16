@@ -1,6 +1,44 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Encore (generated code + local runtime)
+/.encore
 .encore
+/encore.gen
+encore.gen/
 encore.gen.go
 encore.gen.cue
-/.encore
-node_modules
-/encore.gen
+
+# Builds / output
+dist/
+build/
+out/
+.next/
+*.tsbuildinfo
+
+# Env & secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Test / coverage
+coverage/
+.vitest/
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Vite
+.vite/

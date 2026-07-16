@@ -1,0 +1,21 @@
+{
+  "name": "@tcgourney/rank-engine",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Pure domain logic for Ash's Journey: Milestones → Stars → Rank → Slots.",
+  "main": "src/rank-engine.ts",
+  "types": "src/rank-engine.ts",
+  "exports": {
+    ".": "./src/rank-engine.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10"
+  }
+}
