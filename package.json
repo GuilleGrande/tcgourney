@@ -1,0 +1,35 @@
+{
+  "name": "uptime",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Encore Uptime Monitoring Tutorial",
+  "license": "MPL-2.0",
+  "type": "module",
+  "scripts": {
+    "test": "vitest --passWithNoTests",
+    "gen": "encore gen client --output=./frontend/app/lib/client.ts --env=local"
+  },
+  "devDependencies": {
+    "@types/node": "^20.5.7",
+    "typescript": "^5.2.2",
+    "vitest": "^2.1.4",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@types/luxon": "^3.0.1"
+  },
+  "dependencies": {
+    "encore.dev": "^1.36.2",
+    "knex": "^3.0.1",
+    "pg": "^8.11.3",
+    "@tanstack/react-query": "^5.31.0",
+    "@headlessui/react": "^1.7.2",
+    "@heroicons/react": "^2.0.11",
+    "luxon": "^3.0.4",
+    "next": "14.2.2",
+    "react": "^18",
+    "react-dom": "^18"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "^4.13.0"
+  }
+}
