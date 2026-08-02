@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ash's Journey — Slot Details View Mock (2026-07-31)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #f5f5f5; color: #1d1d1d; line-height: 1.45;
+    padding: 36px 20px 56px;
+  }
+  .wrap { max-width: 1140px; margin: 0 auto; }
+
+  header h1 { font-size: 22px; font-weight: 700; }
+  header .sub { color: #6a6a6a; font-size: 13px; margin-top: 3px; }
+  .purpose {
+    margin-top: 10px; font-size: 13px; font-weight: 650; color: #2e2e2e;
+    background: #fff; border-left: 3px solid #3a3a3a; padding: 8px 12px; border-radius: 0 6px 6px 0;
+  }
+  .legend {
+    margin-top: 10px; font-size: 12.5px; color: #3f3f3f;
+    background: #fff; border: 1px solid #e0e0e0; border-radius: 6px; padding: 9px 13px;
+  }
+  .legend b { font-weight: 650; }
+
+  .opt { margin-top: 52px; }
+  .optHead { display: flex; gap: 12px; align-items: center; }
+  .chip {
+    flex: none; width: 27px; height: 27px; border-radius: 6px;
+    background: #2b2b2b; color: #fff; font-weight: 700; font-size: 13px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .optHead h2 { font-size: 17px; }
+  .rationale { margin: 9px 0 16px; font-size: 13px; color: #555; max-width: 920px; }
+  .anno { margin-top: 12px; font-size: 12px; color: #777; max-width: 920px; }
+  .anno ul { margin: 4px 0 0 18px; }
+  .anno li { margin-top: 2px; }
+  footer { margin-top: 52px; text-align: center; font-size: 12px; color: #8a8a8a; }
+
+  /* ---------- single-page binder chassis ---------- */
+  .binderS {
+    display: flex; justify-content: center;
+    background: #404040; border-radius: 10px; padding: 26px 70px 30px;
+    box-shadow: 0 8px 22px rgba(0,0,0,.18);
+  }
+  .spagewrap { position: relative; }
+  .spage {
+    width: 700px; max-width: 100%; background: #fff; position: relative;
+    border-radius: 4px; padding: 16px 18px 30px;
+    box-shadow:
+      -3px 3px 0 #dedede, 3px 3px 0 #dedede,
+      -6px 7px 0 #c7c7c7, 6px 7px 0 #c7c7c7,
+      0 12px 24px rgba(0,0,0,.45);
+  }
+  .spage::before { /* gutter light falling from the binder above */
+    content: ""; position: absolute; left: 0; right: 0; top: 0; height: 22px; pointer-events: none; z-index: 3;
+    background: linear-gradient(180deg, rgba(0,0,0,.06), rgba(0,0,0,0));
+  }
+  .pagehead {
+    font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; color: #7d7d7d;
+    border-bottom: 1px solid #e4e4e4; padding-bottom: 6px; margin-bottom: 12px;
+    display: flex; justify-content: space-between; gap: 8px; position: relative; z-index: 4;
+  }
+  .pageno { position: absolute; bottom: 8px; right: 18px; font-size: 9px; color: #a8a8a8; }
+
+  /* ---------- rows ---------- */
+  .rows { display: flex; flex-direction: column; gap: 14px; }
+  .row {
+    position: relative;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+  }
+  .row.carorow { display: block; }
+
+  /* ---------- hover HUD strips ---------- */
+  .hud {
+    position: absolute; top: -9px; left: 50%; transform: translate(-50%, -3px);
+    z-index: 30; display: flex; gap: 6px; align-items: center; white-space: nowrap;
+    background: rgba(28,28,28,.93); color: #e8e8e8; border-radius: 5px; padding: 4px 9px;
+    font-size: 9px; letter-spacing: .06em; text-transform: uppercase;
+    opacity: 0; transition: opacity .18s ease, transform .18s ease; pointer-events: none;
+    box-shadow: 0 3px 10px rgba(0,0,0,.35);
+  }
+  .row:hover > .hud, .caroband:hover > .hud { opacity: 1; transform: translate(-50%, 0); }
+  .hbtn { border: 1px solid #6f6f6f; border-radius: 3px; padding: 1px 6px; background: #3a3a3a; }
+  .hsep { width: 1px; height: 10px; background: #5a5a5a; }
+  .hdim { color: #9a9a9a; }
+
+  /* ---------- pockets (sleeve grammar from the spread study) ---------- */
+  .pocket {
+    position: relative; min-width: 0;
+    background: #ececec; border-radius: 7px; padding: 7px;
+    box-shadow: inset 0 0 0 1px #d2d2d2, inset 0 2px 5px rgba(0,0,0,.09);
+    display: flex; flex-direction: column;
+  }
+  .pocket::after { /* sleeve sheen */
+    content: ""; position: absolute; inset: 0; border-radius: 7px; pointer-events: none;
+    background: linear-gradient(118deg, rgba(255,255,255,.5), rgba(255,255,255,0) 42%);
+  }
+
+  /* ---------- data card frames (everything lives in a card) ---------- */
+  .dcard {
+    aspect-ratio: 63 / 88; width: 100%; flex: none; position: relative; z-index: 1;
+    background: #fff; border-radius: 5px; overflow: hidden;
+    box-shadow: inset 0 0 0 1px #8f8f8f, 0 1px 2px rgba(0,0,0,.28);
+    padding: 9px 10px 10px; display: flex; flex-direction: column; gap: 6px;
+  }
+  .dhead {
+    font-size: 8px; letter-spacing: .15em; text-transform: uppercase; color: #8a8a8a;
+    border-bottom: 1px solid #e2e2e2; padding-bottom: 4px; flex: none;
+  }
+  .rankline { font-size: 14px; font-weight: 750; letter-spacing: .05em; line-height: 1.2; }
+  .starline { font-size: 11px; letter-spacing: .18em; color: #2e2e2e; }
+  .starline .off { color: #c6c6c6; }
+  .starline .cap { font-size: 8px; letter-spacing: .06em; color: #8a8a8a; margin-left: 4px; }
+  .kv { display: flex; justify-content: space-between; gap: 6px; font-size: 9.5px; }
+  .kv .k { color: #7a7a7a; }
+  .kv .v { font-weight: 650; text-align: right; }
+  .milehead { font-size: 7.5px; letter-spacing: .13em; text-transform: uppercase; color: #9a9a9a; margin-top: 2px; }
+  .milelist { font-size: 8.8px; display: flex; flex-direction: column; gap: 2.5px; }
+  .milelist .this { font-weight: 700; background: #efefef; border-radius: 3px; padding: 1px 4px; margin: 0 -4px; }
+  .milelist .ep { color: #8f8f8f; }
+  .status {
+    margin-top: auto; border-top: 1px dashed #d0d0d0; padding-top: 5px;
+    font-size: 8.6px; color: #444; line-height: 1.45;
+  }
+  .status b { font-weight: 700; }
+
+  /* ---------- the Pokémon, alive ---------- */
+  .alivecard {
+    align-items: center; justify-content: flex-start; text-align: center;
+    background: radial-gradient(ellipse at 50% 34%, #fafafa, #e2e2e2);
+  }
+  .aliveStage { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; width: 100%; }
+  .bobber { animation: bob 3.4s ease-in-out infinite; }
+  .sprite { position: relative; width: 100px; height: 80px; }
+  .sbulb {
+    position: absolute; top: -2px; left: 30px; width: 42px; height: 40px;
+    border-radius: 48% 52% 55% 45% / 60% 62% 40% 38%;
+    background: radial-gradient(circle at 38% 28%, #b2b2b2, #737373);
+    transform: rotate(-8deg); box-shadow: inset 0 -4px 7px rgba(0,0,0,.18);
+  }
+  .sbody {
+    position: absolute; bottom: 8px; left: 2px; width: 96px; height: 50px;
+    border-radius: 52% 48% 46% 54% / 70% 66% 36% 40%;
+    background: radial-gradient(circle at 30% 28%, #d0d0d0, #8f8f8f);
+    box-shadow: inset 0 -6px 9px rgba(0,0,0,.2);
+  }
+  .seye { position: absolute; bottom: 34px; left: 17px; width: 7px; height: 9px; border-radius: 50%; background: #3a3a3a; }
+  .spatch { position: absolute; bottom: 24px; left: 52px; width: 15px; height: 9px; border-radius: 50%; background: rgba(90,90,90,.35); }
+  .spatch.b { left: 30px; bottom: 14px; width: 11px; height: 7px; }
+  .slegF { position: absolute; bottom: 0; left: 12px; width: 20px; height: 13px; border-radius: 44% 44% 50% 50% / 62% 62% 38% 38%; background: #868686; }
+  .slegB { position: absolute; bottom: 0; left: 64px; width: 20px; height: 13px; border-radius: 44% 44% 50% 50% / 62% 62% 38% 38%; background: #7c7c7c; }
+  .shadowE {
+    width: 68px; height: 10px; border-radius: 50%; margin-top: 9px;
+    background: rgba(0,0,0,.24); filter: blur(2px);
+    animation: shadowPulse 3.4s ease-in-out infinite;
+  }
+  @keyframes bob { 0%, 100% { transform: translateY(-5px); } 50% { transform: translateY(4px); } }
+  @keyframes shadowPulse { 0%, 100% { transform: scaleX(.84); opacity: .5; } 50% { transform: scaleX(1.04); opacity: .75; } }
+  @media (prefers-reduced-motion: reduce) { .bobber, .shadowE { animation: none; } }
+  .alivehint { font-size: 7.5px; font-style: italic; color: #9a9a9a; margin-top: 7px; }
+  .aliveplate { flex: none; border-top: 1px solid #e2e2e2; padding-top: 5px; width: 100%; }
+  .aliveplate .nm1 { font-size: 12px; font-weight: 750; letter-spacing: .1em; }
+  .aliveplate .nm2 { font-size: 8.5px; color: #7a7a7a; margin-top: 1px; }
+
+  /* ---------- facts card ---------- */
+  .factrows { display: flex; flex-direction: column; gap: 6px; font-size: 9px; }
+  .flabel { font-size: 7.5px; letter-spacing: .13em; text-transform: uppercase; color: #9a9a9a; margin-bottom: 2px; }
+  .tchip {
+    display: inline-block; border: 1px solid #9a9a9a; border-radius: 3px; padding: 1px 7px;
+    font-size: 8px; letter-spacing: .08em; text-transform: uppercase; font-weight: 650; background: #f1f1f1;
+  }
+  .tchip.dark { background: #3c3c3c; color: #eee; border-color: #3c3c3c; }
+  .evoline { font-size: 9.3px; }
+  .evoline b { font-weight: 750; border-bottom: 2px solid #3a3a3a; }
+  .evoline .arr { color: #9a9a9a; padding: 0 2px; }
+  .sb { display: grid; grid-template-columns: 42px 1fr 20px; gap: 5px; align-items: center; font-size: 7.8px; color: #666; }
+  .sbbar { height: 4px; background: #e4e4e4; border-radius: 2px; overflow: hidden; }
+  .sbfill { height: 100%; background: #5a5a5a; }
+  .sbnum { text-align: right; color: #444; font-weight: 650; }
+
+  /* ---------- row 2: the carousel band ---------- */
+  .caroband {
+    position: relative; border-radius: 7px; min-height: 252px;
+    background: #ececec; padding: 22px 56px;
+    box-shadow: inset 0 0 0 1px #d2d2d2, inset 0 2px 5px rgba(0,0,0,.09);
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+  }
+  .caroband::after {
+    content: ""; position: absolute; inset: 0; border-radius: 7px; pointer-events: none;
+    background: linear-gradient(118deg, rgba(255,255,255,.5), rgba(255,255,255,0) 42%);
+  }
+  .arrow {
+    position: absolute; top: 50%; transform: translateY(-50%); z-index: 15;
+    width: 34px; height: 34px; border-radius: 50%;
+    background: rgba(40,40,40,.78); color: #f0f0f0;
+    display: flex; align-items: center; justify-content: center; font-size: 17px; line-height: 1;
+    opacity: .4; transition: opacity .15s ease; box-shadow: 0 2px 6px rgba(0,0,0,.3);
+  }
+  .arrow.l { left: 13px; } .arrow.r { right: 13px; }
+  .caroband:hover .arrow { opacity: 1; }
+  .arrow.dimmed { opacity: .18; }
+  .caroband:hover .arrow.dimmed { opacity: .35; }
+
+  .ccard {
+    aspect-ratio: 63 / 88; flex: none; position: relative; z-index: 2;
+    background: #fff; border-radius: 5px; overflow: hidden;
+    box-shadow: inset 0 0 0 1px #8f8f8f, 0 2px 6px rgba(0,0,0,.3);
+    display: flex; flex-direction: column;
+    transition: opacity .15s ease, transform .15s ease;
+  }
+  .ccard .art {
+    flex: 1; border-bottom: 1px solid #7c7c7c; position: relative;
+    background: linear-gradient(148deg, #d6d6d6 0%, #9c9c9c 78%, #b0b0b0 100%);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .ccard .plate { padding: 4px 6px 5px; background: #f8f8f8; flex: none; }
+  .ccard .nm { font-size: 10px; font-weight: 650; line-height: 1.15; }
+  .ccard .st { font-size: 8px; color: #6d6d6d; margin-top: 1px; }
+  .cand.far  { width: 84px; opacity: .36; }
+  .cand.near { width: 112px; opacity: .58; }
+  .cand:hover { opacity: .85; }
+  .sel {
+    width: 148px; margin: 0 -14px; opacity: 1; z-index: 6; transform: translateY(-6px);
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4.5px #2c2c2c, 0 10px 22px rgba(0,0,0,.4);
+  }
+  .chasetag {
+    position: absolute; top: 7px; left: 50%; transform: translateX(-50%);
+    font-size: 8px; letter-spacing: .16em; font-weight: 700; color: #2b2b2b;
+    background: rgba(255,255,255,.94); border: 1px solid #2b2b2b; border-radius: 3px; padding: 2px 7px;
+    white-space: nowrap;
+  }
+
+  /* filled-slot carousel: the throne + fillers */
+  .glow {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    width: 250px; height: 250px; border-radius: 50%; z-index: 1; pointer-events: none;
+    background: radial-gradient(circle, rgba(255,255,255,.95), rgba(255,255,255,0) 68%);
+  }
+  .throne {
+    width: 160px; margin: 0 -14px; opacity: 1; z-index: 6; transform: translateY(-8px);
+    box-shadow: 0 0 0 1px #6f6f6f, 0 0 0 5px rgba(255,255,255,.92), 0 0 0 6.5px #bdbdbd, 0 14px 26px rgba(0,0,0,.45);
+  }
+  .throne .art { background: linear-gradient(148deg, #cfcfcf 0%, #8e8e8e 78%, #a5a5a5 100%); }
+  .filledtag {
+    position: absolute; top: 7px; left: 50%; transform: translateX(-50%);
+    font-size: 8px; letter-spacing: .16em; font-weight: 700; color: #f2f2f2;
+    background: rgba(35,35,35,.92); border: 1px solid #1c1c1c; border-radius: 3px; padding: 2px 7px;
+    white-space: nowrap;
+  }
+  .filler { width: 94px; opacity: .95; }
+  .filler .art { border-bottom: 1px solid #c9c9c9; }
+  .filler .art.dots {
+    background-color: #ededed;
+    background-image: radial-gradient(#bdbdbd 1px, transparent 1.5px);
+    background-size: 11px 11px;
+  }
+  .filler .art.rules {
+    background-color: #efefef;
+    background-image: repeating-linear-gradient(0deg, #dcdcdc 0 1px, transparent 1px 10px);
+  }
+  .filler .art.weave {
+    background-color: #ededed;
+    background-image: repeating-linear-gradient(45deg, #e0e0e0 0 2px, transparent 2px 11px);
+  }
+  .fillerlbl {
+    font-size: 7.4px; font-style: italic; color: #8a8a8a; text-align: center;
+    padding: 0 8px; background: rgba(255,255,255,.7); border-radius: 3px; margin: 0 6px;
+  }
+  .filler .plate { background: #f4f4f4; }
+  .filler .nm { color: #8a8a8a; font-weight: 600; }
+
+  /* ---------- row 3: story cards ---------- */
+  .mkick { font-size: 7.5px; letter-spacing: .15em; text-transform: uppercase; color: #9a9a9a; text-align: center; }
+  .mglyph { font-size: 26px; text-align: center; line-height: 1.1; color: #2c2c2c; }
+  .mtype { font-size: 16px; font-weight: 800; letter-spacing: .24em; text-indent: .24em; text-transform: uppercase; text-align: center; }
+  .mname { font-size: 9.5px; text-align: center; color: #444; line-height: 1.4; }
+  .mmeta { font-size: 8px; text-align: center; color: #8f8f8f; }
+  .mrule { width: 44px; height: 1px; background: #c9c9c9; margin: 2px auto; }
+  .mrung {
+    margin-top: auto; text-align: center; font-size: 8.4px; font-weight: 700;
+    letter-spacing: .06em; text-transform: uppercase; color: #2e2e2e;
+    border: 1px solid #cfcfcf; border-radius: 4px; padding: 4px 6px; background: #f4f4f4;
+  }
+  .para { font-size: 9.2px; line-height: 1.58; color: #333; }
+  .quote {
+    font-size: 9px; font-style: italic; color: #444; line-height: 1.55;
+    border-left: 2px solid #c9c9c9; padding-left: 8px;
+  }
+  .src { margin-top: auto; font-size: 8.4px; line-height: 1.5; }
+  .src a { color: #2b2b2b; text-decoration: underline; text-underline-offset: 2px; word-break: break-all; }
+  .src a:hover { background: #efefef; }
+  .srcsub { font-size: 7.8px; color: #9a9a9a; margin-top: 2px; }
+
+  /* ---------- ladder Variant A: HUD ladder docked at page edge ---------- */
+  .hudladder {
+    position: absolute; right: -19px; top: 50%; transform: translateY(-50%);
+    z-index: 40; display: flex; flex-direction: column; align-items: center; gap: 8px;
+    opacity: .55; transition: opacity .2s ease;
+  }
+  .spagewrap:hover .hudladder { opacity: 1; }
+  .hudladder::before {
+    content: ""; position: absolute; top: 22px; bottom: 12px; left: 50%;
+    width: 2px; margin-left: -1px; background: #7c7c7c; z-index: -1;
+  }
+  .llabel { font-size: 6.8px; letter-spacing: .2em; text-transform: uppercase; color: #cfcfcf; text-shadow: 0 1px 2px rgba(0,0,0,.5); }
+  .lrung {
+    width: 36px; height: 27px; border-radius: 5px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8.6px; font-weight: 750; letter-spacing: .03em;
+  }
+  .lrung.fill { background: #2f2f2f; color: #ececec; box-shadow: 0 1px 3px rgba(0,0,0,.45); }
+  .lrung.open { background: #f4f4f4; color: #555; border: 1.5px dashed #8f8f8f; }
+  .lrung.cur { box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px #2c2c2c; }
+
+  /* ---------- ladder Variant B: mini-ladder inside the chase pocket ---------- */
+  .mladder { display: flex; flex-direction: column; gap: 3px; margin-top: 2px; }
+  .mrow {
+    display: flex; align-items: center; gap: 6px; font-size: 8.6px;
+    padding: 2.5px 5px; border-radius: 4px; background: #f5f5f5; border: 1px solid #e3e3e3;
+  }
+  .mrow .dot { width: 9px; height: 9px; border-radius: 2.5px; background: #2f2f2f; flex: none; }
+  .mrow.open .dot { background: #fff; border: 1.5px dashed #8f8f8f; }
+  .mrow.cur { background: #e9e9e9; border-color: #2f2f2f; box-shadow: inset 0 0 0 1px #2f2f2f; }
+  .mrow .rname { font-weight: 650; }
+  .mrow .rst { margin-left: auto; color: #8a8a8a; font-size: 7.4px; text-transform: uppercase; letter-spacing: .06em; }
+
+  /* ---------- Section 4: home-spread fragment ---------- */
+  .fragwrap {
+    display: flex; justify-content: center;
+    background: #404040; border-radius: 10px; padding: 18px 22px;
+    box-shadow: 0 8px 22px rgba(0,0,0,.18);
+  }
+  .fragpage {
+    background: #fff; border-radius: 4px; padding: 14px 14px 20px; width: 620px; max-width: 100%;
+    box-shadow: 3px 3px 0 #dedede, 6px 6px 0 #c7c7c7, 0 8px 18px rgba(0,0,0,.4);
+    position: relative;
+  }
+  .fraggrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .card {
+    aspect-ratio: 63 / 88; width: 100%; flex: none; position: relative; z-index: 1;
+    border-radius: 5px; overflow: hidden; display: flex; flex-direction: column;
+  }
+  .card.filled { background: #fff; box-shadow: inset 0 0 0 1px #8f8f8f, 0 1px 2px rgba(0,0,0,.28); }
+  .card.filled .art {
+    flex: 1; border-bottom: 1px solid #7c7c7c;
+    background: linear-gradient(148deg, #cfcfcf 0%, #969696 78%, #a9a9a9 100%);
+  }
+  .plate { padding: 4px 6px 5px; background: #f8f8f8; }
+  .nm { font-size: 10.5px; font-weight: 650; line-height: 1.15; }
+  .st { font-size: 8.5px; color: #6d6d6d; margin-top: 1px; }
+  .card.chasing { background: #fcfcfc; border: 1.5px dashed #a3a3a3; opacity: .82; }
+  .card.chasing .art {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(148deg, #ededed, #dedede);
+  }
+  .chbadge {
+    font-size: 8px; letter-spacing: .14em; font-weight: 600; color: #7d7d7d;
+    border: 1px solid #b8b8b8; border-radius: 3px; padding: 2px 6px;
+    background: rgba(255,255,255,.75);
+  }
+  .card.chasing .plate { background: #f4f4f4; }
+  .card.chasing .nm { color: #666; }
+  .tag {
+    margin-top: 4px; position: relative; z-index: 1;
+    font-size: 8px; text-transform: uppercase; letter-spacing: .05em;
+    color: #5c5c5c; line-height: 1.35;
+  }
+  .tag .who { font-weight: 650; display: block; }
+  .tag .rk { color: #8f8f8f; display: block; }
+  .figcap { margin-top: 12px; font-size: 12px; color: #777; max-width: 920px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Ash's Journey — Slot Details View: Behavior Mock</h1>
+  <div class="sub">Drill-down from the home spread · Bulbasaur sample content · 2026-07-31 · desktop proportions</div>
+  <div class="purpose">Slot Details view — behavior &amp; layout study, grayscale on purpose.</div>
+  <div class="legend">
+    <b>How to read this mock</b> — clicking a sleeve on the home spread "closes in" to this single centered page (3×3). Row 1 = the soul (data · the Pokémon alive · facts), Row 2 = desire (the candidate carousel), Row 3 = the why (milestone → explainer → citation). <b>Hover any row</b> to reveal its HUD strip; <b>hover the page</b> to brighten the docked slot ladder (Sections 1 and 3). Everything interactive lives inside a card frame.
+  </div>
+</header>
+
+<!-- ================= SECTION 1 — EMPTY SLOT, HUD LADDER ================= -->
+<section class="opt">
+  <div class="optHead"><div class="chip">1</div><h2>Section 1 — Empty slot: the chase · ladder Variant A "HUD ladder"</h2></div>
+  <p class="rationale">Bulbasaur's open Ultra Rare Slot. The shortlist floats semi-transparent — nothing is real yet — and the chosen candidate takes the center with a highlight ring and a CHASING mark. The Pokémon's four Slots ride as a compact rung strip docked at the page edge: chrome that stays out of the sleeve grid entirely and brightens when the hand arrives.</p>
+
+  <div class="binderS">
+    <div class="spagewrap">
+
+      <!-- Variant A: the docked HUD ladder (top = high rank, bottom = base) -->
+      <div class="hudladder" title="Slot ladder — this Entry's four Slots">
+        <div class="llabel">Slots</div>
+        <div class="lrung open cur">UR</div>
+        <div class="lrung fill">R</div>
+        <div class="lrung fill">U</div>
+        <div class="lrung fill">⚫C</div>
+      </div>
+
+      <div class="spage">
+        <div class="pagehead"><span>Kanto · Entry № 001 — Bulbasaur</span><span>Slot 4 of 4 — Ultra Rare · open</span></div>
+        <div class="rows">
+
+          <!-- ROW 1 : the soul -->
+          <div class="row">
+            <div class="hud"><span class="hbtn">‹ back to spread</span><span class="hsep"></span><span>Entry № 001 · Bulbasaur</span><span class="hsep"></span><span class="hdim">slot</span><span class="hbtn">‹ prev</span><span class="hbtn">next ›</span></div>
+            <div class="pocket">
+              <div class="dcard">
+                <div class="dhead">Chase · binder data</div>
+                <div class="rankline">ULTRA RARE</div>
+                <div class="starline">★★★<span class="off">☆☆☆</span><span class="cap">3 of 6 Stars</span></div>
+                <div class="kv"><span class="k">Region</span><span class="v">Kanto</span></div>
+                <div class="kv"><span class="k">Slots</span><span class="v">4 · 3 Filled / 1 Chasing</span></div>
+                <div class="milehead">Milestones earned</div>
+                <div class="milelist">
+                  <div>⚫ The Catch <span class="ep">· EP010</span></div>
+                  <div>★ Teammate <span class="ep">· Kanto</span></div>
+                  <div>★ Bond <span class="ep">· EP051</span></div>
+                  <div class="this">★ Glory · EP074 — this slot</div>
+                </div>
+                <div class="status"><b>This slot: Ultra Rare — CHASING</b><br>Target: Scarlet &amp; Violet — 151 · 2023<br>Chosen 2026-07-31 · hunt pending</div>
+              </div>
+            </div>
+            <div class="pocket">
+              <div class="dcard alivecard">
+                <div class="dhead">The Pokémon</div>
+                <div class="aliveStage">
+                  <div class="bobber">
+                    <div class="sprite">
+                      <div class="sbulb"></div>
+                      <div class="sbody"></div>
+                      <div class="spatch"></div>
+                      <div class="spatch b"></div>
+                      <div class="seye"></div>
+                      <div class="slegF"></div>
+                      <div class="slegB"></div>
+                    </div>
+                  </div>
+                  <div class="shadowE"></div>
+                  <div class="alivehint">sprite / illustration placeholder — alive, floating</div>
+                </div>
+                <div class="aliveplate">
+                  <div class="nm1">BULBASAUR</div>
+                  <div class="nm2">№ 001 · the Seed Pokémon</div>
+                </div>
+              </div>
+            </div>
+            <div class="pocket">
+              <div class="dcard">
+                <div class="dhead">Pokémon facts</div>
+                <div class="factrows">
+                  <div>
+                    <div class="flabel">Type</div>
+                    <span class="tchip dark">Grass</span> <span class="tchip dark">Poison</span>
+                  </div>
+                  <div>
+                    <div class="flabel">Evolution line</div>
+                    <div class="evoline"><b>Bulbasaur</b><span class="arr">▶</span>Ivysaur<span class="arr">▶</span>Venusaur</div>
+                  </div>
+                  <div>
+                    <div class="flabel">Base stats</div>
+                    <div class="sb"><span>HP</span><div class="sbbar"><div class="sbfill" style="width:35%"></div></div><span class="sbnum">45</span></div>
+                    <div class="sb"><span>Attack</span><div class="sbbar"><div class="sbfill" style="width:38%"></div></div><span class="sbnum">49</span></div>
+                    <div class="sb"><span>Defense</span><div class="sbbar"><div class="sbfill" style="width:38%"></div></div><span class="sbnum">49</span></div>
+                    <div class="sb"><span>Sp. Atk</span><div class="sbbar"><div class="sbfill" style="width:50%"></div></div><span class="sbnum">65</span></div>
+                    <div class="sb"><span>Sp. Def</span><div class="sbbar"><div class="sbfill" style="width:50%"></div></div><span class="sbnum">65</span></div>
+                    <div class="sb"><span>Speed</span><div class="sbbar"><div class="sbfill" style="width:35%"></div></div><span class="sbnum">45</span></div>
+                  </div>
+                  <div>
+                    <div class="flabel">Weak to</div>
+                    <span class="tchip">Fire</span> <span class="tchip">Flying</span> <span class="tchip">Ice</span> <span class="tchip">Psychic</span>
+                  </div>
+                  <div>
+                    <div class="flabel">Strong vs</div>
+                    <span class="tchip">Water</span> <span class="tchip">Rock</span> <span class="tchip">Ground</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ROW 2 : the carousel -->
+          <div class="row carorow">
+            <div class="caroband">
+              <div class="hud"><span class="hbtn">‹ rotate</span><span class="hbtn">rotate ›</span><span class="hsep"></span><span>12 eligible printings · showing 5</span><span class="hsep"></span><span class="hbtn">Era ▾</span><span class="hbtn">Set ▾</span><span class="hbtn">Sort: oldest ▾</span></div>
+              <div class="arrow l">&#8249;</div>
+              <div class="arrow r">&#8250;</div>
+              <div class="ccard cand far"><div class="art"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="st">Base Set · 1999</div></div></div>
+              <div class="ccard cand near"><div class="art"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="st">Legendary Collection · 2002</div></div></div>
+              <div class="ccard sel"><div class="art"><span class="chasetag">CHASING</span></div><div class="plate"><div class="nm">Bulbasaur</div><div class="st">Scarlet &amp; Violet — 151 · 2023</div></div></div>
+              <div class="ccard cand near"><div class="art"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="st">Boundaries Crossed · 2012</div></div></div>
+              <div class="ccard cand far"><div class="art"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="st">Pokémon GO · 2022</div></div></div>
+            </div>
+          </div>
+
+          <!-- ROW 3 : the story -->
+          <div class="row">
+            <div class="hud"><span>Story · this slot's milestone</span><span class="hsep"></span><span class="hdim">Glory ★ · rung 4 of 4</span><span class="hsep"></span><span class="hbtn">citations</span></div>
+            <div class="pocket">
+              <div class="dcard">
+                <div class="dhead">Milestone — earned this slot</div>
+                <div class="mglyph">★</div>
+                <div class="mtype">Glory</div>
+                <div class="mrule"></div>
+                <div class="mname">Indigo Plateau Conference<br>— the Grass Field —</div>
+                <div class="mmeta">EP074 · Kanto · Appearance: Ash's Bulbasaur</div>
+                <div class="mrung">★ Glory → rung 4 · Ultra Rare</div>
+              </div>
+            </div>
+            <div class="pocket">
+              <div class="dcard">
+                <div class="dhead">Explainer</div>
+                <p class="para">Chosen for the Grass Field in the opening round of the Indigo Plateau Conference, Bulbasaur beat Jeanette Fisher's Beedrill and her Scyther back to back before finally falling to her Bellsprout. One vine, two knockouts, on the league's biggest stage — the Star that pushed this Entry to Ultra Rare.</p>
+              </div>
+            </div>
+            <div class="pocket">
+              <div class="dcard">
+                <div class="dhead">Citation</div>
+                <p class="quote">"Ash's first battle of the Indigo Plateau Conference took place on the Grass Field, where Bulbasaur defeated Jeanette's Beedrill and Scyther before going down to her Bellsprout."</p>
+                <div class="src"><a href="#">bulbapedia.bulbagarden.net/wiki/EP074&nbsp;↗</a>
+                  <div class="srcsub">EP074 — "Round One – Begin!" · retrieved 2026-07-31</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="pageno">Bulbasaur · slot detail</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="anno">
+    <ul>
+      <li><b>Carousel:</b> candidates render semi-transparent (not yet real); the selected card sits frontmost with a highlight ring and CHASING mark. Hover the band for the paging/filter HUD; edge arrows rotate the shortlist.</li>
+      <li><b>Variant A ladder:</b> a rung strip docked half-over the page's right edge — ⚫C / U / R solid (Filled), UR outlined (open) and ringed (you are here). Hover the page and it brightens; clicking a rung would flip to that Slot's page.</li>
+      <li><b>Rows 1 and 3</b> carry their own hover HUDs: entry/slot navigation on top, story/citation controls below.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= SECTION 2 — EMPTY SLOT, POCKET LADDER ================= -->
+<section class="opt">
+  <div class="optHead"><div class="chip">2</div><h2>Section 2 — Empty slot: the chase · ladder Variant B "pocket ladder"</h2></div>
+  <p class="rationale">The same page, but the ladder moves inside the left chase-data pocket as a mini-ladder among the chase data — no floating chrome, everything sleeved. The cost: the milestones list loses its room and must fold into the ladder rows themselves.</p>
+
+  <div class="binderS">
+    <div class="spagewrap">
+      <div class="spage">
+        <div class="pagehead"><span>Kanto · Entry № 001 — Bulbasaur</span><span>Slot 4 of 4 — Ultra Rare · open</span></div>
+        <div class="rows">
+
+          <!-- ROW 1 -->
+          <div class="row">
+            <div class="hud"><span class="hbtn">‹ back to spread</span><span class="hsep"></span><span>Entry № 001 · Bulbasaur</span><span class="hsep"></span><span class="hdim">slot</span><span class="hbtn">‹ prev</span><span class="hbtn">next ›</span></div>
+            <div class="pocket">
+              <div class="dcard">
+                <div class="dhead">Chase · binder data</div>
+                <div class="rankline">ULTRA RARE</div>
+                <div class="starline">★★★<span class="off">☆☆☆</span><span class="cap">3 of 6 Stars</span></div>
+                <div class="kv"><span class="k">Region</span><span class="v">Kanto</span></div>
+                <div class="kv"><span class="k">Slots</span><span class="v">4 · 3 Filled / 1 Chasing</span></div>
+                <div class="milehead">Slot ladder — low to high</div>
+                <div class="mladder">
+                  <div class="mrow"><span class="dot"></span><span class="rname">⚫ Common</span><span class="rst">Filled</span></div>
+                  <div class="mrow"><span class="dot"></span><span class="rname">Uncommon</span><span class="rst">Filled</span></div>
+                  <div class="mrow"><span class="dot"></span><span class="rname">Rare</span><span class="rst">Filled</span></div>
+                  <div class="mrow open cur"><span class="dot"></span><span class="rname">Ultra Rare ★ Glory</span><span class="rst">◂ here</span></div>
+                </div>
+                <div class="status"><b>This slot: Ultra Rare — CHASING</b><br>Target: Scarlet &amp; Violet — 151 · 2023</div>
+              </div>
+            </div>
+            <div class="pocket">
+              <div class="dcard alivecard">
+                <div class="dhead">The Pokémon</div>
+                <div class="aliveStage">
+                  <div class="bobber">
+                    <div class="sprite">
+                      <div class="sbulb"></div>
+                      <div class="sbody"></div>
+                      <div class="spatch"></div>
+                      <div class="spatch b"></div>
+                      <div class="seye"></div>
+                      <div class="slegF"></div>
+                      <div class="slegB"></div>
+                    </div>
+                  </div>
+                  <div class="shadowE"></div>
+                  <div class="alivehint">sprite / illustration placeholder — alive, floating</div>
+                </div>
+                <div class="aliveplate">
+                  <div class="nm1">BULBASAUR</div>
+                  <div class="nm2">№ 001 · the Seed Pokémon</div>
+                </div>
+              </div>
+            </div>
+            <div class="pocket">
+              <div class="dcard">
+                <div class="dhead">Pokémon facts</div>
+                <div class="factrows">
+                  <div>
+                    <div class="flabel">Type</div>
+                    <span class="tchip dark">Grass</span> <span class="tchip dark">Poison</span>
+                  </div>
+                  <div>
+                    <div class="flabel">Evolution line</div>
+                    <div class="evoline"><b>Bulbasaur</b><span class="arr">▶</span>Ivysaur<span class="arr">▶</span>Venusaur</div>
+                  </div>
+                  <div>
+                    <div class="flabel">Base stats</div>
+                    <div class="sb"><span>HP</span><div class="sbbar"><div class="sbfill" style="width:35%"></div></div><span class="sbnum">45</span></div>
+                    <div class="sb"><span>Attack</span><div class="sbbar"><div class="sbfill" style="width:38%"></div></div><span class="sbnum">49</span></div>
+                    <div class="sb"><span>Defense</span><div class="sbbar"><div class="sbfill" style="width:38%"></div></div><span class="sbnum">49</span></div>
+                    <div class="sb"><span>Sp. Atk</span><div class="sbbar"><div class="sbfill" style="width:50%"></div></div><span class="sbnum">65</span></div>
+                    <div class="sb"><span>Sp. Def</span><div class="sbbar"><div class="sbfill" style="width:50%"></div></div><span class="sbnum">65</span></div>
+                    <div class="sb"><span>Speed</span><div class="sbbar"><div class="sbfill" style="width:35%"></div></div><span class="sbnum">45</span></div>
+                  </div>
+                  <div>
+                    <div class="flabel">Weak to</div>
+                    <span class="tchip">Fire</span> <span class="tchip">Flying</span> <span class="tchip">Ice</span> <span class="tchip">Psychic</span>
+                  </div>
+                  <div>
+                    <div class="flabel">Strong vs</div>
+                    <span class="tchip">Water</span> <span class="tchip">Rock</span> <span class="tchip">Ground</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ROW 2 -->
+          <div class="row carorow">
+            <div class="caroband">
+              <div class="hud"><span class="hbtn">‹ rotate</span><span class="hbtn">rotate ›</span><span class="hsep"></span><span>12 eligible printings · showing 5</span><span class="hsep"></span><span class="hbtn">Era ▾</span><span class="hbtn">Set ▾</span><span class="hbtn">Sort: oldest ▾</span></div>
+              <div class="arrow l">&#8249;</div>
+              <div class="arrow r">&#8250;</div>
+              <div class="ccard cand far"><div class="art"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="st">Base Set · 1999</div></div></div>
+              <div class="ccard cand near"><div class="art"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="st">Legendary Collection · 2002</div></div></div>
+              <div class="ccard sel"><div class="art"><span class="chasetag">CHASING</span></div><div class="plate"><div class="nm">Bulbasaur</div><div class="st">Scarlet &amp; Violet — 151 · 2023</div></div></div>
+              <div class="ccard cand near"><div class="art"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="st">Boundaries Crossed · 2012</div></div></div>
+              <div class="ccard cand far"><div class="art"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="st">Pokémon GO · 2022</div></div></div>
+            </div>
+          </div>
+
+          <!-- ROW 3 -->
+          <div class="row">
+            <div class="hud"><span>Story · this slot's milestone</span><span class="hsep"></span><span class="hdim">Glory ★ · rung 4 of 4</span><span class="hsep"></span><span class="hbtn">citations</span></div>
+            <div class="pocket">
+              <div class="dcard">
+                <div class="dhead">Milestone — earned this slot</div>
+                <div class="mglyph">★</div>
+                <div class="mtype">Glory</div>
+                <div class="mrule"></div>
+                <div class="mname">Indigo Plateau Conference<br>— the Grass Field —</div>
+                <div class="mmeta">EP074 · Kanto · Appearance: Ash's Bulbasaur</div>
+                <div class="mrung">★ Glory → rung 4 · Ultra Rare</div>
+              </div>
+            </div>
+            <div class="pocket">
+              <div class="dcard">
+                <div class="dhead">Explainer</div>
+                <p class="para">Chosen for the Grass Field in the opening round of the Indigo Plateau Conference, Bulbasaur beat Jeanette Fisher's Beedrill and her Scyther back to back before finally falling to her Bellsprout. One vine, two knockouts, on the league's biggest stage — the Star that pushed this Entry to Ultra Rare.</p>
+              </div>
+            </div>
+            <div class="pocket">
+              <div class="dcard">
+                <div class="dhead">Citation</div>
+                <p class="quote">"Ash's first battle of the Indigo Plateau Conference took place on the Grass Field, where Bulbasaur defeated Jeanette's Beedrill and Scyther before going down to her Bellsprout."</p>
+                <div class="src"><a href="#">bulbapedia.bulbagarden.net/wiki/EP074&nbsp;↗</a>
+                  <div class="srcsub">EP074 — "Round One – Begin!" · retrieved 2026-07-31</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="pageno">Bulbasaur · slot detail</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="anno">
+    <ul>
+      <li><b>Variant B ladder:</b> the four rungs live inside the chase-data card — always visible, no floating chrome, and each rung can carry its milestone inline (Ultra Rare ★ Glory). Tradeoff made visible: the standalone milestones list from Section 1 no longer fits in the pocket.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= SECTION 3 — FILLED SLOT, THE THRONE ================= -->
+<section class="opt">
+  <div class="optHead"><div class="chip">3</div><h2>Section 3 — Filled slot: the throne · ladder Variant A (HUD ladder)</h2></div>
+  <p class="rationale">Bulbasaur's ⚫ base Common Slot, already Filled. No more candidates, no more transparency: the sleeved card sits enthroned, clear and opaque, on a light pedestal glow. The side spots stop being a shortlist and become quiet Common-rank filler panels — each Rank will get its own decorative element set. Ladder Variant A used here so the chase-data pocket stays free for the Filled record (labeled choice; A pairs with the invisible-until-needed HUD philosophy).</p>
+
+  <div class="binderS">
+    <div class="spagewrap">
+
+      <div class="hudladder" title="Slot ladder — this Entry's four Slots">
+        <div class="llabel">Slots</div>
+        <div class="lrung open">UR</div>
+        <div class="lrung fill">R</div>
+        <div class="lrung fill">U</div>
+        <div class="lrung fill cur">⚫C</div>
+      </div>
+
+      <div class="spage">
+        <div class="pagehead"><span>Kanto · Entry № 001 — Bulbasaur</span><span>Slot 1 of 4 — ⚫ base Common · Filled</span></div>
+        <div class="rows">
+
+          <!-- ROW 1 -->
+          <div class="row">
+            <div class="hud"><span class="hbtn">‹ back to spread</span><span class="hsep"></span><span>Entry № 001 · Bulbasaur</span><span class="hsep"></span><span class="hdim">slot</span><span class="hbtn">‹ prev</span><span class="hbtn">next ›</span></div>
+            <div class="pocket">
+              <div class="dcard">
+                <div class="dhead">Chase · binder data</div>
+                <div class="rankline">ULTRA RARE</div>
+                <div class="starline">★★★<span class="off">☆☆☆</span><span class="cap">3 of 6 Stars</span></div>
+                <div class="kv"><span class="k">Region</span><span class="v">Kanto</span></div>
+                <div class="kv"><span class="k">Slots</span><span class="v">4 · 3 Filled / 1 Chasing</span></div>
+                <div class="milehead">Milestones earned</div>
+                <div class="milelist">
+                  <div class="this">⚫ The Catch · EP010 — this slot</div>
+                  <div>★ Teammate <span class="ep">· Kanto</span></div>
+                  <div>★ Bond <span class="ep">· EP051</span></div>
+                  <div>★ Glory <span class="ep">· EP074</span></div>
+                </div>
+                <div class="status"><b>This slot: ⚫ base Common — FILLED</b><br>Sleeved: Base Set · 1999<br>Only Filled counts toward progress.</div>
+              </div>
+            </div>
+            <div class="pocket">
+              <div class="dcard alivecard">
+                <div class="dhead">The Pokémon</div>
+                <div class="aliveStage">
+                  <div class="bobber">
+                    <div class="sprite">
+                      <div class="sbulb"></div>
+                      <div class="sbody"></div>
+                      <div class="spatch"></div>
+                      <div class="spatch b"></div>
+                      <div class="seye"></div>
+                      <div class="slegF"></div>
+                      <div class="slegB"></div>
+                    </div>
+                  </div>
+                  <div class="shadowE"></div>
+                  <div class="alivehint">sprite / illustration placeholder — alive, floating</div>
+                </div>
+                <div class="aliveplate">
+                  <div class="nm1">BULBASAUR</div>
+                  <div class="nm2">№ 001 · the Seed Pokémon</div>
+                </div>
+              </div>
+            </div>
+            <div class="pocket">
+              <div class="dcard">
+                <div class="dhead">Pokémon facts</div>
+                <div class="factrows">
+                  <div>
+                    <div class="flabel">Type</div>
+                    <span class="tchip dark">Grass</span> <span class="tchip dark">Poison</span>
+                  </div>
+                  <div>
+                    <div class="flabel">Evolution line</div>
+                    <div class="evoline"><b>Bulbasaur</b><span class="arr">▶</span>Ivysaur<span class="arr">▶</span>Venusaur</div>
+                  </div>
+                  <div>
+                    <div class="flabel">Base stats</div>
+                    <div class="sb"><span>HP</span><div class="sbbar"><div class="sbfill" style="width:35%"></div></div><span class="sbnum">45</span></div>
+                    <div class="sb"><span>Attack</span><div class="sbbar"><div class="sbfill" style="width:38%"></div></div><span class="sbnum">49</span></div>
+                    <div class="sb"><span>Defense</span><div class="sbbar"><div class="sbfill" style="width:38%"></div></div><span class="sbnum">49</span></div>
+                    <div class="sb"><span>Sp. Atk</span><div class="sbbar"><div class="sbfill" style="width:50%"></div></div><span class="sbnum">65</span></div>
+                    <div class="sb"><span>Sp. Def</span><div class="sbbar"><div class="sbfill" style="width:50%"></div></div><span class="sbnum">65</span></div>
+                    <div class="sb"><span>Speed</span><div class="sbbar"><div class="sbfill" style="width:35%"></div></div><span class="sbnum">45</span></div>
+                  </div>
+                  <div>
+                    <div class="flabel">Weak to</div>
+                    <span class="tchip">Fire</span> <span class="tchip">Flying</span> <span class="tchip">Ice</span> <span class="tchip">Psychic</span>
+                  </div>
+                  <div>
+                    <div class="flabel">Strong vs</div>
+                    <span class="tchip">Water</span> <span class="tchip">Rock</span> <span class="tchip">Ground</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ROW 2 : the throne -->
+          <div class="row carorow">
+            <div class="caroband">
+              <div class="hud"><span>⚫ base Common · Filled</span><span class="hsep"></span><span class="hdim">Base Set · 1999 · physically sleeved</span><span class="hsep"></span><span class="hbtn">other printings ▾</span></div>
+              <div class="glow"></div>
+              <div class="arrow l dimmed">&#8249;</div>
+              <div class="arrow r dimmed">&#8250;</div>
+              <div class="ccard filler"><div class="art dots"><span class="fillerlbl">filler — Common motif: quiet dot lattice</span></div><div class="plate"><div class="nm">Common filler panel</div><div class="st">rank element set · placeholder</div></div></div>
+              <div class="ccard filler"><div class="art rules"><span class="fillerlbl">filler — Common motif: thin single rules</span></div><div class="plate"><div class="nm">Common filler panel</div><div class="st">rank element set · placeholder</div></div></div>
+              <div class="ccard throne"><div class="art"><span class="filledtag">FILLED · SLEEVED</span></div><div class="plate"><div class="nm">Bulbasaur</div><div class="st">Base Set · 1999 · ⚫ base Common</div></div></div>
+              <div class="ccard filler"><div class="art rules"><span class="fillerlbl">filler — Common motif: thin single rules</span></div><div class="plate"><div class="nm">Common filler panel</div><div class="st">rank element set · placeholder</div></div></div>
+              <div class="ccard filler"><div class="art weave"><span class="fillerlbl">filler — Common motif: plain diagonal weave</span></div><div class="plate"><div class="nm">Common filler panel</div><div class="st">rank element set · placeholder</div></div></div>
+            </div>
+          </div>
+
+          <!-- ROW 3 -->
+          <div class="row">
+            <div class="hud"><span>Story · this slot's milestone</span><span class="hsep"></span><span class="hdim">The Catch ⚫ · base rung</span><span class="hsep"></span><span class="hbtn">citations</span></div>
+            <div class="pocket">
+              <div class="dcard">
+                <div class="dhead">Milestone — earned this slot</div>
+                <div class="mglyph">⚫</div>
+                <div class="mtype">The Catch</div>
+                <div class="mrule"></div>
+                <div class="mname">Bulbasaur and the<br>Hidden Village</div>
+                <div class="mmeta">EP010 · Kanto · Appearance: the Hidden Village</div>
+                <div class="mrung">⚫ The Catch → base rung · Common</div>
+              </div>
+            </div>
+            <div class="pocket">
+              <div class="dcard">
+                <div class="dhead">Explainer</div>
+                <p class="para">In the Hidden Village, Bulbasaur stood watch over abandoned and injured Pokémon, turning every traveler away from the bridge. Only after Ash helped defend the village did it agree to battle him — Pikachu wore it down, the Poké Ball closed, and the village's guardian chose the road. Every Entry begins here: the ⚫ base Slot is the Catch itself.</p>
+              </div>
+            </div>
+            <div class="pocket">
+              <div class="dcard">
+                <div class="dhead">Citation</div>
+                <p class="quote">"Bulbasaur agreed to come with Ash only if he could defeat it in battle. After Pikachu won the fight, Ash threw a Poké Ball and caught Bulbasaur."</p>
+                <div class="src"><a href="#">bulbapedia.bulbagarden.net/wiki/EP010&nbsp;↗</a>
+                  <div class="srcsub">EP010 — "Bulbasaur and the Hidden Village" · retrieved 2026-07-31</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="pageno">Bulbasaur · slot detail</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="anno">
+    <ul>
+      <li><b>The throne:</b> the sleeved card is the only clear, opaque image on the row — pedestal glow, double frame, FILLED · SLEEVED mark. Carousel arrows stay but idle at low opacity; the HUD reframes to the Filled record.</li>
+      <li><b>Filler panels:</b> Common gets quiet motifs (dot lattice, thin rules, plain weave) — placeholders for the per-Rank decorative element sets. Higher Ranks would escalate.</li>
+      <li><b>Ladder state:</b> ⚫C ringed (you are here) and solid; U and R solid; UR outlined — still the open chase upstairs.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= SECTION 4 — THE GHOST COMES HOME ================= -->
+<section class="opt">
+  <div class="optHead"><div class="chip">4</div><h2>Section 4 — The ghost comes home</h2></div>
+  <p class="rationale">Supporting exhibit: a fragment of the home two-page spread after Section 1's choice. The chosen candidate now haunts the Ultra Rare sleeve as a transparent placeholder beside its Filled neighbors.</p>
+
+  <div class="fragwrap">
+    <div class="fragpage">
+      <div class="pagehead"><span>Kanto · home spread (fragment)</span><span>Entry № 001 — Bulbasaur</span></div>
+      <div class="fraggrid">
+        <div class="pocket">
+          <div class="card filled"><div class="art"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="st">Base Set · 1999</div></div></div>
+          <div class="tag"><span class="who">Bulbasaur</span><span class="rk">Common · ⚫ base</span></div>
+        </div>
+        <div class="pocket">
+          <div class="card filled"><div class="art"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="st">Shining Legends · 2017</div></div></div>
+          <div class="tag"><span class="who">Bulbasaur</span><span class="rk">Uncommon</span></div>
+        </div>
+        <div class="pocket">
+          <div class="card filled"><div class="art"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="st">Pokémon GO · 2022</div></div></div>
+          <div class="tag"><span class="who">Bulbasaur</span><span class="rk">Rare</span></div>
+        </div>
+        <div class="pocket">
+          <div class="card chasing"><div class="art"><span class="chbadge">CHASING</span></div><div class="plate"><div class="nm">Bulbasaur</div><div class="st">Scarlet &amp; Violet — 151 · 2023</div></div></div>
+          <div class="tag"><span class="who">Bulbasaur</span><span class="rk">Ultra Rare</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="figcap">Choosing in the details view plants a ghost in the home binder — the chosen candidate sits transparent in the Ultra Rare sleeve, so the spread always shows what is being chased.</p>
+</section>
+
+<footer>Layout study only — visual identity to be decided separately.</footer>
+
+</div>
+</body>
+</html>

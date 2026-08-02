@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ash's Journey — Direction 3: The Trainer's Tool</title>
+<style>
+/* ============================================================
+   DIRECTION 3 — "THE TRAINER'S TOOL"
+   Palette documentation (hex):
+   DAY   app background    #f4ead8  (texture stripe rgba(60,45,20,.03))
+         chrome panel      #fffaf0
+         chrome ink        #33302b
+         body ink          #2d2a24
+         muted ink         #8a8172
+         page              #fdf6e6
+         sleeve            #f1e6cd  (rim #d9c9a4)
+         accent · flame    #e05a3a  (press #c44a2e)
+         secondary · leaf  #62a15e
+         rank · gold       #e0a72e
+         HUD chip dark     #33302b on #fffaf0
+   NIGHT app background    #221f1c
+         chrome panel      #2b2724
+         chrome edge       #4a443b
+         ink (light)       #f0e6d2
+         muted ink         #a3988a
+         page (dimmed)     #f3e7cb
+         sleeve            #e7d8b4  (rim #c6b48c)
+         accent · flame    #ff7a55  (glow rgba(255,122,85,.35))
+         secondary · leaf  #7cba76
+         rank · gold       #f2bc4a
+   CARD ART (placeholders)
+         bulbasaur  #96c47e → #4f8a4a     ivysaur #7fb56e → #3f7442 (+#eb9daa)
+         venusaur   #68a35e → #2f6339     caterpie #d8dd7e → #8fae53
+         butterfree #c9c4ec → #7e93cd     pikachu  #ffd94e → #e8a92e
+   ============================================================ */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
+  background: #efe4cf; color: #2d2a24; line-height: 1.45;
+  padding: 40px 22px 64px;
+}
+.wrap { max-width: 1400px; margin: 0 auto; }
+header .kicker { font-size: 10.5px; font-weight: 700; letter-spacing: .26em; text-transform: uppercase; color: #8a8172; margin-bottom: 6px; }
+header h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.01em; }
+.rationale { margin: 10px 0 0; max-width: 880px; font-size: 14px; color: #6b6355; }
+.sectionhead { margin: 46px 0 14px; font-size: 11px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: #8a8172; }
+
+/* ---------- app chassis ---------- */
+.app {
+  --bg: #f4ead8; --panel: #fffaf0; --edge: #33302b; --ink: #2d2a24; --muted: #8a8172;
+  --page: #fdf6e6; --sleeve: #f1e6cd; --rim: #d9c9a4;
+  --flame: #e05a3a; --press: #c44a2e; --leafc: #62a15e; --gold: #e0a72e;
+  --glow: rgba(224,90,58,.28);
+  position: relative; border-radius: 22px; overflow: hidden; padding: 26px 30px 20px;
+  background:
+    repeating-linear-gradient(-38deg, rgba(60,45,20,.03) 0 14px, rgba(60,45,20,0) 14px 28px),
+    var(--bg);
+  box-shadow: 0 18px 40px rgba(70,55,30,.22), inset 0 0 0 2px rgba(51,48,43,.08);
+  color: var(--ink);
+}
+.app.night {
+  --bg: #221f1c; --panel: #2b2724; --edge: #4a443b; --ink: #f0e6d2; --muted: #a3988a;
+  --page: #f3e7cb; --sleeve: #e7d8b4; --rim: #c6b48c;
+  --flame: #ff7a55; --press: #e05a3a; --leafc: #7cba76; --gold: #f2bc4a;
+  --glow: rgba(255,122,85,.35);
+  background:
+    repeating-linear-gradient(-38deg, rgba(255,235,200,.02) 0 14px, rgba(255,235,200,0) 14px 28px),
+    var(--bg);
+  box-shadow: 0 18px 44px rgba(0,0,0,.5), inset 0 0 0 2px rgba(255,235,200,.06);
+}
+
+/* ---------- HUD: the command bar ---------- */
+.cmdbar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
+.search {
+  flex: 1 1 340px; min-width: 260px; display: flex; align-items: center; gap: 10px;
+  background: var(--panel); border: 2px solid var(--edge); border-radius: 999px; padding: 9px 8px 9px 16px;
+  box-shadow: 0 3px 0 var(--edge);
+}
+.app.night .search { border-color: var(--edge); box-shadow: 0 3px 0 rgba(0,0,0,.6), 0 0 14px rgba(255,122,85,.08); }
+.search .glass { width: 24px; height: 24px; border-radius: 8px; background: var(--flame); color: #fffaf0;
+  display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex: none; }
+.search .ph { font-size: 13px; color: var(--muted); }
+.search .kbd { margin-left: auto; flex: none; font-size: 10px; font-weight: 700; color: var(--muted);
+  border: 1.5px solid var(--rim); border-radius: 6px; padding: 2px 7px; background: rgba(0,0,0,.02); }
+.chip {
+  font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap;
+  background: var(--panel); border: 2px solid var(--edge); border-radius: 999px; padding: 7px 14px;
+  box-shadow: 0 3px 0 var(--edge); cursor: default;
+  transition: transform .08s cubic-bezier(.2,.9,.3,1.4), box-shadow .08s ease;
+}
+.chip:hover { transform: translateY(2px); box-shadow: 0 1px 0 var(--edge); }
+.chip.on { background: var(--flame); border-color: var(--press); color: #fffaf0; box-shadow: 0 3px 0 var(--press); }
+.chip.on:hover { box-shadow: 0 1px 0 var(--press); }
+.app.night .chip { box-shadow: 0 3px 0 rgba(0,0,0,.55); }
+.app.night .chip.on { box-shadow: 0 3px 0 rgba(0,0,0,.55), 0 0 14px var(--glow); }
+.meter { display: flex; flex-direction: column; gap: 4px; min-width: 190px; }
+.meter .lbl { font-size: 10.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.meter .lbl small { font-weight: 600; color: var(--muted); letter-spacing: .06em; }
+.meter .bar { height: 12px; border-radius: 999px; background: var(--panel); border: 2px solid var(--edge); position: relative; overflow: hidden; }
+.meter .fill { position: absolute; inset: 0; width: 39%; border-radius: 999px 0 0 999px;
+  background: repeating-linear-gradient(90deg, var(--leafc) 0 14px, rgba(255,255,255,.28) 14px 16px); }
+.toggle { display: flex; align-items: center; gap: 8px; }
+.toggle .tk {
+  width: 62px; height: 30px; border-radius: 999px; background: var(--panel); border: 2px solid var(--edge);
+  position: relative; box-shadow: 0 3px 0 var(--edge);
+}
+.toggle .knob { position: absolute; top: 2px; width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 12px; }
+.toggle.day .knob { left: 3px; background: var(--gold); color: #4a3a10; }
+.toggle.nightpos .knob { right: 3px; background: #6f7db3; color: #eef1ff; box-shadow: 0 0 10px rgba(111,125,179,.6); }
+.toggle .cap { font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+
+/* ---------- the binder deck ---------- */
+.deck { display: flex; justify-content: center; gap: 16px; }
+.panelpage {
+  width: 594px; max-width: 46vw; background: var(--page); border-radius: 16px; padding: 14px 16px 26px; position: relative;
+  border: 2px solid rgba(51,48,43,.16); box-shadow: 0 6px 0 rgba(51,48,43,.12), 0 14px 30px rgba(60,45,20,.18);
+}
+.app.night .panelpage { border-color: rgba(0,0,0,.4); box-shadow: 0 6px 0 rgba(0,0,0,.5), 0 16px 34px rgba(0,0,0,.5); }
+.pagehead { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+.pagehead .crumb { font-size: 10px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: #8a8172; }
+.pagehead .flip { display: flex; gap: 6px; }
+.fbtn { width: 26px; height: 26px; border-radius: 9px; border: 2px solid #33302b; background: #fffaf0;
+  display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: #33302b;
+  box-shadow: 0 2.5px 0 #33302b; transition: transform .08s ease, box-shadow .08s ease; }
+.fbtn:hover { transform: translateY(2px); box-shadow: 0 0.5px 0 #33302b; }
+.pageno { position: absolute; bottom: 7px; font-size: 9.5px; font-weight: 700; color: #8a8172; }
+.panelpage .pageno.l { left: 16px; } .panelpage .pageno.r { right: 16px; }
+
+/* ---------- slots ---------- */
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.slot { background: var(--sleeve); border-radius: 13px; padding: 7px 7px 7px; position: relative;
+  box-shadow: inset 0 0 0 2px var(--rim), inset 0 3px 5px rgba(90,60,25,.12);
+  transition: transform .1s cubic-bezier(.2,.9,.3,1.4); }
+.slot:hover { transform: translateY(-2px) scale(1.015); }
+.slot::after { content: ""; position: absolute; inset: 0; border-radius: 13px; pointer-events: none;
+  background: linear-gradient(115deg, rgba(255,252,242,.5), rgba(255,252,242,0) 45%); }
+.card { aspect-ratio: 63/88; border-radius: 9px; overflow: hidden; display: flex; flex-direction: column; position: relative; z-index: 1;
+  background: #fffdf6; box-shadow: inset 0 0 0 2px rgba(51,48,43,.35), 0 2px 5px rgba(60,45,20,.25); }
+.card .art { flex: 1; }
+.app.night .card .art { filter: brightness(.95); }
+.plate { padding: 4px 8px 5px; background: #fffdf6; border-top: 2px solid rgba(51,48,43,.22); }
+.plate .nm { font-size: 11px; font-weight: 800; line-height: 1.15; color: #2d2a24; }
+.plate .set { font-size: 8.4px; font-weight: 600; color: #8a8172; }
+.slottag { margin-top: 6px; display: flex; align-items: center; justify-content: space-between; gap: 6px; position: relative; z-index: 1; }
+.slottag .who { font-size: 10px; font-weight: 800; color: var(--ink); }
+.app.night .slottag .who { color: #4a3f2c; }
+.rkpill { font-size: 7.6px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap;
+  border-radius: 999px; padding: 2.5px 8px; background: #fffaf0; border: 1.5px solid rgba(51,48,43,.4); color: #55503f; }
+.rkpill.gold { border-color: var(--gold); color: #8a6410; background: rgba(224,167,46,.14); }
+.rkpill.flame { border-color: var(--flame); color: var(--press); background: rgba(224,90,58,.1); }
+.app.night .rkpill.flame { color: #b3492c; }
+
+/* card-art placeholder gradients (see palette comment) */
+.art-bulba  { background: radial-gradient(circle at 34% 30%, rgba(255,252,235,.55), rgba(255,252,235,0) 44%), linear-gradient(150deg, #96c47e, #4f8a4a); }
+.art-ivy    { background: radial-gradient(circle at 66% 28%, rgba(235,157,170,.6), rgba(235,157,170,0) 40%), linear-gradient(150deg, #7fb56e, #3f7442); }
+.art-venu   { background: radial-gradient(circle at 50% 24%, rgba(240,230,180,.5), rgba(240,230,180,0) 46%), linear-gradient(150deg, #68a35e, #2f6339); }
+.art-cater  { background: radial-gradient(circle at 36% 34%, rgba(255,252,235,.55), rgba(255,252,235,0) 44%), linear-gradient(150deg, #d8dd7e, #8fae53); }
+.art-butter { background: radial-gradient(circle at 62% 28%, rgba(255,253,244,.6), rgba(255,253,244,0) 42%), linear-gradient(150deg, #c9c4ec, #7e93cd); }
+.art-pika   { background: radial-gradient(circle at 40% 28%, rgba(255,252,230,.7), rgba(255,252,230,0) 46%), linear-gradient(150deg, #ffd94e, #e8a92e); }
+
+/* CHASING ghost */
+.card.ghost { opacity: .55; border: 2px dashed var(--flame); box-shadow: none; background: rgba(255,253,246,.55); }
+.card.ghost .art { opacity: .55; }
+.chasechip { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); z-index: 3;
+  font-size: 8px; font-weight: 800; letter-spacing: .18em; color: #fffaf0; background: var(--flame);
+  border-radius: 999px; padding: 3px 10px; box-shadow: 0 2px 0 var(--press); animation: chasepulse 2.4s ease-in-out infinite; }
+@keyframes chasepulse { 0%,100% { box-shadow: 0 2px 0 var(--press), 0 0 0 0 var(--glow); } 50% { box-shadow: 0 2px 0 var(--press), 0 0 0 7px rgba(224,90,58,0); } }
+
+/* empty slot: OPEN + demanded rank */
+.card.empty { background: rgba(255,251,238,.5); box-shadow: inset 0 0 0 2px rgba(51,48,43,.18); align-items: center; justify-content: center; gap: 7px; }
+.card.empty::before { content: ""; position: absolute; inset: 8px; border-radius: 6px; border: 2px dashed rgba(51,48,43,.25); }
+.openlbl { font-size: 8px; font-weight: 800; letter-spacing: .3em; text-transform: uppercase; color: #8a8172; }
+.openrank { font-size: 9.6px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; text-align: center; padding: 3px 10px; margin: 0 8px;
+  border: 2px solid var(--gold); border-radius: 999px; color: #8a6410; background: rgba(224,167,46,.12); line-height: 1.35; }
+.openstar { font-size: 15px; color: var(--gold); line-height: 1; }
+.openstar.base { color: #33302b; }
+.card.empty .openrank.base { border-color: #33302b; color: #33302b; background: rgba(51,48,43,.06); }
+
+/* ---------- footer hint rail (game-menu register) ---------- */
+.hintrail { margin-top: 20px; display: flex; justify-content: center; gap: 26px; flex-wrap: wrap;
+  font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.hintrail b { display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 20px; padding: 0 6px;
+  border: 1.5px solid var(--muted); border-radius: 6px; margin-right: 6px; font-size: 10px; color: inherit; }
+
+/* ---------- secondary exhibit: throne carousel ---------- */
+.exwrap { display: flex; justify-content: center; }
+.expanel { width: 660px; max-width: 96vw; background: #fdf6e6; border-radius: 16px; padding: 14px 16px 22px; position: relative;
+  border: 2px solid rgba(51,48,43,.16); box-shadow: 0 6px 0 rgba(51,48,43,.12), 0 14px 30px rgba(60,45,20,.18); }
+.exhud { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.hudchip { font-size: 9.5px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
+  background: #33302b; color: #fffaf0; border-radius: 999px; padding: 5px 12px; }
+.hudchip.q { background: transparent; color: #8a8172; border: 2px solid rgba(51,48,43,.25); }
+.hudchip.act { background: #fffaf0; color: #33302b; border: 2px solid #33302b; box-shadow: 0 2.5px 0 #33302b; }
+.caroband { position: relative; border-radius: 13px; background: #f1e6cd; padding: 22px 60px;
+  box-shadow: inset 0 0 0 2px #d9c9a4, inset 0 3px 5px rgba(90,60,25,.12);
+  display: flex; align-items: center; justify-content: center; gap: 14px; }
+.pedestal { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 260px; height: 260px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,250,235,.95), rgba(255,250,235,0) 68%); pointer-events: none; }
+.cbtn { position: absolute; top: 50%; transform: translateY(-50%); width: 38px; height: 38px; border-radius: 50%;
+  background: #fffaf0; border: 2px solid #33302b; box-shadow: 0 3px 0 #33302b;
+  display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 800; color: #33302b;
+  transition: transform .08s ease, box-shadow .08s ease; }
+.cbtn:hover { transform: translateY(calc(-50% + 2px)); box-shadow: 0 1px 0 #33302b; }
+.cbtn.l { left: 12px; } .cbtn.r { right: 12px; }
+.mot { width: 116px; position: relative; z-index: 2; }
+.mot .card { box-shadow: inset 0 0 0 2px rgba(51,48,43,.22), 0 2px 4px rgba(60,45,20,.18); }
+.motart { flex: 1; background: #f6eed8; position: relative; }
+.motart.dots { background-image: radial-gradient(rgba(51,48,43,.3) 1.2px, transparent 1.7px); background-size: 12px 12px; }
+.motart.weave { background-image: repeating-linear-gradient(45deg, rgba(51,48,43,.14) 0 2px, transparent 2px 12px); }
+.motlbl { position: absolute; left: 6px; right: 6px; bottom: 6px; font-size: 8px; font-weight: 600; text-align: center; color: #8a8172;
+  background: rgba(255,250,240,.85); border-radius: 6px; padding: 2px 4px; }
+.throne { width: 172px; position: relative; z-index: 3; transform: translateY(-6px); }
+.throne .card { box-shadow: 0 0 0 2px #33302b, 0 0 0 6px #fffaf0, 0 0 0 8px var(--gold), 0 14px 26px rgba(60,45,20,.4); }
+.filledchip { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); z-index: 4;
+  font-size: 8px; font-weight: 800; letter-spacing: .18em; color: #fffaf0; background: #33302b; border-radius: 999px; padding: 3px 10px; }
+.exfoot { margin-top: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+.exfoot .note { font-size: 10.5px; font-weight: 600; color: #8a8172; }
+.bigbtn { font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: #fffaf0;
+  background: #62a15e; border: 2px solid #4c8449; border-radius: 999px; padding: 8px 18px; box-shadow: 0 3px 0 #4c8449;
+  transition: transform .08s ease, box-shadow .08s ease; }
+.bigbtn:hover { transform: translateY(2px); box-shadow: 0 1px 0 #4c8449; }
+
+/* ---------- swatches ---------- */
+.swatches { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 10px; }
+.sw { width: 120px; border-radius: 12px; overflow: hidden; background: #fffaf0; border: 2px solid rgba(51,48,43,.15); }
+.sw i { display: block; height: 42px; }
+.sw span { display: block; padding: 6px 8px 7px; font-size: 8.6px; line-height: 1.45; color: #6b6355; }
+.sw span b { display: block; font-size: 9.4px; font-weight: 800; color: #2d2a24; }
+footer { margin-top: 44px; text-align: center; font-size: 11px; font-weight: 600; color: #8a8172; }
+.caption { margin-top: 12px; font-size: 12.5px; color: #6b6355; max-width: 900px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .chasechip { animation: none; }
+  .chip, .fbtn, .cbtn, .slot, .bigbtn { transition: none; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">Ash's Journey · Visual direction 3 of 4</div>
+  <h1>The Trainer's Tool</h1>
+  <p class="rationale">This is the "tool for a game" turned all the way up: crisp Nintendo-adjacent menu chrome — chunky pills that press when you touch them, a confident flame accent, a segmented progress meter, a button-hint rail — wrapped around soft, warm binder pages. The cozy lives in the butter-and-wood palette and the card content; the chrome stays sharp, snappy, and satisfying. It fits because the collection IS a game, and its controls should feel as good as its pages look.</p>
+</header>
+
+<!-- ================= HERO — DAY ================= -->
+<div class="sectionhead">Hero · home spread · light mode (day)</div>
+<div class="app day">
+  <div class="cmdbar">
+    <div class="search"><span class="glass">⌕</span><span class="ph">Search the binder — name, Region, Milestone, Rank, status:chasing</span><span class="kbd">/</span></div>
+    <span class="chip on">Region: Kanto</span>
+    <span class="chip">Rank ▾</span>
+    <span class="chip">Milestone ▾</span>
+    <span class="chip">The Hunt</span>
+    <div class="meter"><span class="lbl">Kanto — 12 of 31 sleeved <small>· only Filled counts</small></span><span class="bar"><span class="fill"></span></span></div>
+    <div class="toggle day"><span class="tk"><span class="knob">☀</span></span><span class="cap">Day</span></div>
+  </div>
+
+  <div class="deck">
+    <div class="panelpage">
+      <div class="pagehead"><span class="crumb">Kanto · Entries № 001–003 · Chapter I</span><span class="flip"><span class="fbtn">‹</span></span></div>
+      <div class="grid">
+        <div class="slot"><div class="card"><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Base Set · 1999</div></div></div><div class="slottag"><span class="who">Bulbasaur</span><span class="rkpill">⚫ Common</span></div></div>
+        <div class="slot"><div class="card"><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Shining Legends · 2017</div></div></div><div class="slottag"><span class="who">Bulbasaur</span><span class="rkpill">Uncommon</span></div></div>
+        <div class="slot"><div class="card"><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Pokémon GO · 2022</div></div></div><div class="slottag"><span class="who">Bulbasaur</span><span class="rkpill">Rare</span></div></div>
+        <div class="slot"><div class="card ghost"><span class="chasechip">CHASING</span><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Scarlet &amp; Violet — 151 · 2023</div></div></div><div class="slottag"><span class="who">Bulbasaur</span><span class="rkpill flame">Ultra Rare</span></div></div>
+        <div class="slot"><div class="card"><div class="art art-ivy"></div><div class="plate"><div class="nm">Ivysaur</div><div class="set">Jungle · 1999</div></div></div><div class="slottag"><span class="who">Ivysaur</span><span class="rkpill">⚫ Common</span></div></div>
+        <div class="slot"><div class="card empty"><span class="openstar">★</span><span class="openlbl">Open slot</span><span class="openrank">Uncommon</span></div><div class="slottag"><span class="who">Ivysaur</span><span class="rkpill gold">Uncommon</span></div></div>
+        <div class="slot"><div class="card"><div class="art art-venu"></div><div class="plate"><div class="nm">Venusaur</div><div class="set">Base Set · 1999</div></div></div><div class="slottag"><span class="who">Venusaur</span><span class="rkpill">Rare</span></div></div>
+        <div class="slot"><div class="card empty"><span class="openstar">★</span><span class="openlbl">Open slot</span><span class="openrank">Illustration Rare</span></div><div class="slottag"><span class="who">Venusaur</span><span class="rkpill gold">Illustration Rare</span></div></div>
+        <div class="slot"><div class="card empty"><span class="openstar">★</span><span class="openlbl">Open slot</span><span class="openrank">Special Illustration Rare</span></div><div class="slottag"><span class="who">Venusaur</span><span class="rkpill gold">Special Illus. Rare</span></div></div>
+      </div>
+      <div class="pageno l">p. 04</div>
+    </div>
+    <div class="panelpage">
+      <div class="pagehead"><span class="crumb">Kanto · Entries № 010–025 · Chapter I</span><span class="flip"><span class="fbtn">›</span></span></div>
+      <div class="grid">
+        <div class="slot"><div class="card"><div class="art art-cater"></div><div class="plate"><div class="nm">Caterpie</div><div class="set">Base Set · 1999</div></div></div><div class="slottag"><span class="who">Caterpie</span><span class="rkpill">⚫ Common</span></div></div>
+        <div class="slot"><div class="card"><div class="art art-butter"></div><div class="plate"><div class="nm">Butterfree</div><div class="set">Jungle · 1999</div></div></div><div class="slottag"><span class="who">Butterfree</span><span class="rkpill">Uncommon</span></div></div>
+        <div class="slot"><div class="card empty"><span class="openstar">★</span><span class="openlbl">Open slot</span><span class="openrank">Rare</span></div><div class="slottag"><span class="who">Butterfree</span><span class="rkpill gold">Rare</span></div></div>
+        <div class="slot"><div class="card"><div class="art art-pika"></div><div class="plate"><div class="nm">Pikachu</div><div class="set">Base Set · 1999</div></div></div><div class="slottag"><span class="who">Pikachu</span><span class="rkpill">⚫ Common</span></div></div>
+        <div class="slot"><div class="card"><div class="art art-pika"></div><div class="plate"><div class="nm">Pikachu</div><div class="set">Legendary Collection · 2002</div></div></div><div class="slottag"><span class="who">Pikachu</span><span class="rkpill">Uncommon</span></div></div>
+        <div class="slot"><div class="card"><div class="art art-pika"></div><div class="plate"><div class="nm">Pikachu</div><div class="set">XY Evolutions · 2016</div></div></div><div class="slottag"><span class="who">Pikachu</span><span class="rkpill">Rare</span></div></div>
+        <div class="slot"><div class="card empty"><span class="openstar">★</span><span class="openlbl">Open slot</span><span class="openrank">Ultra Rare</span></div><div class="slottag"><span class="who">Pikachu</span><span class="rkpill gold">Ultra Rare</span></div></div>
+        <div class="slot"><div class="card empty"><span class="openstar">★</span><span class="openlbl">Open slot</span><span class="openrank">Illustration Rare</span></div><div class="slottag"><span class="who">Pikachu</span><span class="rkpill gold">Illustration Rare</span></div></div>
+        <div class="slot"><div class="card empty"><span class="openstar">★</span><span class="openlbl">Open slot</span><span class="openrank">Hyper Rare</span></div><div class="slottag"><span class="who">Pikachu</span><span class="rkpill gold">Hyper Rare</span></div></div>
+      </div>
+      <div class="pageno r">p. 05</div>
+    </div>
+  </div>
+
+  <div class="hintrail">
+    <span><b>⌕</b> Search</span>
+    <span><b>◀ ▶</b> Flip pages</span>
+    <span><b>↵</b> Open slot</span>
+    <span><b>☾</b> Night</span>
+  </div>
+</div>
+<p class="caption">Chrome presses like game-menu buttons (chips and flip buttons sink on hover); the CHASING ghost pulses a soft flame ring; open slots announce their demanded Rank in a gold pill. The pages themselves stay warm and quiet under the sharp shell.</p>
+
+<!-- ================= DARK STRIP — NIGHT ================= -->
+<div class="sectionhead">Dark mode strip · one page at night · toggle in night position</div>
+<div class="app night">
+  <div class="cmdbar">
+    <div class="search"><span class="glass">⌕</span><span class="ph">Search the binder — name, Region, Milestone, Rank, status:chasing</span><span class="kbd">/</span></div>
+    <span class="chip on">Region: Kanto</span>
+    <span class="chip">The Hunt</span>
+    <div class="meter"><span class="lbl">Kanto — 12 of 31 sleeved <small>· only Filled counts</small></span><span class="bar"><span class="fill"></span></span></div>
+    <div class="toggle nightpos"><span class="tk"><span class="knob">☾</span></span><span class="cap">Night</span></div>
+  </div>
+
+  <div class="deck">
+    <div class="panelpage">
+      <div class="pagehead"><span class="crumb">Kanto · Entries № 001–003 · Chapter I</span><span class="flip"><span class="fbtn">‹</span><span class="fbtn">›</span></span></div>
+      <div class="grid">
+        <div class="slot"><div class="card"><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Base Set · 1999</div></div></div><div class="slottag"><span class="who">Bulbasaur</span><span class="rkpill">⚫ Common</span></div></div>
+        <div class="slot"><div class="card"><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Shining Legends · 2017</div></div></div><div class="slottag"><span class="who">Bulbasaur</span><span class="rkpill">Uncommon</span></div></div>
+        <div class="slot"><div class="card"><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Pokémon GO · 2022</div></div></div><div class="slottag"><span class="who">Bulbasaur</span><span class="rkpill">Rare</span></div></div>
+        <div class="slot"><div class="card ghost"><span class="chasechip">CHASING</span><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Scarlet &amp; Violet — 151 · 2023</div></div></div><div class="slottag"><span class="who">Bulbasaur</span><span class="rkpill flame">Ultra Rare</span></div></div>
+        <div class="slot"><div class="card"><div class="art art-ivy"></div><div class="plate"><div class="nm">Ivysaur</div><div class="set">Jungle · 1999</div></div></div><div class="slottag"><span class="who">Ivysaur</span><span class="rkpill">⚫ Common</span></div></div>
+        <div class="slot"><div class="card empty"><span class="openstar">★</span><span class="openlbl">Open slot</span><span class="openrank">Uncommon</span></div><div class="slottag"><span class="who">Ivysaur</span><span class="rkpill gold">Uncommon</span></div></div>
+        <div class="slot"><div class="card"><div class="art art-venu"></div><div class="plate"><div class="nm">Venusaur</div><div class="set">Base Set · 1999</div></div></div><div class="slottag"><span class="who">Venusaur</span><span class="rkpill">Rare</span></div></div>
+        <div class="slot"><div class="card empty"><span class="openstar">★</span><span class="openlbl">Open slot</span><span class="openrank">Illustration Rare</span></div><div class="slottag"><span class="who">Venusaur</span><span class="rkpill gold">Illustration Rare</span></div></div>
+        <div class="slot"><div class="card empty"><span class="openstar">★</span><span class="openlbl">Open slot</span><span class="openrank">Special Illustration Rare</span></div><div class="slottag"><span class="who">Venusaur</span><span class="rkpill gold">Special Illus. Rare</span></div></div>
+      </div>
+      <div class="pageno l">p. 04</div>
+    </div>
+  </div>
+
+  <div class="hintrail">
+    <span><b>⌕</b> Search</span>
+    <span><b>◀ ▶</b> Flip pages</span>
+    <span><b>↵</b> Open slot</span>
+    <span><b>☀</b> Day</span>
+  </div>
+</div>
+<p class="caption">Night keeps the page readable (a lamp-dimmed warm paper) while the shell goes charcoal: accents gain a soft glow, the toggle knob becomes the moon, and the flame accent lifts a step brighter to hold contrast.</p>
+
+<!-- ================= SECONDARY EXHIBIT — THE THRONE ================= -->
+<div class="sectionhead">Secondary exhibit · slot details, row 2 — the enthroned card with game chrome (day)</div>
+<div class="exwrap">
+  <div class="expanel">
+    <div class="exhud">
+      <span class="hudchip">⚫ base Common · Filled</span>
+      <span class="hudchip q">Base Set · 1999 · physically sleeved</span>
+      <span class="hudchip act">Other printings ▾</span>
+    </div>
+    <div class="caroband">
+      <div class="pedestal"></div>
+      <span class="cbtn l">‹</span>
+      <span class="cbtn r">›</span>
+      <div class="mot"><div class="card"><div class="motart dots"><span class="motlbl">Common motif — dot lattice</span></div><div class="plate"><div class="nm" style="color:#8a8172">Common motif card</div><div class="set">rank element set</div></div></div></div>
+      <div class="throne"><div class="card"><span class="filledchip">FILLED · SLEEVED</span><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Base Set · 1999 · ⚫ base Common</div></div></div></div>
+      <div class="mot"><div class="card"><div class="motart weave"><span class="motlbl">Common motif — diagonal weave</span></div><div class="plate"><div class="nm" style="color:#8a8172">Common motif card</div><div class="set">rank element set</div></div></div></div>
+    </div>
+    <div class="exfoot">
+      <span class="note">The Catch · EP010 — "Bulbasaur and the Hidden Village"</span>
+      <span class="bigbtn">Un-fill · confirm first</span>
+    </div>
+  </div>
+</div>
+<p class="caption">The strict three-sleeve carousel with tool chrome: pinned status chips above, chunky rotate buttons at the edges, the enthroned card ringed in ink–cream–gold on its pedestal glow. Motif cards keep the Common rank's quiet patterns.</p>
+
+<!-- ================= PALETTE ================= -->
+<div class="sectionhead">Palette · every color used</div>
+<div class="swatches">
+  <div class="sw"><i style="background:#f4ead8"></i><span><b>#f4ead8</b>app background (day)</span></div>
+  <div class="sw"><i style="background:#fffaf0"></i><span><b>#fffaf0</b>chrome panel</span></div>
+  <div class="sw"><i style="background:#33302b"></i><span><b>#33302b</b>chrome ink / edges</span></div>
+  <div class="sw"><i style="background:#2d2a24"></i><span><b>#2d2a24</b>body ink</span></div>
+  <div class="sw"><i style="background:#8a8172"></i><span><b>#8a8172</b>muted ink</span></div>
+  <div class="sw"><i style="background:#fdf6e6"></i><span><b>#fdf6e6</b>page (day)</span></div>
+  <div class="sw"><i style="background:#f1e6cd"></i><span><b>#f1e6cd</b>sleeve (day)</span></div>
+  <div class="sw"><i style="background:#e05a3a"></i><span><b>#e05a3a</b>accent — flame</span></div>
+  <div class="sw"><i style="background:#62a15e"></i><span><b>#62a15e</b>secondary — leaf</span></div>
+  <div class="sw"><i style="background:#e0a72e"></i><span><b>#e0a72e</b>rank accent — gold</span></div>
+  <div class="sw"><i style="background:#221f1c"></i><span><b>#221f1c</b>app background (night)</span></div>
+  <div class="sw"><i style="background:#2b2724"></i><span><b>#2b2724</b>chrome panel (night)</span></div>
+  <div class="sw"><i style="background:#f3e7cb"></i><span><b>#f3e7cb</b>page (night, dimmed)</span></div>
+  <div class="sw"><i style="background:#ff7a55"></i><span><b>#ff7a55</b>accent — flame (night)</span></div>
+  <div class="sw"><i style="background:#f2bc4a"></i><span><b>#f2bc4a</b>rank gold (night)</span></div>
+  <div class="sw"><i style="background:linear-gradient(150deg,#96c47e,#4f8a4a)"></i><span><b>#96c47e→#4f8a4a</b>card art — Bulbasaur</span></div>
+  <div class="sw"><i style="background:linear-gradient(150deg,#ffd94e,#e8a92e)"></i><span><b>#ffd94e→#e8a92e</b>card art — Pikachu</span></div>
+</div>
+
+<footer>Direction study — The Trainer's Tool · Ash's Journey · no JS, no external assets · pulses and presses honor prefers-reduced-motion</footer>
+</div>
+</body>
+</html>

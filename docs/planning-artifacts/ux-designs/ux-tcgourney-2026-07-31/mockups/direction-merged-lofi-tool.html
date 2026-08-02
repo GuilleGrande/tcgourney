@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ash's Journey — Merged Direction: Lofi World, Trainer Chrome</title>
+<style>
+/* ============================================================
+   MERGED DIRECTION — "LOFI WORLD, TRAINER CHROME"
+   World from The Lofi Desk · UI chrome from The Trainer's Tool
+   Rounded corners (8–12px) everywhere on chrome — never pills.
+
+   Palette documentation (hex):
+   DAY WORLD
+         room wall          #ecdcbf
+         window frame       #6b4a30
+         window sky (day)   #cfe3d8 → #ffe9b8  (sun glow #fff3cd)
+         window light       #ffe9b8
+         desk wood          #a06b46  (grain #8a5a3a / #b57d54)
+         binder leather     #7b523a  (stitch #5c3c28)
+         page               #fbf4e3
+         sleeve             #f1e7d0  (rim #dbcba6)
+         ink                #4a392b  (soft ink #97826a)
+         plant green        #7d9b5d  (meter fill)
+         terracotta pot     #c2713f  (world object only — not chrome)
+   DAY CHROME (Trainer register, unified warm)
+         chrome panel       #fff9ec
+         chrome border/edge #3b2a1c  (espresso)
+         ACCENT — EMBER     #d95f36  (press edge #b34a28)
+         rank honey         #d29a3a  (text #8a6410) — quiet
+   NIGHT WORLD
+         room               #251d17
+         desk wood          #533826  (grain #45301f / #6b492f)
+         binder leather     #4b3221  (stitch #33220f)
+         page (lamp-lit)    #f0e2c2
+         sleeve             #e4d4ae  (rim #c9b489)
+         window sky (night) #101720 → #1d2733  (moon #f4e9c8)
+         lamp glow          #ffbe69
+         fairy lights       #ffd98a / #f2a68a / #b9d189
+   NIGHT CHROME
+         chrome panel       #33261a
+         chrome edge        #57422e
+         chrome ink         #f2e3c4
+         ACCENT — EMBER     #ff8257  (glow rgba(255,130,87,.35))
+         rank honey         #e0a94e
+   GHOST (Chasing placeholder)
+         dashed #d95f36 on rgba(255,253,246,.6), art at 55%
+   CARD ART (placeholders)
+         bulbasaur  #a9c286 → #6b9457     ivysaur #8fb573 → #557f4a (+#e2a9b4)
+         venusaur   #7ba468 → #3f6b42     caterpie #d3d489 → #9cb35f
+         butterfree #cdc7e3 → #8f9fc9     pikachu  #f4d766 → #dda93e
+   ============================================================ */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  background: #f2ead9; color: #4a392b; line-height: 1.5;
+  padding: 40px 22px 64px;
+}
+.wrap { max-width: 1400px; margin: 0 auto; }
+header .kicker { font-size: 10.5px; font-weight: 700; letter-spacing: .26em; text-transform: uppercase; color: #97826a; margin-bottom: 6px; }
+header h1 { font-family: ui-rounded, "Segoe UI Variable Display", "Trebuchet MS", "Segoe UI", sans-serif;
+  font-size: 26px; font-weight: 800; letter-spacing: -.01em; }
+.rationale { margin: 10px 0 0; max-width: 900px; font-size: 14px; color: #6d5a45; }
+.accentnote { margin: 10px 0 0; max-width: 900px; font-size: 12.5px; color: #6d5a45;
+  background: #fff9ec; border: 2px solid #3b2a1c; border-radius: 12px; padding: 10px 14px; box-shadow: 0 3px 0 #3b2a1c; }
+.accentnote b { color: #b34a28; }
+.accentnote i.dot { display: inline-block; width: 11px; height: 11px; border-radius: 4px; background: #d95f36;
+  border: 1.5px solid #b34a28; vertical-align: -1px; margin-right: 4px; }
+.sectionhead { margin: 46px 0 14px; font-size: 11px; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: #97826a; }
+.caption { margin-top: 12px; font-size: 12.5px; color: #6d5a45; max-width: 920px; }
+footer { margin-top: 44px; font-size: 11px; font-weight: 600; color: #97826a; text-align: center; }
+
+/* ============================================================
+   THE SCENE — inhabited room, wood desk, window behind the desk
+   ============================================================ */
+.scene {
+  --wall: #ecdcbf; --desk: #a06b46; --graind: #8a5a3a; --grainl: #b57d54;
+  --leather: #7b523a; --stitch: #5c3c28;
+  --page: #fbf4e3; --sleeve: #f1e7d0; --rim: #dbcba6;
+  --ink: #4a392b; --soft: #97826a;
+  --green: #7d9b5d; --honey: #d29a3a; --honeytxt: #8a6410;
+  --panel: #fff9ec; --edge: #3b2a1c; --chromeink: #4a392b;
+  --ember: #d95f36; --emberpress: #b34a28; --glow: rgba(217,95,54,.3);
+  position: relative; border-radius: 20px; overflow: hidden;
+  background:
+    radial-gradient(1100px 420px at 50% -8%, #ffe9b8 0%, rgba(255,233,184,0) 60%),
+    var(--wall);
+  box-shadow: 0 20px 44px rgba(90,62,35,.22);
+  padding: 30px 40px 56px;
+}
+.scene::before { /* desk surface */
+  content: ""; position: absolute; left: 0; right: 0; top: 430px; bottom: 0; z-index: 1;
+  background:
+    repeating-linear-gradient(94deg, rgba(0,0,0,0) 0 46px, rgba(70,42,20,.10) 46px 49px, rgba(255,235,205,.06) 49px 52px),
+    linear-gradient(180deg, var(--grainl), var(--desk) 24%, var(--graind));
+  border-radius: 26px 26px 0 0;
+  box-shadow: 0 -8px 22px rgba(60,35,15,.25);
+}
+.scene.night {
+  --wall: #251d17; --desk: #533826; --graind: #45301f; --grainl: #6b492f;
+  --leather: #4b3221; --stitch: #33220f;
+  --page: #f0e2c2; --sleeve: #e4d4ae; --rim: #c9b489;
+  --ink: #443320; --soft: #8d7a5e;
+  --green: #8fae6f; --honey: #e0a94e; --honeytxt: #8a6410;
+  --panel: #33261a; --edge: #57422e; --chromeink: #f2e3c4;
+  --ember: #ff8257; --emberpress: #d95f36; --glow: rgba(255,130,87,.35);
+  background:
+    radial-gradient(700px 460px at 80% 6%, rgba(255,190,105,.3) 0%, rgba(255,190,105,0) 62%),
+    var(--wall);
+}
+.scene.night::before { top: 380px; }
+
+/* ---------- the window, behind/above the binder ---------- */
+.window {
+  position: absolute; top: 44px; left: 50%; transform: translateX(-50%);
+  width: 780px; height: 380px; z-index: 0; pointer-events: none;
+  border: 13px solid #6b4a30; border-radius: 8px;
+  background: linear-gradient(180deg, #cfe3d8 0%, #f3e6bd 52%, #ffe9b8 100%);
+  box-shadow: inset 0 0 32px rgba(120,85,45,.28), 0 8px 22px rgba(90,62,35,.2);
+}
+.window::before { /* sun + distant hills, day */
+  content: ""; position: absolute; inset: 0;
+  background:
+    radial-gradient(120px 120px at 68% 26%, rgba(255,243,205,.95), rgba(255,243,205,0) 70%),
+    radial-gradient(420px 110px at 20% 104%, rgba(125,155,93,.55), rgba(125,155,93,0) 70%),
+    radial-gradient(460px 120px at 88% 108%, rgba(156,179,95,.5), rgba(156,179,95,0) 72%);
+}
+.window::after { /* muntins — six panes */
+  content: ""; position: absolute; inset: 0;
+  background:
+    linear-gradient(0deg, transparent calc(50% - 5px), #6b4a30 calc(50% - 5px) calc(50% + 5px), transparent calc(50% + 5px)),
+    linear-gradient(90deg, transparent calc(33.33% - 5px), #6b4a30 calc(33.33% - 5px) calc(33.33% + 5px), transparent calc(33.33% + 5px)),
+    linear-gradient(90deg, transparent calc(66.66% - 5px), #6b4a30 calc(66.66% - 5px) calc(66.66% + 5px), transparent calc(66.66% + 5px));
+}
+.windowsill { position: absolute; top: 420px; left: 50%; transform: translateX(-50%);
+  width: 836px; height: 14px; z-index: 1; pointer-events: none;
+  background: linear-gradient(180deg, #7c5636, #5f3f26); border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(90,62,35,.3); }
+.scene.night .window {
+  background: linear-gradient(200deg, #101720, #1d2733);
+  border-color: #3a2717; box-shadow: inset 0 0 26px rgba(0,0,0,.5), 0 0 30px rgba(180,200,235,.08);
+}
+.scene.night .window::before { /* moon + stars, night */
+  background:
+    radial-gradient(19px 19px at 69% 25%, #f4e9c8 46%, rgba(244,233,200,0) 60%),
+    radial-gradient(64px 64px at 69% 25%, rgba(244,233,200,.4), rgba(244,233,200,0) 72%),
+    radial-gradient(2px 2px at 22% 18%, rgba(240,235,215,.9), rgba(240,235,215,0) 70%),
+    radial-gradient(2px 2px at 36% 62%, rgba(240,235,215,.7), rgba(240,235,215,0) 70%),
+    radial-gradient(2px 2px at 82% 66%, rgba(240,235,215,.75), rgba(240,235,215,0) 70%),
+    radial-gradient(1.6px 1.6px at 12% 44%, rgba(240,235,215,.6), rgba(240,235,215,0) 70%);
+}
+.scene.night .window::after {
+  background:
+    linear-gradient(0deg, transparent calc(50% - 5px), #3a2717 calc(50% - 5px) calc(50% + 5px), transparent calc(50% + 5px)),
+    linear-gradient(90deg, transparent calc(33.33% - 5px), #3a2717 calc(33.33% - 5px) calc(33.33% + 5px), transparent calc(33.33% + 5px)),
+    linear-gradient(90deg, transparent calc(66.66% - 5px), #3a2717 calc(66.66% - 5px) calc(66.66% + 5px), transparent calc(66.66% + 5px));
+}
+.scene.night .windowsill { background: linear-gradient(180deg, #4a3018, #33200e); }
+
+/* light shafts falling from the window onto the desk */
+.shaft { position: absolute; top: 150px; left: 50%; margin-left: -660px; width: 720px; height: 580px; z-index: 1; pointer-events: none;
+  background: linear-gradient(200deg, rgba(255,233,184,.42), rgba(255,233,184,0) 72%);
+  clip-path: polygon(80% 0, 100% 0, 52% 100%, 4% 100%); }
+.shaft.r { margin-left: -60px; transform: scaleX(-1); opacity: .6; }
+.scene.night .shaft { background: linear-gradient(200deg, rgba(198,215,240,.14), rgba(198,215,240,0) 70%); }
+
+/* ---------- room objects ---------- */
+.plant { position: absolute; top: 26px; left: 14px; width: 150px; height: 150px; z-index: 3; pointer-events: none; }
+.leaf { position: absolute; width: 70px; height: 26px; border-radius: 4% 96% 40% 60% / 50% 50% 50% 50%; background: linear-gradient(100deg, #7d9b5d, #5f7c45); }
+.leaf.a { top: 26px; left: 4px; transform: rotate(-34deg); }
+.leaf.b { top: 44px; left: 30px; transform: rotate(-6deg); width: 84px; }
+.leaf.c { top: 66px; left: 8px; transform: rotate(22deg); background: linear-gradient(100deg, #90ac6c, #6d8a50); }
+.leaf.d { top: 84px; left: 40px; transform: rotate(46deg); width: 60px; }
+.pot { position: absolute; top: 102px; left: 44px; width: 56px; height: 40px; border-radius: 6px 6px 14px 14px; background: linear-gradient(180deg, #c2713f, #a55b2f); }
+.mug { position: absolute; right: 40px; top: 474px; width: 58px; height: 48px; z-index: 3; pointer-events: none; }
+.mug .cup { position: absolute; inset: 8px 0 0 0; border-radius: 6px 6px 16px 16px; background: linear-gradient(180deg, #e8d3a9, #cfb381); box-shadow: inset 0 4px 0 rgba(90,60,30,.28); }
+.mug .handle { position: absolute; right: -13px; top: 16px; width: 18px; height: 20px; border: 5px solid #cfb381; border-radius: 50%; }
+.steam { position: absolute; top: -14px; left: 16px; width: 8px; height: 20px; border-radius: 50%; background: rgba(255,251,240,.75); filter: blur(3px); animation: steam 4.2s ease-in-out infinite; }
+.steam.s2 { left: 30px; animation-delay: 1.3s; height: 15px; }
+@keyframes steam { 0% { transform: translateY(4px) scaleY(.7); opacity: 0; } 45% { opacity: .8; } 100% { transform: translateY(-16px) scaleY(1.25); opacity: 0; } }
+.note {
+  position: absolute; left: 34px; bottom: 46px; width: 120px; padding: 10px 10px 12px; z-index: 3;
+  background: #ffe9a8; color: #6d5424; font-size: 10.5px; line-height: 1.45;
+  border-radius: 3px; transform: rotate(-4deg); box-shadow: 0 6px 12px rgba(70,45,15,.28);
+}
+.note b { display: block; font-size: 9px; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 2px; }
+.note::before { content: ""; position: absolute; top: -7px; left: 34px; width: 46px; height: 14px; background: rgba(194,113,63,.45); transform: rotate(2deg); border-radius: 2px; }
+.pencil { position: absolute; right: 60px; bottom: 50px; width: 120px; height: 9px; border-radius: 5px; z-index: 3;
+  background: linear-gradient(90deg, #e0a94e 0 12px, #d3b98d 12px 16px, #c2713f 16px 100px, #6d5a45 100px 112px, #3a2c1c 112px 100%);
+  transform: rotate(-8deg); box-shadow: 0 4px 8px rgba(60,35,15,.3); }
+.lamp { position: absolute; right: 26px; top: -6px; width: 190px; height: 210px; z-index: 3; pointer-events: none; }
+.lamp .arm { position: absolute; right: 34px; top: 0; width: 10px; height: 96px; background: #1c130c; border-radius: 5px; transform: rotate(14deg); }
+.lamp .shade { position: absolute; right: 6px; top: 84px; width: 96px; height: 44px; border-radius: 10px 10px 46px 46px; background: linear-gradient(180deg, #2e2013, #17100a); box-shadow: inset 0 -7px 0 rgba(255,190,105,.85); }
+.lamp .cone { position: absolute; right: -22px; top: 124px; width: 152px; height: 260px;
+  background: radial-gradient(ellipse at 50% -8%, rgba(255,206,130,.5), rgba(255,206,130,0) 74%);
+  clip-path: polygon(30% 0, 70% 0, 100% 100%, 0 100%); }
+.lamppool { position: absolute; right: 0; top: 330px; width: 460px; height: 300px; z-index: 1; pointer-events: none;
+  background: radial-gradient(ellipse at 62% 40%, rgba(255,190,105,.28), rgba(255,190,105,0) 68%); }
+.fairy { position: absolute; top: 12px; left: 0; right: 230px; height: 20px; z-index: 3; display: flex; gap: 52px; padding-left: 40px; pointer-events: none; }
+.fairy i { width: 8px; height: 8px; border-radius: 50%; background: #ffd98a; box-shadow: 0 0 12px 3px rgba(255,217,138,.55); animation: twinkle 3.6s ease-in-out infinite; }
+.fairy i:nth-child(3n+2) { background: #f2a68a; box-shadow: 0 0 12px 3px rgba(242,166,138,.5); animation-delay: 1.1s; }
+.fairy i:nth-child(3n) { background: #b9d189; box-shadow: 0 0 12px 3px rgba(185,209,137,.5); animation-delay: 2.2s; }
+@keyframes twinkle { 0%,100% { opacity: .55; } 50% { opacity: 1; } }
+
+/* ============================================================
+   TRAINER CHROME — thick borders, hard press shadows,
+   rounded rectangles (8–12px), never pills
+   ============================================================ */
+.cmdbar { position: relative; z-index: 5; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  max-width: 1220px; margin: 0 auto 168px; }
+.scene.night .cmdbar { margin-bottom: 128px; }
+.searchbox {
+  flex: 1 1 340px; min-width: 260px; display: flex; align-items: center; gap: 10px;
+  background: var(--panel); border: 2px solid var(--edge); border-radius: 12px; padding: 9px 9px 9px 14px;
+  box-shadow: 0 3px 0 var(--edge); color: var(--chromeink);
+}
+.searchbox .glass { width: 24px; height: 24px; border-radius: 8px; background: var(--ember); color: #fff9ec;
+  display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex: none; }
+.searchbox .ph { font-size: 12.5px; color: var(--soft); }
+.searchbox .kbd { margin-left: auto; flex: none; font-size: 10px; font-weight: 700; color: var(--soft);
+  border: 1.5px solid var(--rim); border-radius: 6px; padding: 2px 7px; }
+.scene.night .searchbox { box-shadow: 0 3px 0 rgba(0,0,0,.55), 0 0 14px rgba(255,130,87,.1); }
+.scene.night .searchbox .ph, .scene.night .searchbox .kbd { color: #a8977e; }
+.scene.night .searchbox .kbd { border-color: #57422e; }
+.chip {
+  font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap;
+  background: var(--panel); color: var(--chromeink); border: 2px solid var(--edge); border-radius: 10px; padding: 7px 13px;
+  box-shadow: 0 3px 0 var(--edge); cursor: default;
+  transition: transform .08s cubic-bezier(.2,.9,.3,1.4), box-shadow .08s ease;
+}
+.chip:hover { transform: translateY(2px); box-shadow: 0 1px 0 var(--edge); }
+.chip.on { background: var(--ember); border-color: var(--emberpress); color: #fff9ec; box-shadow: 0 3px 0 var(--emberpress); }
+.chip.on:hover { box-shadow: 0 1px 0 var(--emberpress); }
+.scene.night .chip { box-shadow: 0 3px 0 rgba(0,0,0,.55); }
+.scene.night .chip.on { box-shadow: 0 3px 0 rgba(0,0,0,.55), 0 0 14px var(--glow); }
+.meter { display: flex; flex-direction: column; gap: 4px; min-width: 200px; color: var(--chromeink); }
+.meter .lbl { font-size: 10.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.meter .lbl small { font-weight: 600; color: var(--soft); letter-spacing: .04em; }
+.scene.night .meter .lbl small { color: #a8977e; }
+.meter .bar { height: 12px; border-radius: 8px; background: var(--panel); border: 2px solid var(--edge); position: relative; overflow: hidden;
+  box-shadow: 0 3px 0 var(--edge); }
+.scene.night .meter .bar { box-shadow: 0 3px 0 rgba(0,0,0,.55); }
+.meter .fill { position: absolute; inset: 0; width: 39%; border-radius: 5px 0 0 5px;
+  background: repeating-linear-gradient(90deg, var(--green) 0 14px, rgba(255,255,255,.3) 14px 16px); }
+.toggle { display: flex; align-items: center; gap: 8px; }
+.toggle .tk { width: 62px; height: 30px; border-radius: 10px; background: var(--panel); border: 2px solid var(--edge);
+  position: relative; box-shadow: 0 3px 0 var(--edge); }
+.scene.night .toggle .tk { box-shadow: 0 3px 0 rgba(0,0,0,.55); }
+.toggle .knob { position: absolute; top: 2px; width: 22px; height: 22px; border-radius: 7px;
+  display: flex; align-items: center; justify-content: center; font-size: 12px; }
+.toggle.day .knob { left: 3px; background: var(--honey); color: #4a3a10; }
+.toggle.nightpos .knob { right: 3px; background: #b9c6e8; color: #26304d; box-shadow: 0 0 10px rgba(185,198,232,.6); }
+.toggle .cap { font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--soft); }
+.scene.night .toggle .cap { color: #a8977e; }
+
+/* ============================================================
+   THE BINDER — leather, cream pages, paper grain
+   ============================================================ */
+.binder { position: relative; z-index: 2; display: flex; justify-content: center; }
+.cover {
+  display: flex; gap: 0; padding: 20px 22px 24px; border-radius: 16px; position: relative;
+  background: linear-gradient(155deg, var(--leather), color-mix(in srgb, var(--leather) 72%, #000));
+  box-shadow: 0 22px 44px rgba(40,22,8,.42), inset 0 0 0 2px rgba(255,240,210,.07);
+}
+.cover::after { content: ""; position: absolute; inset: 9px; border-radius: 11px; pointer-events: none;
+  border: 2px dashed var(--stitch); opacity: .6; }
+.pageL, .pageR {
+  width: 590px; max-width: 46vw; background: var(--page); padding: 14px 16px 26px; position: relative; z-index: 2;
+  background-image: radial-gradient(rgba(120,90,50,.045) 1px, transparent 1.4px);
+  background-size: 14px 14px;
+}
+.pageL { border-radius: 12px 3px 3px 12px; box-shadow: -6px 8px 18px rgba(40,22,8,.28), inset -14px 0 22px -16px rgba(70,45,20,.5); }
+.pageR { border-radius: 3px 12px 12px 3px; box-shadow: 6px 8px 18px rgba(40,22,8,.28), inset 14px 0 22px -16px rgba(70,45,20,.5); }
+.pageL.solo { border-radius: 12px; box-shadow: 0 10px 22px rgba(40,22,8,.35); }
+.rings { width: 34px; position: relative; z-index: 3; display: flex; flex-direction: column; align-items: center; justify-content: space-around; padding: 30px 0; }
+.rings i { width: 26px; height: 26px; border-radius: 50%; border: 5px solid #d8c49a; border-left-color: #a98f62; box-shadow: 0 2px 4px rgba(0,0,0,.35); }
+.scene.night .rings i { border-color: #bfa878; border-left-color: #8a744f; }
+.pagehead { display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  border-bottom: 1.5px solid var(--rim); padding-bottom: 7px; margin-bottom: 12px; }
+.pagehead .crumb { font-size: 9.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--soft); }
+.pagehead .flip { display: flex; gap: 6px; }
+.fbtn { width: 26px; height: 26px; border-radius: 9px; border: 2px solid #3b2a1c; background: #fff9ec;
+  display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: #3b2a1c;
+  box-shadow: 0 2.5px 0 #3b2a1c; transition: transform .08s ease, box-shadow .08s ease; }
+.fbtn:hover { transform: translateY(2px); box-shadow: 0 .5px 0 #3b2a1c; }
+.pageno { position: absolute; bottom: 8px; font-size: 9px; font-weight: 700; color: var(--soft); }
+.pageL .pageno { left: 16px; } .pageR .pageno { right: 16px; }
+
+/* ---------- pockets & cards ---------- */
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.pocket { background: var(--sleeve); border-radius: 12px; padding: 7px 7px 6px; position: relative;
+  box-shadow: inset 0 0 0 1.5px var(--rim), inset 0 3px 6px rgba(90,60,25,.14); }
+.pocket::after { content: ""; position: absolute; inset: 0; border-radius: 12px; pointer-events: none;
+  background: linear-gradient(115deg, rgba(255,252,242,.55), rgba(255,252,242,0) 44%); }
+.card { aspect-ratio: 63/88; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; position: relative; z-index: 1;
+  background: #fffdf6; box-shadow: inset 0 0 0 2px rgba(59,42,28,.35), 0 2px 4px rgba(70,45,15,.25); }
+.card .art { flex: 1; position: relative; }
+.scene.night .card .art::after { content: ""; position: absolute; inset: 0; background: rgba(45,28,10,.16); }
+.plate { padding: 4px 7px 5px; background: rgba(255,252,242,.96); border-top: 2px solid rgba(59,42,28,.24); }
+.plate .nm { font-size: 10.5px; font-weight: 800; line-height: 1.15; color: #4a392b; }
+.plate .set { font-size: 8.3px; font-weight: 600; color: #97826a; }
+.slottag { margin-top: 6px; display: flex; align-items: center; justify-content: space-between; gap: 6px; position: relative; z-index: 1; }
+.slottag .who { font-size: 10px; font-weight: 800; color: var(--ink); }
+.rkchip { font-size: 7.6px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; white-space: nowrap;
+  border-radius: 7px; padding: 2.5px 7px; background: rgba(255,249,236,.9); border: 1.5px solid rgba(59,42,28,.4); color: #6a5942; }
+.rkchip.honey { border-color: var(--honey); color: var(--honeytxt); background: rgba(210,154,58,.14); }
+.rkchip.ember { border-color: var(--ember); color: var(--emberpress); background: rgba(217,95,54,.1); }
+.scene.night .rkchip.ember { color: #b3492c; }
+
+/* card-art placeholder gradients (see palette comment) */
+.art-bulba  { background: radial-gradient(circle at 34% 32%, rgba(255,250,225,.5), rgba(255,250,225,0) 42%), linear-gradient(150deg, #a9c286, #6b9457); }
+.art-ivy    { background: radial-gradient(circle at 66% 30%, rgba(226,169,180,.65), rgba(226,169,180,0) 40%), linear-gradient(150deg, #8fb573, #557f4a); }
+.art-venu   { background: radial-gradient(circle at 50% 26%, rgba(233,220,160,.5), rgba(233,220,160,0) 46%), linear-gradient(150deg, #7ba468, #3f6b42); }
+.art-cater  { background: radial-gradient(circle at 36% 36%, rgba(255,250,225,.55), rgba(255,250,225,0) 44%), linear-gradient(150deg, #d3d489, #9cb35f); }
+.art-butter { background: radial-gradient(circle at 62% 30%, rgba(255,251,235,.6), rgba(255,251,235,0) 42%), linear-gradient(150deg, #cdc7e3, #8f9fc9); }
+.art-pika   { background: radial-gradient(circle at 40% 30%, rgba(255,252,230,.65), rgba(255,252,230,0) 46%), linear-gradient(150deg, #f4d766, #dda93e); }
+
+/* CHASING ghost: translucent placeholder, ember mark */
+.card.ghost { opacity: .55; border: 2px dashed var(--ember); background: rgba(255,253,246,.6); box-shadow: none; }
+.card.ghost .art { opacity: .55; }
+.chasechip { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); z-index: 3;
+  font-size: 7.8px; font-weight: 800; letter-spacing: .18em; color: #fff9ec; background: var(--ember);
+  border-radius: 8px; padding: 3px 9px; box-shadow: 0 2px 0 var(--emberpress);
+  animation: chasepulse 2.4s ease-in-out infinite; }
+@keyframes chasepulse { 0%,100% { box-shadow: 0 2px 0 var(--emberpress), 0 0 0 0 var(--glow); } 50% { box-shadow: 0 2px 0 var(--emberpress), 0 0 0 7px rgba(217,95,54,0); } }
+
+/* empty sleeve: OPEN + the demanded Rank, quiet honey */
+.card.empty { background: rgba(255,251,238,.55); box-shadow: inset 0 0 0 1.5px rgba(150,120,80,.3); align-items: center; justify-content: center; gap: 6px; }
+.card.empty::before { content: ""; position: absolute; inset: 8px; border: 1.5px dashed rgba(150,120,80,.5); border-radius: 6px; }
+.openstar { font-size: 17px; color: var(--honey); line-height: 1; }
+.openstar.base { color: var(--ink); font-size: 14px; }
+.openlbl { font-size: 7.6px; font-weight: 800; letter-spacing: .28em; text-transform: uppercase; color: var(--soft); }
+.openrank { font-size: 9.2px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; text-align: center;
+  padding: 3px 9px; margin: 0 8px; border: 2px solid var(--honey); border-radius: 8px; color: var(--honeytxt);
+  background: rgba(210,154,58,.12); line-height: 1.3; position: relative; z-index: 1; }
+.openrank.base { border-color: rgba(74,57,43,.7); color: var(--ink); background: rgba(74,57,43,.06); }
+.emptywaits { font-size: 8px; color: var(--soft); font-style: italic; position: relative; z-index: 1; }
+
+/* ============================================================
+   SLOT DETAILS — single page, three bands, merged chrome
+   ============================================================ */
+.spagewrap { position: relative; z-index: 2; }
+.spage { width: 700px; max-width: 92vw; background: var(--page); border-radius: 12px; padding: 15px 17px 28px; position: relative;
+  background-image: radial-gradient(rgba(120,90,50,.045) 1px, transparent 1.4px); background-size: 14px 14px;
+  box-shadow: 0 10px 22px rgba(40,22,8,.35); }
+.rows { display: flex; flex-direction: column; gap: 14px; }
+.rowband { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+
+/* hover HUD strips — Trainer register */
+.rowhud { position: absolute; top: -11px; left: 50%; transform: translate(-50%, -3px);
+  z-index: 30; display: flex; gap: 7px; align-items: center; white-space: nowrap;
+  background: #3b2a1c; color: #f2e3c4; border: 2px solid #211509; border-radius: 10px; padding: 4px 10px;
+  font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  opacity: 0; transition: opacity .18s ease, transform .18s ease; pointer-events: none;
+  box-shadow: 0 3px 0 #211509; }
+.rowband:hover > .rowhud, .caroband:hover > .rowhud { opacity: 1; transform: translate(-50%, 0); }
+.hbtn { border: 1.5px solid #6d5a45; border-radius: 6px; padding: 1px 6px; background: #4e3a26; }
+.hsep { width: 1.5px; height: 10px; background: #6d5a45; }
+.hdim { color: #b8a488; }
+
+/* data cards — every piece of content lives in a card frame */
+.dcard { aspect-ratio: 63/88; width: 100%; flex: none; position: relative; z-index: 1;
+  background: #fffdf6; border-radius: 8px; overflow: hidden;
+  box-shadow: inset 0 0 0 2px rgba(59,42,28,.3), 0 1px 3px rgba(70,45,15,.25);
+  padding: 9px 10px 10px; display: flex; flex-direction: column; gap: 6px; }
+.dhead { font-size: 8px; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; color: #97826a;
+  border-bottom: 1.5px solid #e6d9bd; padding-bottom: 4px; flex: none; }
+.rankline { font-size: 14px; font-weight: 800; letter-spacing: .05em; line-height: 1.2; color: #4a392b; }
+.starline { font-size: 11px; letter-spacing: .18em; color: #d29a3a; }
+.starline .off { color: #dfd2b4; }
+.starline .cap { font-size: 8px; letter-spacing: .06em; color: #97826a; margin-left: 4px; }
+.kv { display: flex; justify-content: space-between; gap: 6px; font-size: 9.5px; }
+.kv .k { color: #97826a; }
+.kv .v { font-weight: 700; text-align: right; color: #4a392b; }
+.milehead { font-size: 7.5px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; color: #97826a; margin-top: 2px; }
+.milelist { font-size: 8.8px; display: flex; flex-direction: column; gap: 2.5px; color: #4a392b; }
+.milelist .this { font-weight: 800; background: rgba(210,154,58,.16); border: 1.5px solid rgba(210,154,58,.55);
+  border-radius: 6px; padding: 1px 5px; margin: 0 -5px; }
+.milelist .ep { color: #97826a; }
+.dstatus { margin-top: auto; border-top: 1.5px dashed #dbcba6; padding-top: 5px; font-size: 8.6px; color: #5c4a37; line-height: 1.45; }
+.dstatus b { font-weight: 800; color: #4a392b; }
+
+/* the Pokémon, alive */
+.alivecard { align-items: center; text-align: center; background: radial-gradient(ellipse at 50% 34%, #fdf9ec, #efe3c8); }
+.aliveStage { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
+.bobber { animation: bob 3.4s ease-in-out infinite; }
+.sprite { position: relative; width: 100px; height: 80px; }
+.sbulb { position: absolute; top: -2px; left: 30px; width: 42px; height: 40px;
+  border-radius: 48% 52% 55% 45% / 60% 62% 40% 38%;
+  background: radial-gradient(circle at 38% 28%, #79b45a, #47764a);
+  transform: rotate(-8deg); box-shadow: inset 0 -4px 7px rgba(30,60,30,.3); }
+.sbody { position: absolute; bottom: 8px; left: 2px; width: 96px; height: 50px;
+  border-radius: 52% 48% 46% 54% / 70% 66% 36% 40%;
+  background: radial-gradient(circle at 30% 28%, #a7d8a9, #5f9f70);
+  box-shadow: inset 0 -6px 9px rgba(30,70,45,.3); }
+.seye { position: absolute; bottom: 34px; left: 17px; width: 7px; height: 9px; border-radius: 50%; background: #3a2c1c; }
+.spatch { position: absolute; bottom: 24px; left: 52px; width: 15px; height: 9px; border-radius: 50%; background: rgba(46,90,50,.4); }
+.spatch.b { left: 30px; bottom: 14px; width: 11px; height: 7px; }
+.slegF { position: absolute; bottom: 0; left: 12px; width: 20px; height: 13px; border-radius: 44% 44% 50% 50% / 62% 62% 38% 38%; background: #6aa877; }
+.slegB { position: absolute; bottom: 0; left: 64px; width: 20px; height: 13px; border-radius: 44% 44% 50% 50% / 62% 62% 38% 38%; background: #5c976b; }
+.shadowE { width: 68px; height: 10px; border-radius: 50%; margin-top: 9px;
+  background: rgba(70,45,20,.28); filter: blur(2px); animation: shadowPulse 3.4s ease-in-out infinite; }
+@keyframes bob { 0%, 100% { transform: translateY(-5px); } 50% { transform: translateY(4px); } }
+@keyframes shadowPulse { 0%, 100% { transform: scaleX(.84); opacity: .5; } 50% { transform: scaleX(1.04); opacity: .75; } }
+.alivehint { font-size: 7.5px; font-style: italic; color: #97826a; margin-top: 7px; }
+.aliveplate { flex: none; border-top: 1.5px solid #e6d9bd; padding-top: 5px; width: 100%; }
+.aliveplate .nm1 { font-size: 12px; font-weight: 800; letter-spacing: .1em; color: #4a392b; }
+.aliveplate .nm2 { font-size: 8.5px; color: #97826a; margin-top: 1px; }
+
+/* facts card */
+.factrows { display: flex; flex-direction: column; gap: 6px; font-size: 9px; }
+.flabel { font-size: 7.5px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; color: #97826a; margin-bottom: 2px; }
+.tchip { display: inline-block; border: 1.5px solid rgba(59,42,28,.45); border-radius: 6px; padding: 1px 7px;
+  font-size: 8px; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; background: rgba(255,249,236,.9); color: #5c4a37; }
+.tchip.dark { background: #3b2a1c; color: #f2e3c4; border-color: #3b2a1c; }
+.evoline { font-size: 9.3px; color: #4a392b; }
+.evoline b { font-weight: 800; border-bottom: 2px solid #d95f36; }
+.evoline .arr { color: #97826a; padding: 0 2px; }
+.sb { display: grid; grid-template-columns: 42px 1fr 20px; gap: 5px; align-items: center; font-size: 7.8px; color: #97826a; }
+.sbbar { height: 5px; background: #eadfc2; border-radius: 3px; overflow: hidden; border: 1px solid rgba(59,42,28,.16); }
+.sbfill { height: 100%; background: #7d9b5d; }
+.sbnum { text-align: right; color: #4a392b; font-weight: 700; }
+
+/* row 2 — the strict three-sleeve carousel */
+.caroband { position: relative; border-radius: 12px; background: var(--sleeve); padding: 24px 62px;
+  box-shadow: inset 0 0 0 1.5px var(--rim), inset 0 3px 6px rgba(90,60,25,.14);
+  display: flex; align-items: center; justify-content: center; gap: 16px; min-height: 268px; }
+.caroband::after { content: ""; position: absolute; inset: 0; border-radius: 12px; pointer-events: none;
+  background: linear-gradient(115deg, rgba(255,252,242,.5), rgba(255,252,242,0) 44%); }
+.pedestal { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 260px; height: 260px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,250,235,.95), rgba(255,250,235,0) 68%); pointer-events: none; }
+.cbtn { position: absolute; top: 50%; transform: translateY(-50%); z-index: 15; width: 38px; height: 38px; border-radius: 10px;
+  background: #fff9ec; border: 2px solid #3b2a1c; box-shadow: 0 3px 0 #3b2a1c;
+  display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 800; color: #3b2a1c;
+  transition: transform .08s ease, box-shadow .08s ease; }
+.cbtn:hover { transform: translateY(calc(-50% + 2px)); box-shadow: 0 1px 0 #3b2a1c; }
+.cbtn.l { left: 12px; } .cbtn.r { right: 12px; }
+.mot { width: 118px; position: relative; z-index: 2; }
+.mot .card { box-shadow: inset 0 0 0 2px rgba(59,42,28,.22), 0 2px 4px rgba(60,45,20,.18); }
+.motart { flex: 1; background: #f8f0da; position: relative; }
+.motart.dots { background-image: radial-gradient(rgba(59,42,28,.28) 1.2px, transparent 1.7px); background-size: 12px 12px; }
+.motart.weave { background-image: repeating-linear-gradient(45deg, rgba(59,42,28,.13) 0 2px, transparent 2px 12px); }
+.motlbl { position: absolute; left: 6px; right: 6px; bottom: 6px; font-size: 8px; font-weight: 600; text-align: center; color: #97826a;
+  background: rgba(255,250,240,.88); border-radius: 6px; padding: 2px 4px; }
+.throne { width: 176px; position: relative; z-index: 6; transform: translateY(-8px); }
+.throne .card { box-shadow: 0 0 0 2px #3b2a1c, 0 0 0 6px #fff9ec, 0 0 0 8px var(--honey), 0 14px 26px rgba(60,45,20,.4); }
+.filledchip { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); z-index: 7;
+  font-size: 8px; font-weight: 800; letter-spacing: .18em; color: #f2e3c4; background: #3b2a1c;
+  border-radius: 8px; padding: 3px 10px; box-shadow: 0 2px 0 #211509; white-space: nowrap; }
+
+/* edge-docked HUD rung-strip ladder (Variant A, merged) */
+.hudladder { position: absolute; right: -24px; top: 50%; transform: translateY(-50%);
+  z-index: 40; display: flex; flex-direction: column; align-items: center; gap: 8px;
+  opacity: .6; transition: opacity .2s ease; }
+.spagewrap:hover .hudladder { opacity: 1; }
+.hudladder::before { content: ""; position: absolute; top: 22px; bottom: 12px; left: 50%;
+  width: 2px; margin-left: -1px; background: #6d5a45; z-index: -1; }
+.llabel { font-size: 6.8px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; color: #6d5a45; }
+.lrung { width: 38px; height: 28px; border-radius: 9px; display: flex; align-items: center; justify-content: center;
+  font-size: 8.6px; font-weight: 800; letter-spacing: .03em;
+  border: 2px solid #3b2a1c; box-shadow: 0 2.5px 0 #3b2a1c;
+  transition: transform .08s ease, box-shadow .08s ease; }
+.lrung:hover { transform: translateY(2px); box-shadow: 0 .5px 0 #3b2a1c; }
+.lrung.fill { background: #3b2a1c; color: #f2e3c4; }
+.lrung.open { background: #fff9ec; color: #6d5a45; border-style: dashed; }
+.lrung.cur { box-shadow: 0 2.5px 0 #3b2a1c, 0 0 0 2px #fbf4e3, 0 0 0 4px #d95f36; }
+.lrung.cur:hover { box-shadow: 0 .5px 0 #3b2a1c, 0 0 0 2px #fbf4e3, 0 0 0 4px #d95f36; }
+
+/* row 3 — the story */
+.mglyph { font-size: 24px; text-align: center; line-height: 1.1; color: #4a392b; }
+.mtype { font-size: 15px; font-weight: 800; letter-spacing: .24em; text-indent: .24em; text-transform: uppercase; text-align: center; color: #4a392b; }
+.mname { font-size: 9.5px; text-align: center; color: #5c4a37; line-height: 1.4; }
+.mmeta { font-size: 8px; text-align: center; color: #97826a; }
+.mrule { width: 44px; height: 2px; border-radius: 2px; background: #d29a3a; margin: 2px auto; }
+.mrung { margin-top: auto; text-align: center; font-size: 8.4px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase;
+  color: #4a392b; border: 2px solid rgba(59,42,28,.35); border-radius: 8px; padding: 4px 6px; background: rgba(255,249,236,.9); }
+.para { font-size: 9.2px; line-height: 1.58; color: #4a392b; }
+.quote { font-size: 9px; font-style: italic; color: #5c4a37; line-height: 1.55; border-left: 2px solid #d29a3a; padding-left: 8px; }
+.src { margin-top: auto; font-size: 8.4px; line-height: 1.5; }
+.src a { color: #b34a28; font-weight: 700; text-decoration: underline; text-underline-offset: 2px; word-break: break-all; }
+.src a:hover { background: rgba(210,154,58,.18); }
+.srcsub { font-size: 7.8px; color: #97826a; margin-top: 2px; }
+
+/* ============================================================
+   THE SLEEVING RITUAL — static climax still
+   ============================================================ */
+.scene.ritual { padding-bottom: 64px;
+  background:
+    radial-gradient(700px 460px at 80% 6%, rgba(255,190,105,.12), rgba(255,190,105,0) 62%),
+    #1a130e; }
+.scene.ritual::before { top: 380px; filter: brightness(.55); }
+.scene.ritual .window, .scene.ritual .windowsill, .scene.ritual .lamp, .scene.ritual .fairy { opacity: .35; }
+.ritualstage { position: relative; z-index: 2; display: flex; justify-content: center; margin-top: 96px; }
+.rpage { width: 700px; max-width: 92vw; background: var(--page); border-radius: 12px; padding: 15px 17px 24px; position: relative;
+  background-image: radial-gradient(rgba(120,90,50,.045) 1px, transparent 1.4px); background-size: 14px 14px;
+  box-shadow: 0 10px 22px rgba(0,0,0,.5); }
+.rpage::after { /* everything on the page dims */
+  content: ""; position: absolute; inset: 0; z-index: 5; border-radius: 12px;
+  background: rgba(14,9,4,.6); pointer-events: none; }
+.rshaft { /* light falls from above onto the chased card */
+  position: absolute; top: -70px; bottom: 0; left: 50%; transform: translateX(-50%); width: 340px; z-index: 6; pointer-events: none;
+  background: linear-gradient(180deg, rgba(255,226,160,.55), rgba(255,226,160,0) 82%);
+  clip-path: polygon(36% 0, 64% 0, 96% 100%, 4% 100%); }
+.ritualpocket { z-index: 7; width: 204px; overflow: visible; }
+.ritualpocket .slidewell { position: relative; aspect-ratio: 63/88; }
+.slidecard { position: absolute; left: 5%; bottom: 26%; width: 90%; aspect-ratio: 63/88; z-index: 2;
+  border-radius: 8px; overflow: hidden; display: flex; flex-direction: column;
+  background: #fffdf6; transform: rotate(-5deg);
+  box-shadow: 0 0 0 2px #3b2a1c, 0 0 34px 8px rgba(255,205,130,.65), 0 18px 30px rgba(0,0,0,.5); }
+.slidecard .art { flex: 1;
+  background: radial-gradient(circle at 70% 22%, rgba(255,244,205,.8), rgba(255,244,205,0) 46%),
+              radial-gradient(circle at 34% 32%, rgba(255,250,225,.5), rgba(255,250,225,0) 42%),
+              linear-gradient(150deg, #a9c286, #6b9457); }
+.ritualpocket .lip { position: absolute; left: 0; right: 0; bottom: 0; height: 52%; z-index: 3; border-radius: 6px 6px 10px 10px;
+  background: linear-gradient(115deg, rgba(255,252,242,.35), rgba(255,252,242,0) 46%), rgba(228,212,174,.86);
+  box-shadow: inset 0 0 0 1.5px #c9b489, inset 0 4px 6px rgba(90,60,25,.18); }
+.ritualcaptionchip { position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%); z-index: 7;
+  font-size: 10.5px; font-style: italic; color: #f2e3c4; white-space: nowrap;
+  background: rgba(33,21,9,.7); border: 1.5px solid rgba(242,227,196,.25); border-radius: 10px; padding: 6px 16px; }
+.sleevebtn { font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: #fff9ec;
+  background: #d95f36; border: 2px solid #b34a28; border-radius: 10px; padding: 8px 18px;
+  box-shadow: 0 1px 0 #b34a28; display: inline-block; transform: translateY(2px); }
+.rfoot { margin-top: 14px; display: flex; justify-content: center; }
+
+/* ============================================================
+   PALETTE SWATCHES
+   ============================================================ */
+.swatches { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 10px; }
+.sw { width: 122px; border-radius: 10px; overflow: hidden; background: #fff9ec; border: 2px solid rgba(59,42,28,.2); }
+.sw i { display: block; height: 42px; }
+.sw span { display: block; padding: 6px 8px 7px; font-size: 8.6px; line-height: 1.45; color: #6d5a45; }
+.sw span b { display: block; font-size: 9.3px; font-weight: 800; color: #4a392b; }
+.sw i.ghostsw { background: rgba(255,253,246,.6); border-bottom: none; box-shadow: inset 0 0 0 2px #fff, inset 0 0 0 4px transparent;
+  border: 2px dashed #d95f36; margin: 4px; height: 34px; border-radius: 6px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .steam, .fairy i, .chasechip, .bobber, .shadowE { animation: none; }
+  .chip, .fbtn, .cbtn, .lrung, .rowhud, .hudladder { transition: none; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">Ash's Journey · Merged visual direction — the definitive remix</div>
+  <h1>Lofi World, Trainer Chrome</h1>
+  <p class="rationale">The Lofi Desk's world, whole: an inhabited room with a window behind the desk, honeyed light by day and moon-plus-lamp by night, wood grain, plants, a mug going cold, a leather binder of cream paper. Inside that world, every control speaks the Trainer's Tool language: thick espresso borders, hard press-shadows that sink on hover, one confident accent — but every corner is a rounded rectangle (8–12px), never a capsule.</p>
+  <p class="accentnote"><i class="dot"></i><b>The one accent — Ember #d95f36</b> (night #ff8257). The Trainer's Tool's flame, annealed toward the Lofi Desk's terracotta pot: fired clay in honeyed light. It reads as part of the room — the pot on the shelf, the pencil on the desk — so the chrome's confidence never breaks the coziness. Ember marks only what is interactive or chased: search glyph, active chips, the CHASING ghost, the current ladder rung, the sleeve button. Rank labels stay quiet honey (#d29a3a) and ink.</p>
+</header>
+
+<!-- ================= 1 · HERO — HOME SPREAD, DAY ================= -->
+<div class="sectionhead">1 · Hero — home spread, day (sunlit window behind the desk)</div>
+<div class="scene day">
+  <div class="window"></div>
+  <div class="windowsill"></div>
+  <div class="shaft"></div>
+  <div class="shaft r"></div>
+  <div class="plant"><i class="leaf a"></i><i class="leaf b"></i><i class="leaf c"></i><i class="leaf d"></i><i class="pot"></i></div>
+  <div class="mug"><i class="steam"></i><i class="steam s2"></i><i class="cup"></i><i class="handle"></i></div>
+  <div class="note"><b>The Hunt</b>1 Slot Chasing —<br>Bulbasaur · Ultra Rare</div>
+  <div class="pencil"></div>
+
+  <div class="cmdbar">
+    <div class="searchbox"><span class="glass">⌕</span><span class="ph">Search the binder — name, Region, Milestone, Rank, status:chasing</span><span class="kbd">/</span></div>
+    <span class="chip on">Region: Kanto</span>
+    <span class="chip">Rank ▾</span>
+    <span class="chip">Milestone ▾</span>
+    <span class="chip">The Hunt</span>
+    <div class="meter"><span class="lbl">Kanto — 12 of 31 sleeved <small>· only Filled counts</small></span><span class="bar"><span class="fill"></span></span></div>
+    <div class="toggle day"><span class="tk"><span class="knob">☀</span></span><span class="cap">Day</span></div>
+  </div>
+
+  <div class="binder">
+    <div class="cover">
+      <div class="pageL">
+        <div class="pagehead"><span class="crumb">Kanto · Entries № 001–003 · Chapter I</span><span class="flip"><span class="fbtn">‹</span></span></div>
+        <div class="grid">
+          <div class="pocket"><div class="card"><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Base Set · 1999</div></div></div><div class="slottag"><span class="who">Bulbasaur</span><span class="rkchip">⚫ Common</span></div></div>
+          <div class="pocket"><div class="card"><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Shining Legends · 2017</div></div></div><div class="slottag"><span class="who">Bulbasaur</span><span class="rkchip">Uncommon</span></div></div>
+          <div class="pocket"><div class="card"><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Pokémon GO · 2022</div></div></div><div class="slottag"><span class="who">Bulbasaur</span><span class="rkchip">Rare</span></div></div>
+          <div class="pocket"><div class="card ghost"><span class="chasechip">CHASING</span><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Scarlet &amp; Violet — 151 · 2023</div></div></div><div class="slottag"><span class="who">Bulbasaur</span><span class="rkchip ember">Ultra Rare</span></div></div>
+          <div class="pocket"><div class="card"><div class="art art-ivy"></div><div class="plate"><div class="nm">Ivysaur</div><div class="set">Jungle · 1999</div></div></div><div class="slottag"><span class="who">Ivysaur</span><span class="rkchip">⚫ Common</span></div></div>
+          <div class="pocket"><div class="card empty"><span class="openstar">★</span><span class="openlbl">Open slot</span><span class="openrank">Uncommon</span><span class="emptywaits">this sleeve waits</span></div><div class="slottag"><span class="who">Ivysaur</span><span class="rkchip honey">Uncommon</span></div></div>
+          <div class="pocket"><div class="card"><div class="art art-venu"></div><div class="plate"><div class="nm">Venusaur</div><div class="set">Base Set · 1999</div></div></div><div class="slottag"><span class="who">Venusaur</span><span class="rkchip">Rare</span></div></div>
+          <div class="pocket"><div class="card empty"><span class="openstar">★</span><span class="openlbl">Open slot</span><span class="openrank">Illustration Rare</span><span class="emptywaits">this sleeve waits</span></div><div class="slottag"><span class="who">Venusaur</span><span class="rkchip honey">Illustration Rare</span></div></div>
+          <div class="pocket"><div class="card empty"><span class="openstar">★</span><span class="openlbl">Open slot</span><span class="openrank">Special Illustration Rare</span><span class="emptywaits">this sleeve waits</span></div><div class="slottag"><span class="who">Venusaur</span><span class="rkchip honey">Special Illus. Rare</span></div></div>
+        </div>
+        <div class="pageno">p. 04</div>
+      </div>
+      <div class="rings"><i></i><i></i><i></i></div>
+      <div class="pageR">
+        <div class="pagehead"><span class="crumb">Kanto · Entries № 010–025 · Chapter I</span><span class="flip"><span class="fbtn">›</span></span></div>
+        <div class="grid">
+          <div class="pocket"><div class="card"><div class="art art-cater"></div><div class="plate"><div class="nm">Caterpie</div><div class="set">Base Set · 1999</div></div></div><div class="slottag"><span class="who">Caterpie</span><span class="rkchip">⚫ Common</span></div></div>
+          <div class="pocket"><div class="card"><div class="art art-butter"></div><div class="plate"><div class="nm">Butterfree</div><div class="set">Jungle · 1999</div></div></div><div class="slottag"><span class="who">Butterfree</span><span class="rkchip">Uncommon</span></div></div>
+          <div class="pocket"><div class="card empty"><span class="openstar">★</span><span class="openlbl">Open slot</span><span class="openrank">Rare</span><span class="emptywaits">this sleeve waits</span></div><div class="slottag"><span class="who">Butterfree</span><span class="rkchip honey">Rare</span></div></div>
+          <div class="pocket"><div class="card"><div class="art art-pika"></div><div class="plate"><div class="nm">Pikachu</div><div class="set">Base Set · 1999</div></div></div><div class="slottag"><span class="who">Pikachu</span><span class="rkchip">⚫ Common</span></div></div>
+          <div class="pocket"><div class="card"><div class="art art-pika"></div><div class="plate"><div class="nm">Pikachu</div><div class="set">Legendary Collection · 2002</div></div></div><div class="slottag"><span class="who">Pikachu</span><span class="rkchip">Uncommon</span></div></div>
+          <div class="pocket"><div class="card"><div class="art art-pika"></div><div class="plate"><div class="nm">Pikachu</div><div class="set">XY Evolutions · 2016</div></div></div><div class="slottag"><span class="who">Pikachu</span><span class="rkchip">Rare</span></div></div>
+          <div class="pocket"><div class="card empty"><span class="openstar">★</span><span class="openlbl">Open slot</span><span class="openrank">Ultra Rare</span><span class="emptywaits">this sleeve waits</span></div><div class="slottag"><span class="who">Pikachu</span><span class="rkchip honey">Ultra Rare</span></div></div>
+          <div class="pocket"><div class="card empty"><span class="openstar">★</span><span class="openlbl">Open slot</span><span class="openrank">Illustration Rare</span><span class="emptywaits">this sleeve waits</span></div><div class="slottag"><span class="who">Pikachu</span><span class="rkchip honey">Illustration Rare</span></div></div>
+          <div class="pocket"><div class="card empty"><span class="openstar">★</span><span class="openlbl">Open slot</span><span class="openrank">Hyper Rare</span><span class="emptywaits">this sleeve waits</span></div><div class="slottag"><span class="who">Pikachu</span><span class="rkchip honey">Hyper Rare</span></div></div>
+        </div>
+        <div class="pageno">p. 05</div>
+      </div>
+    </div>
+  </div>
+</div>
+<p class="caption">Day: sunlight pours through the window behind the desk — the Orca-card light — and the beams spill past the binder onto the wood. The command bar floats above the binder in full Trainer chrome (thick borders, press-on-hover, rounded rectangles); the CHASING ghost sits translucent with its ember mark; empty sleeves state the Rank they demand in quiet honey.</p>
+
+<!-- ================= 2 · NIGHT STRIP ================= -->
+<div class="sectionhead">2 · Night strip — the same room after dark (moonlit window, lamp pool) · toggle in night position</div>
+<div class="scene night">
+  <div class="window" style="left:26%; top:24px; height:350px"></div>
+  <div class="windowsill" style="left:26%; top:376px"></div>
+  <div class="shaft" style="margin-left:-820px"></div>
+  <div class="fairy"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="lamp"><i class="arm"></i><i class="shade"></i><i class="cone"></i></div>
+  <div class="lamppool"></div>
+  <div class="mug" style="top:430px; right:120px"><i class="steam"></i><i class="cup"></i><i class="handle"></i></div>
+
+  <div class="cmdbar">
+    <div class="searchbox"><span class="glass">⌕</span><span class="ph">Search the binder — name, Region, Milestone, Rank, status:chasing</span><span class="kbd">/</span></div>
+    <span class="chip on">Region: Kanto</span>
+    <span class="chip">The Hunt</span>
+    <div class="meter"><span class="lbl">Kanto — 12 of 31 sleeved <small>· only Filled counts</small></span><span class="bar"><span class="fill"></span></span></div>
+    <div class="toggle nightpos"><span class="tk"><span class="knob">☾</span></span><span class="cap">Night</span></div>
+  </div>
+
+  <div class="binder">
+    <div class="cover">
+      <div class="pageL solo">
+        <div class="pagehead"><span class="crumb">Kanto · Entries № 001–003 · Chapter I</span><span class="flip"><span class="fbtn">‹</span><span class="fbtn">›</span></span></div>
+        <div class="grid">
+          <div class="pocket"><div class="card"><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Base Set · 1999</div></div></div><div class="slottag"><span class="who">Bulbasaur</span><span class="rkchip">⚫ Common</span></div></div>
+          <div class="pocket"><div class="card"><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Shining Legends · 2017</div></div></div><div class="slottag"><span class="who">Bulbasaur</span><span class="rkchip">Uncommon</span></div></div>
+          <div class="pocket"><div class="card"><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Pokémon GO · 2022</div></div></div><div class="slottag"><span class="who">Bulbasaur</span><span class="rkchip">Rare</span></div></div>
+          <div class="pocket"><div class="card ghost"><span class="chasechip">CHASING</span><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Scarlet &amp; Violet — 151 · 2023</div></div></div><div class="slottag"><span class="who">Bulbasaur</span><span class="rkchip ember">Ultra Rare</span></div></div>
+          <div class="pocket"><div class="card"><div class="art art-ivy"></div><div class="plate"><div class="nm">Ivysaur</div><div class="set">Jungle · 1999</div></div></div><div class="slottag"><span class="who">Ivysaur</span><span class="rkchip">⚫ Common</span></div></div>
+          <div class="pocket"><div class="card empty"><span class="openstar">★</span><span class="openlbl">Open slot</span><span class="openrank">Uncommon</span><span class="emptywaits">this sleeve waits</span></div><div class="slottag"><span class="who">Ivysaur</span><span class="rkchip honey">Uncommon</span></div></div>
+          <div class="pocket"><div class="card"><div class="art art-venu"></div><div class="plate"><div class="nm">Venusaur</div><div class="set">Base Set · 1999</div></div></div><div class="slottag"><span class="who">Venusaur</span><span class="rkchip">Rare</span></div></div>
+          <div class="pocket"><div class="card empty"><span class="openstar">★</span><span class="openlbl">Open slot</span><span class="openrank">Illustration Rare</span><span class="emptywaits">this sleeve waits</span></div><div class="slottag"><span class="who">Venusaur</span><span class="rkchip honey">Illustration Rare</span></div></div>
+          <div class="pocket"><div class="card empty"><span class="openstar">★</span><span class="openlbl">Open slot</span><span class="openrank">Special Illustration Rare</span><span class="emptywaits">this sleeve waits</span></div><div class="slottag"><span class="who">Venusaur</span><span class="rkchip honey">Special Illus. Rare</span></div></div>
+        </div>
+        <div class="pageno">p. 04</div>
+      </div>
+    </div>
+  </div>
+</div>
+<p class="caption">Night: the window turns to moon and stars, the lamp pools warm light over the page, fairy lights hold the ceiling. The chrome goes roasted-dark and glows gently — ember lifts a step brighter (#ff8257), the moon knob takes the toggle — while the page itself stays lamp-lit cream, still a binder on a desk.</p>
+
+<!-- ================= 3 · SLOT DETAILS FRAGMENT ================= -->
+<div class="sectionhead">3 · Slot details fragment — single page, three-sleeve carousel throne, edge-docked rung-strip ladder</div>
+<div class="scene day" style="padding-bottom:64px">
+  <div class="window"></div>
+  <div class="windowsill"></div>
+  <div class="shaft"></div>
+  <div class="plant"><i class="leaf a"></i><i class="leaf b"></i><i class="leaf c"></i><i class="leaf d"></i><i class="pot"></i></div>
+  <div class="mug"><i class="steam"></i><i class="steam s2"></i><i class="cup"></i><i class="handle"></i></div>
+
+  <div class="binder" style="margin-top:150px">
+    <div class="cover" style="padding:20px 22px 24px">
+      <div class="spagewrap">
+
+        <div class="hudladder" title="Slot ladder — this Entry's four Slots">
+          <div class="llabel">Slots</div>
+          <span class="lrung open">UR</span>
+          <span class="lrung fill">R</span>
+          <span class="lrung fill">U</span>
+          <span class="lrung fill cur">⚫C</span>
+        </div>
+
+        <div class="spage">
+          <div class="pagehead"><span class="crumb">Kanto · Entry № 001 — Bulbasaur</span><span class="crumb">Slot 1 of 4 — ⚫ base Common · Filled</span></div>
+          <div class="rows">
+
+            <!-- ROW 1 : the soul -->
+            <div class="rowband">
+              <div class="rowhud"><span class="hbtn">‹ back to spread</span><span class="hsep"></span><span>Entry № 001 · Bulbasaur</span><span class="hsep"></span><span class="hdim">slot</span><span class="hbtn">‹ prev</span><span class="hbtn">next ›</span></div>
+              <div class="pocket">
+                <div class="dcard">
+                  <div class="dhead">Chase · binder data</div>
+                  <div class="rankline">ULTRA RARE</div>
+                  <div class="starline">★★★<span class="off">★★★</span><span class="cap">3 of 6 Stars</span></div>
+                  <div class="kv"><span class="k">Region</span><span class="v">Kanto</span></div>
+                  <div class="kv"><span class="k">Slots</span><span class="v">4 · 3 Filled / 1 Chasing</span></div>
+                  <div class="milehead">Milestones earned</div>
+                  <div class="milelist">
+                    <div class="this">⚫ The Catch · EP010 — this slot</div>
+                    <div>★ Teammate <span class="ep">· Kanto</span></div>
+                    <div>★ Bond <span class="ep">· EP051</span></div>
+                    <div>★ Glory <span class="ep">· EP074</span></div>
+                  </div>
+                  <div class="dstatus"><b>This slot: ⚫ base Common — FILLED</b><br>Sleeved: Base Set · 1999<br>Only Filled counts toward progress.</div>
+                </div>
+              </div>
+              <div class="pocket">
+                <div class="dcard alivecard">
+                  <div class="dhead">The Pokémon</div>
+                  <div class="aliveStage">
+                    <div class="bobber">
+                      <div class="sprite">
+                        <div class="sbulb"></div>
+                        <div class="sbody"></div>
+                        <div class="spatch"></div>
+                        <div class="spatch b"></div>
+                        <div class="seye"></div>
+                        <div class="slegF"></div>
+                        <div class="slegB"></div>
+                      </div>
+                    </div>
+                    <div class="shadowE"></div>
+                    <div class="alivehint">sprite / illustration placeholder — alive, floating</div>
+                  </div>
+                  <div class="aliveplate">
+                    <div class="nm1">BULBASAUR</div>
+                    <div class="nm2">№ 001 · the Seed Pokémon</div>
+                  </div>
+                </div>
+              </div>
+              <div class="pocket">
+                <div class="dcard">
+                  <div class="dhead">Pokémon facts</div>
+                  <div class="factrows">
+                    <div>
+                      <div class="flabel">Type</div>
+                      <span class="tchip dark">Grass</span> <span class="tchip dark">Poison</span>
+                    </div>
+                    <div>
+                      <div class="flabel">Evolution line</div>
+                      <div class="evoline"><b>Bulbasaur</b><span class="arr">▶</span>Ivysaur<span class="arr">▶</span>Venusaur</div>
+                    </div>
+                    <div>
+                      <div class="flabel">Base stats</div>
+                      <div class="sb"><span>HP</span><div class="sbbar"><div class="sbfill" style="width:35%"></div></div><span class="sbnum">45</span></div>
+                      <div class="sb"><span>Attack</span><div class="sbbar"><div class="sbfill" style="width:38%"></div></div><span class="sbnum">49</span></div>
+                      <div class="sb"><span>Defense</span><div class="sbbar"><div class="sbfill" style="width:38%"></div></div><span class="sbnum">49</span></div>
+                      <div class="sb"><span>Sp. Atk</span><div class="sbbar"><div class="sbfill" style="width:50%"></div></div><span class="sbnum">65</span></div>
+                      <div class="sb"><span>Sp. Def</span><div class="sbbar"><div class="sbfill" style="width:50%"></div></div><span class="sbnum">65</span></div>
+                      <div class="sb"><span>Speed</span><div class="sbbar"><div class="sbfill" style="width:35%"></div></div><span class="sbnum">45</span></div>
+                    </div>
+                    <div>
+                      <div class="flabel">Weak to</div>
+                      <span class="tchip">Fire</span> <span class="tchip">Flying</span> <span class="tchip">Ice</span> <span class="tchip">Psychic</span>
+                    </div>
+                    <div>
+                      <div class="flabel">Strong vs</div>
+                      <span class="tchip">Water</span> <span class="tchip">Rock</span> <span class="tchip">Ground</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ROW 2 : the strict three-sleeve carousel — the throne -->
+            <div class="caroband">
+              <div class="rowhud"><span>⚫ base Common · Filled</span><span class="hsep"></span><span class="hdim">Base Set · 1999 · physically sleeved</span><span class="hsep"></span><span class="hbtn">other printings ▾</span></div>
+              <div class="pedestal"></div>
+              <span class="cbtn l">‹</span>
+              <span class="cbtn r">›</span>
+              <div class="mot"><div class="card"><div class="motart dots"><span class="motlbl">Common motif — quiet dot lattice</span></div><div class="plate"><div class="nm" style="color:#97826a">Common motif card</div><div class="set">rank element set</div></div></div></div>
+              <div class="throne"><div class="card"><span class="filledchip">FILLED · SLEEVED</span><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Base Set · 1999 · ⚫ base Common</div></div></div></div>
+              <div class="mot"><div class="card"><div class="motart weave"><span class="motlbl">Common motif — plain diagonal weave</span></div><div class="plate"><div class="nm" style="color:#97826a">Common motif card</div><div class="set">rank element set</div></div></div></div>
+            </div>
+
+            <!-- ROW 3 : the story -->
+            <div class="rowband">
+              <div class="rowhud"><span>Story · this slot's milestone</span><span class="hsep"></span><span class="hdim">The Catch ⚫ · base rung</span><span class="hsep"></span><span class="hbtn">citations</span></div>
+              <div class="pocket">
+                <div class="dcard">
+                  <div class="dhead">Milestone — earned this slot</div>
+                  <div class="mglyph">⚫</div>
+                  <div class="mtype">The Catch</div>
+                  <div class="mrule"></div>
+                  <div class="mname">Bulbasaur and the<br>Hidden Village</div>
+                  <div class="mmeta">EP010 · Kanto · Appearance: the Hidden Village</div>
+                  <div class="mrung">⚫ The Catch → base rung · Common</div>
+                </div>
+              </div>
+              <div class="pocket">
+                <div class="dcard">
+                  <div class="dhead">Explainer</div>
+                  <p class="para">In the Hidden Village, Bulbasaur stood watch over abandoned and injured Pokémon, turning every traveler away from the bridge. Only after Ash helped defend the village did it agree to battle him — Pikachu wore it down, the Poké Ball closed, and the village's guardian chose the road. Every Entry begins here: the ⚫ base Slot is the Catch itself.</p>
+                </div>
+              </div>
+              <div class="pocket">
+                <div class="dcard">
+                  <div class="dhead">Citation</div>
+                  <p class="quote">"Bulbasaur agreed to come with Ash only if he could defeat it in battle. After Pikachu won the fight, Ash threw a Poké Ball and caught Bulbasaur."</p>
+                  <div class="src"><a href="#">bulbapedia.bulbagarden.net/wiki/EP010&nbsp;↗</a>
+                    <div class="srcsub">EP010 — "Bulbasaur and the Hidden Village" · retrieved 2026-07-31</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="pageno" style="left:17px">Bulbasaur · slot detail</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<p class="caption">The single-page drill-down in merged style: the strict 3×3 holds — row 2 is exactly three sleeves, the enthroned card taller on its pedestal glow (ink–cream–honey triple ring), the Common motif cards shorter at its sides, chunky rounded-square rotate buttons at the band edges. The Entry's four Slots dock at the page edge as a Trainer rung strip — filled rungs solid espresso, the open Ultra Rare dashed, the current rung ringed in ember. Hover a row for its HUD strip; hover the page to brighten the ladder.</p>
+
+<!-- ================= 4 · THE SLEEVING RITUAL ================= -->
+<div class="sectionhead">4 · The sleeving ritual frame — the climax, mid-slide (static still)</div>
+<div class="scene night ritual">
+  <div class="window" style="left:12%; top:30px; height:320px"></div>
+  <div class="windowsill" style="left:12%; top:352px"></div>
+  <div class="fairy"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="lamp"><i class="arm"></i><i class="shade"></i><i class="cone"></i></div>
+
+  <div class="ritualstage">
+    <div class="rpage">
+      <div class="rshaft"></div>
+      <div class="pagehead"><span class="crumb">Kanto · Entry № 001 — Bulbasaur</span><span class="crumb">Slot 4 of 4 — Ultra Rare · sleeving…</span></div>
+      <div class="caroband" style="min-height:300px">
+        <div class="pedestal" style="opacity:.4"></div>
+        <div class="mot"><div class="card"><div class="motart dots"><span class="motlbl">Ultra Rare motif card</span></div><div class="plate"><div class="nm" style="color:#97826a">motif card</div><div class="set">rank element set</div></div></div></div>
+        <div class="pocket ritualpocket">
+          <div class="slidewell">
+            <div class="slidecard"><div class="art"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Scarlet &amp; Violet — 151 · 2023 · Ultra Rare</div></div></div>
+            <div class="lip"></div>
+          </div>
+        </div>
+        <div class="mot"><div class="card"><div class="motart weave"><span class="motlbl">Ultra Rare motif card</span></div><div class="plate"><div class="nm" style="color:#97826a">motif card</div><div class="set">rank element set</div></div></div></div>
+      </div>
+      <div class="rfoot"><span class="sleevebtn">Sleeve this card</span></div>
+    </div>
+  </div>
+
+  <div class="ritualcaptionchip">The ritual's peak — the room holds its breath; light finds the card as it slides home.</div>
+</div>
+<p class="caption">The sleeving ritual, frozen mid-slide: everything on the page dims under the veil, a single shaft of light falls from above, and the chased card — slightly rotated, glowing ember-gold at its edges — descends behind the sleeve's front lip. The pressed Sleeve button waits dimmed below. One frame later it is the page's enthroned card. Static CSS scene; in product this is the FR-038/039 moment, paired with the sleeving sound effect and a reduced-motion-safe cut.</p>
+
+<!-- ================= 5 · FOOTER PALETTE ================= -->
+<div class="sectionhead">5 · Footer palette swatch row — every color, hex + role</div>
+<div class="swatches">
+  <div class="sw"><i style="background:#ecdcbf"></i><span><b>#ecdcbf</b>room wall (day)</span></div>
+  <div class="sw"><i style="background:#a06b46"></i><span><b>#a06b46</b>desk wood (day)</span></div>
+  <div class="sw"><i style="background:linear-gradient(180deg,#cfe3d8,#ffe9b8)"></i><span><b>#cfe3d8→#ffe9b8</b>window — day sky &amp; sun</span></div>
+  <div class="sw"><i style="background:linear-gradient(200deg,#101720,#1d2733)"></i><span><b>#101720→#1d2733</b>window — night sky</span></div>
+  <div class="sw"><i style="background:#f4e9c8"></i><span><b>#f4e9c8</b>moon (night window)</span></div>
+  <div class="sw"><i style="background:#6b4a30"></i><span><b>#6b4a30</b>window frame</span></div>
+  <div class="sw"><i style="background:#7b523a"></i><span><b>#7b523a</b>binder leather</span></div>
+  <div class="sw"><i style="background:#fbf4e3"></i><span><b>#fbf4e3</b>page (day)</span></div>
+  <div class="sw"><i style="background:#f1e7d0"></i><span><b>#f1e7d0</b>sleeve (day)</span></div>
+  <div class="sw"><i style="background:#4a392b"></i><span><b>#4a392b</b>ink</span></div>
+  <div class="sw"><i style="background:#97826a"></i><span><b>#97826a</b>soft ink</span></div>
+  <div class="sw"><i style="background:#fff9ec"></i><span><b>#fff9ec</b>chrome panel (day)</span></div>
+  <div class="sw"><i style="background:#3b2a1c"></i><span><b>#3b2a1c</b>chrome border — espresso</span></div>
+  <div class="sw"><i style="background:#d95f36"></i><span><b>#d95f36</b>ACCENT — ember (day)</span></div>
+  <div class="sw"><i style="background:#b34a28"></i><span><b>#b34a28</b>ember press edge</span></div>
+  <div class="sw"><i style="background:#ff8257"></i><span><b>#ff8257</b>ACCENT — ember (night)</span></div>
+  <div class="sw"><i class="ghostsw"></i><span><b>#d95f36 dashed</b>ghost — Chasing placeholder</span></div>
+  <div class="sw"><i style="background:#d29a3a"></i><span><b>#d29a3a</b>rank tone — honey (day)</span></div>
+  <div class="sw"><i style="background:#e0a94e"></i><span><b>#e0a94e</b>rank tone — honey (night)</span></div>
+  <div class="sw"><i style="background:#8a6410"></i><span><b>#8a6410</b>rank tone — honey text</span></div>
+  <div class="sw"><i style="background:#7d9b5d"></i><span><b>#7d9b5d</b>plant green · meter fill</span></div>
+  <div class="sw"><i style="background:#c2713f"></i><span><b>#c2713f</b>terracotta pot (world only)</span></div>
+  <div class="sw"><i style="background:#251d17"></i><span><b>#251d17</b>room (night)</span></div>
+  <div class="sw"><i style="background:#533826"></i><span><b>#533826</b>desk wood (night)</span></div>
+  <div class="sw"><i style="background:#f0e2c2"></i><span><b>#f0e2c2</b>page (night, lamp-lit)</span></div>
+  <div class="sw"><i style="background:#e4d4ae"></i><span><b>#e4d4ae</b>sleeve (night)</span></div>
+  <div class="sw"><i style="background:#33261a"></i><span><b>#33261a</b>chrome panel (night)</span></div>
+  <div class="sw"><i style="background:#57422e"></i><span><b>#57422e</b>chrome edge (night)</span></div>
+  <div class="sw"><i style="background:#f2e3c4"></i><span><b>#f2e3c4</b>chrome ink (night)</span></div>
+  <div class="sw"><i style="background:#ffbe69"></i><span><b>#ffbe69</b>lamp glow (night)</span></div>
+  <div class="sw"><i style="background:#ffd98a"></i><span><b>#ffd98a</b>fairy light</span></div>
+  <div class="sw"><i style="background:linear-gradient(150deg,#a9c286,#6b9457)"></i><span><b>#a9c286→#6b9457</b>card art — Bulbasaur</span></div>
+  <div class="sw"><i style="background:linear-gradient(150deg,#f4d766,#dda93e)"></i><span><b>#f4d766→#dda93e</b>card art — Pikachu</span></div>
+</div>
+
+<footer>Merged direction — Lofi world, Trainer chrome · Ash's Journey · no JS, no external assets · rounded corners never pills · motion honors prefers-reduced-motion</footer>
+</div>
+</body>
+</html>

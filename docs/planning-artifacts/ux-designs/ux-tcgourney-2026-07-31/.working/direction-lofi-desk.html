@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ash's Journey — Direction 1: The Lofi Desk</title>
+<style>
+/* ============================================================
+   DIRECTION 1 — "THE LOFI DESK"
+   Palette documentation (hex):
+   DAY   room wall        #ecdcbf
+         window light     #ffe9b8
+         desk wood        #a06b46  (grain #8a5a3a / #b57d54)
+         binder leather   #7b523a  (stitch #5c3c28)
+         page             #fbf4e3
+         sleeve           #f1e7d0  (rim #dbcba6)
+         ink              #4a392b  (soft ink #97826a)
+         accent green     #7d9b5d
+         rank honey       #d29a3a
+         chase terracotta #c2713f
+   NIGHT room             #251d17
+         lamp glow        #ffbe69
+         desk wood        #533826  (grain #45301f)
+         page (lamp-lit)  #f0e2c2
+         sleeve           #e4d4ae  (rim #c9b489)
+         ink              #443320  (soft ink #8d7a5e)
+         accent green     #8fae6f
+         rank honey       #e0a94e
+         chase terracotta #d07c48
+         fairy lights     #ffd98a / #f2a68a / #b9d189
+   CARD ART (placeholders)
+         bulbasaur  #a9c286 → #6b9457     ivysaur #8fb573 → #557f4a (+#e2a9b4)
+         venusaur   #7ba468 → #3f6b42     caterpie #d3d489 → #9cb35f
+         butterfree #cdc7e3 → #8f9fc9     pikachu  #f4d766 → #dda93e
+   ============================================================ */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: ui-rounded, "Trebuchet MS", "Segoe UI", Verdana, sans-serif;
+  background: #f2ead9; color: #4a392b; line-height: 1.5;
+  padding: 40px 22px 64px;
+}
+.wrap { max-width: 1400px; margin: 0 auto; }
+header h1 { font-size: 25px; letter-spacing: .01em; }
+header .kicker { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: #97826a; margin-bottom: 6px; }
+.rationale { margin: 10px 0 0; max-width: 880px; font-size: 14px; color: #6d5a45; }
+.sectionhead { margin: 46px 0 14px; font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: #97826a; }
+
+/* ---------- scene chassis: the room + the desk ---------- */
+.scene {
+  --wall: #ecdcbf; --desk: #a06b46; --graind: #8a5a3a; --grainl: #b57d54;
+  --leather: #7b523a; --stitch: #5c3c28;
+  --page: #fbf4e3; --sleeve: #f1e7d0; --rim: #dbcba6;
+  --ink: #4a392b; --soft: #97826a;
+  --green: #7d9b5d; --honey: #d29a3a; --terra: #c2713f;
+  --hud: rgba(253,248,236,.92); --hudink: #4a392b;
+  position: relative; border-radius: 20px; overflow: hidden;
+  background:
+    radial-gradient(1100px 420px at 18% -8%, #ffe9b8 0%, rgba(255,233,184,0) 58%),
+    var(--wall);
+  box-shadow: 0 20px 44px rgba(90,62,35,.22);
+  padding: 34px 40px 52px;
+}
+.scene::before { /* desk surface */
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 82%;
+  background:
+    repeating-linear-gradient(94deg, rgba(0,0,0,0) 0 46px, rgba(70,42,20,.10) 46px 49px, rgba(255,235,205,.06) 49px 52px),
+    linear-gradient(180deg, var(--grainl), var(--desk) 24%, var(--graind));
+  border-radius: 26px 26px 0 0;
+  box-shadow: 0 -8px 22px rgba(60,35,15,.25);
+}
+.scene > * { position: relative; z-index: 2; }
+
+.scene.night {
+  --wall: #251d17; --desk: #533826; --graind: #45301f; --grainl: #6b492f;
+  --leather: #4b3221; --stitch: #33220f;
+  --page: #f0e2c2; --sleeve: #e4d4ae; --rim: #c9b489;
+  --ink: #443320; --soft: #8d7a5e;
+  --green: #8fae6f; --honey: #e0a94e; --terra: #d07c48;
+  --hud: rgba(48,36,26,.92); --hudink: #f2e3c4;
+  background:
+    radial-gradient(760px 520px at 82% 4%, rgba(255,190,105,.34) 0%, rgba(255,190,105,0) 62%),
+    var(--wall);
+}
+
+/* ---------- room objects (day) ---------- */
+.plant { position: absolute; top: 6px; left: 10px; width: 150px; height: 150px; z-index: 3; pointer-events: none; }
+.leaf { position: absolute; width: 70px; height: 26px; border-radius: 4% 96% 40% 60% / 50% 50% 50% 50%; background: linear-gradient(100deg, #7d9b5d, #5f7c45); }
+.leaf.a { top: 26px; left: 4px; transform: rotate(-34deg); }
+.leaf.b { top: 44px; left: 30px; transform: rotate(-6deg); width: 84px; }
+.leaf.c { top: 66px; left: 8px; transform: rotate(22deg); background: linear-gradient(100deg, #90ac6c, #6d8a50); }
+.leaf.d { top: 84px; left: 40px; transform: rotate(46deg); width: 60px; }
+.pot { position: absolute; top: 102px; left: 44px; width: 56px; height: 40px; border-radius: 6px 6px 14px 14px; background: linear-gradient(180deg, #c2713f, #a55b2f); }
+.mug { position: absolute; right: 46px; top: 118px; width: 58px; height: 48px; z-index: 3; pointer-events: none; }
+.mug .cup { position: absolute; inset: 8px 0 0 0; border-radius: 6px 6px 16px 16px; background: linear-gradient(180deg, #e8d3a9, #cfb381); box-shadow: inset 0 4px 0 rgba(90,60,30,.28); }
+.mug .handle { position: absolute; right: -13px; top: 16px; width: 18px; height: 20px; border: 5px solid #cfb381; border-radius: 50%; }
+.steam { position: absolute; top: -14px; left: 16px; width: 8px; height: 20px; border-radius: 50%; background: rgba(255,251,240,.75); filter: blur(3px); animation: steam 4.2s ease-in-out infinite; }
+.steam.s2 { left: 30px; animation-delay: 1.3s; height: 15px; }
+@keyframes steam { 0% { transform: translateY(4px) scaleY(.7); opacity: 0; } 45% { opacity: .8; } 100% { transform: translateY(-16px) scaleY(1.25); opacity: 0; } }
+.note {
+  position: absolute; left: 34px; bottom: 40px; width: 118px; padding: 10px 10px 12px; z-index: 3;
+  background: #ffe9a8; color: #6d5424; font-size: 10.5px; line-height: 1.45;
+  border-radius: 3px; transform: rotate(-4deg); box-shadow: 0 6px 12px rgba(70,45,15,.28);
+}
+.note b { display: block; font-size: 9px; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 2px; }
+.note::before { content: ""; position: absolute; top: -7px; left: 34px; width: 46px; height: 14px; background: rgba(194,113,63,.45); transform: rotate(2deg); border-radius: 2px; }
+.pencil { position: absolute; right: 60px; bottom: 44px; width: 120px; height: 9px; border-radius: 5px; z-index: 3;
+  background: linear-gradient(90deg, #e0a94e 0 12px, #d3b98d 12px 16px, #c2713f 16px 100px, #6d5a45 100px 112px, #3a2c1c 112px 100%);
+  transform: rotate(-8deg); box-shadow: 0 4px 8px rgba(60,35,15,.3); }
+
+/* ---------- room objects (night) ---------- */
+.lamp { position: absolute; right: 26px; top: -6px; width: 190px; height: 210px; z-index: 3; pointer-events: none; }
+.lamp .arm { position: absolute; right: 34px; top: 0; width: 10px; height: 96px; background: #1c130c; border-radius: 5px; transform: rotate(14deg); }
+.lamp .shade { position: absolute; right: 6px; top: 84px; width: 96px; height: 44px; border-radius: 10px 10px 46px 46px; background: linear-gradient(180deg, #2e2013, #17100a); box-shadow: inset 0 -7px 0 rgba(255,190,105,.85); }
+.lamp .cone { position: absolute; right: -22px; top: 124px; width: 152px; height: 190px;
+  background: radial-gradient(ellipse at 50% -8%, rgba(255,206,130,.5), rgba(255,206,130,0) 72%);
+  clip-path: polygon(30% 0, 70% 0, 100% 100%, 0 100%); }
+.fairy { position: absolute; top: 12px; left: 0; right: 210px; height: 20px; z-index: 3; display: flex; gap: 52px; padding-left: 40px; pointer-events: none; }
+.fairy i { width: 8px; height: 8px; border-radius: 50%; background: #ffd98a; box-shadow: 0 0 12px 3px rgba(255,217,138,.55); animation: twinkle 3.6s ease-in-out infinite; }
+.fairy i:nth-child(3n+2) { background: #f2a68a; box-shadow: 0 0 12px 3px rgba(242,166,138,.5); animation-delay: 1.1s; }
+.fairy i:nth-child(3n) { background: #b9d189; box-shadow: 0 0 12px 3px rgba(185,209,137,.5); animation-delay: 2.2s; }
+@keyframes twinkle { 0%,100% { opacity: .55; } 50% { opacity: 1; } }
+.moonwin { position: absolute; left: 42px; top: 20px; width: 104px; height: 128px; border-radius: 10px; z-index: 1;
+  background: linear-gradient(200deg, #101720, #1d2733); box-shadow: inset 0 0 0 7px #17100a, 0 0 24px rgba(0,0,0,.4); }
+.moonwin::before { content: ""; position: absolute; top: 20px; right: 18px; width: 24px; height: 24px; border-radius: 50%;
+  background: #f4e9c8; box-shadow: 0 0 16px 4px rgba(244,233,200,.4); }
+.moonwin::after { content: ""; position: absolute; inset: 0; border-radius: 10px;
+  background: linear-gradient(0deg, transparent 48%, #17100a 48% 56%, transparent 56%), linear-gradient(90deg, transparent 46%, #17100a 46% 54%, transparent 54%); }
+
+/* ---------- the HUD: one advanced search bar ---------- */
+.hudbar {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  background: var(--hud); color: var(--hudink);
+  border-radius: 16px; padding: 11px 16px; margin: 0 auto 30px; max-width: 1150px;
+  box-shadow: 0 10px 26px rgba(60,38,16,.24);
+}
+.searchbox { flex: 1 1 320px; display: flex; align-items: center; gap: 9px; min-width: 240px;
+  background: rgba(150,120,80,.12); border: 1.5px solid rgba(150,120,80,.35); border-radius: 11px; padding: 8px 13px; }
+.scene.night .searchbox { background: rgba(255,222,160,.08); border-color: rgba(255,222,160,.25); }
+.searchbox .glass { font-size: 14px; opacity: .75; }
+.searchbox .ph { font-size: 12.5px; color: var(--soft); }
+.chip { font-size: 11px; padding: 6px 12px; border-radius: 999px; border: 1.5px solid rgba(150,120,80,.4); color: inherit; white-space: nowrap; }
+.chip.on { background: var(--green); border-color: var(--green); color: #fdf8ec; font-weight: 600; }
+.scene.night .chip { border-color: rgba(255,222,160,.3); }
+.progress { font-size: 12px; font-weight: 600; white-space: nowrap; letter-spacing: .02em; }
+.progress small { display: block; font-weight: 400; font-size: 9.5px; color: var(--soft); letter-spacing: .1em; text-transform: uppercase; }
+.toggle { display: flex; align-items: center; gap: 7px; font-size: 13px; white-space: nowrap; }
+.toggle .track { width: 46px; height: 24px; border-radius: 999px; background: rgba(150,120,80,.3); position: relative; }
+.toggle .knob { position: absolute; top: 3px; width: 18px; height: 18px; border-radius: 50%; background: #ffdf8f; box-shadow: 0 2px 5px rgba(70,45,15,.4); }
+.toggle.day .knob { left: 4px; } .toggle.nightpos .knob { right: 4px; background: #cdd6ef; }
+.scene.night .toggle .track { background: rgba(255,222,160,.22); }
+
+/* ---------- the binder ---------- */
+.binder { display: flex; justify-content: center; }
+.cover {
+  display: flex; gap: 0; padding: 20px 22px 24px; border-radius: 16px; position: relative;
+  background: linear-gradient(155deg, var(--leather), color-mix(in srgb, var(--leather) 72%, #000));
+  box-shadow: 0 22px 44px rgba(40,22,8,.42), inset 0 0 0 2px rgba(255,240,210,.07);
+}
+.cover::after { content: ""; position: absolute; inset: 9px; border-radius: 11px; pointer-events: none;
+  border: 2px dashed var(--stitch); opacity: .6; }
+.pageL, .pageR {
+  width: 590px; max-width: 46vw; background: var(--page); padding: 15px 17px 26px; position: relative; z-index: 2;
+  background-image: radial-gradient(rgba(120,90,50,.045) 1px, transparent 1.4px);
+  background-size: 14px 14px;
+}
+.pageL { border-radius: 12px 3px 3px 12px; box-shadow: -6px 8px 18px rgba(40,22,8,.28), inset -14px 0 22px -16px rgba(70,45,20,.5); }
+.pageR { border-radius: 3px 12px 12px 3px; box-shadow: 6px 8px 18px rgba(40,22,8,.28), inset 14px 0 22px -16px rgba(70,45,20,.5); }
+.rings { width: 34px; position: relative; z-index: 3; display: flex; flex-direction: column; align-items: center; justify-content: space-around; padding: 30px 0; }
+.rings i { width: 26px; height: 26px; border-radius: 50%; border: 5px solid #d8c49a; border-left-color: #a98f62; box-shadow: 0 2px 4px rgba(0,0,0,.35); }
+.scene.night .rings i { border-color: #bfa878; border-left-color: #8a744f; }
+.pagehead { display: flex; justify-content: space-between; font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--soft); border-bottom: 1.5px solid var(--rim); padding-bottom: 6px; margin-bottom: 12px; }
+.pageno { position: absolute; bottom: 8px; font-size: 9px; color: var(--soft); }
+.pageL .pageno { left: 17px; } .pageR .pageno { right: 17px; }
+
+/* ---------- pockets & cards ---------- */
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.pocket { background: var(--sleeve); border-radius: 11px; padding: 7px 7px 6px; position: relative;
+  box-shadow: inset 0 0 0 1.5px var(--rim), inset 0 3px 6px rgba(90,60,25,.14); }
+.pocket::after { content: ""; position: absolute; inset: 0; border-radius: 11px; pointer-events: none;
+  background: linear-gradient(115deg, rgba(255,252,242,.55), rgba(255,252,242,0) 44%); }
+.card { aspect-ratio: 63/88; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; position: relative; z-index: 1;
+  background: #fffdf6; box-shadow: inset 0 0 0 1.5px rgba(120,90,50,.4), 0 2px 4px rgba(70,45,15,.25); }
+.card .art { flex: 1; position: relative; }
+.scene.night .card .art::after { content: ""; position: absolute; inset: 0; background: rgba(45,28,10,.16); }
+.plate { padding: 4px 7px 5px; background: rgba(255,252,242,.96); border-top: 1.5px solid rgba(120,90,50,.28); }
+.plate .nm { font-size: 10.5px; font-weight: 700; line-height: 1.15; color: var(--ink); }
+.plate .set { font-size: 8.3px; color: var(--soft); }
+.tag { margin-top: 5px; font-size: 8.6px; line-height: 1.35; color: var(--soft); position: relative; z-index: 1; }
+.tag b { color: var(--ink); font-weight: 700; display: block; font-size: 9.2px; }
+.tag .rk { letter-spacing: .05em; text-transform: uppercase; }
+
+/* card-art placeholder gradients (see palette comment) */
+.art-bulba  { background: radial-gradient(circle at 34% 32%, rgba(255,250,225,.5), rgba(255,250,225,0) 42%), linear-gradient(150deg, #a9c286, #6b9457); }
+.art-ivy    { background: radial-gradient(circle at 66% 30%, rgba(226,169,180,.65), rgba(226,169,180,0) 40%), linear-gradient(150deg, #8fb573, #557f4a); }
+.art-venu   { background: radial-gradient(circle at 50% 26%, rgba(233,220,160,.5), rgba(233,220,160,0) 46%), linear-gradient(150deg, #7ba468, #3f6b42); }
+.art-cater  { background: radial-gradient(circle at 36% 36%, rgba(255,250,225,.55), rgba(255,250,225,0) 44%), linear-gradient(150deg, #d3d489, #9cb35f); }
+.art-butter { background: radial-gradient(circle at 62% 30%, rgba(255,251,235,.6), rgba(255,251,235,0) 42%), linear-gradient(150deg, #cdc7e3, #8f9fc9); }
+.art-pika   { background: radial-gradient(circle at 40% 30%, rgba(255,252,230,.65), rgba(255,252,230,0) 46%), linear-gradient(150deg, #f4d766, #dda93e); }
+
+/* CHASING ghost: translucent placeholder */
+.card.ghost { opacity: .5; border: 1.5px dashed var(--terra); background: rgba(255,253,246,.6); box-shadow: none; }
+.card.ghost .art { opacity: .55; }
+.chasepill { position: absolute; top: 7px; left: 50%; transform: translateX(-50%); z-index: 2;
+  font-size: 7.8px; font-weight: 700; letter-spacing: .18em; color: #fdf6e8; background: var(--terra);
+  border-radius: 999px; padding: 3px 9px; box-shadow: 0 2px 5px rgba(120,60,25,.35); }
+.tag .chasing { color: var(--terra); font-weight: 700; }
+
+/* empty sleeve: the demanded Rank waits */
+.card.empty { background: rgba(255,251,238,.55); box-shadow: inset 0 0 0 1.5px rgba(150,120,80,.3); align-items: center; justify-content: center; gap: 5px; }
+.card.empty::before { content: ""; position: absolute; inset: 7px; border: 1.5px dashed rgba(150,120,80,.5); border-radius: 6px; }
+.emptyglyph { font-size: 19px; color: var(--honey); line-height: 1; }
+.emptyglyph.base { color: var(--ink); font-size: 15px; }
+.emptyrank { font-size: 9.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--honey); text-align: center; padding: 0 8px; }
+.emptyrank.base { color: var(--ink); }
+.emptywaits { font-size: 8px; color: var(--soft); font-style: italic; }
+
+/* ---------- exhibit: the Kanto region title card ---------- */
+.exhibit { display: flex; justify-content: center; }
+.singlecover { display: flex; padding: 20px 22px 24px; border-radius: 16px;
+  background: linear-gradient(155deg, #7b523a, #59391f);
+  box-shadow: 0 22px 44px rgba(40,22,8,.42); }
+.titlepage { width: 620px; max-width: 92vw; background: #fbf4e3; border-radius: 10px; padding: 15px 17px 26px; position: relative;
+  box-shadow: 0 10px 22px rgba(40,22,8,.35);
+  background-image: radial-gradient(rgba(120,90,50,.045) 1px, transparent 1.4px); background-size: 14px 14px; }
+.titlegrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; border-radius: 12px; padding: 12px; position: relative;
+  /* the Kanto vignette spreads behind all nine sleeves (decision: backgrounds may span slots) */
+  background:
+    radial-gradient(340px 150px at 82% 8%, rgba(255,233,168,.9), rgba(255,233,168,0) 60%),
+    radial-gradient(420px 190px at 12% 96%, rgba(125,155,93,.75), rgba(125,155,93,0) 62%),
+    radial-gradient(460px 200px at 88% 100%, rgba(156,179,95,.7), rgba(156,179,95,0) 64%),
+    linear-gradient(180deg, #f5dfae 0%, #e8cf96 44%, #cdc07c 100%); }
+.twin { aspect-ratio: 63/88; border-radius: 9px; background: rgba(255,252,240,.14);
+  box-shadow: inset 0 0 0 1.5px rgba(120,90,50,.35), inset 0 3px 6px rgba(90,60,25,.12); position: relative; }
+.twin::after { content: ""; position: absolute; inset: 0; border-radius: 9px;
+  background: linear-gradient(115deg, rgba(255,252,242,.4), rgba(255,252,242,0) 46%); }
+.twin.hold { background: #fffdf6; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+  box-shadow: inset 0 0 0 1.5px rgba(120,90,50,.45), 0 4px 10px rgba(70,45,15,.28); }
+.twin.hold .ch { font-size: 9px; letter-spacing: .3em; text-transform: uppercase; color: #97826a; }
+.twin.hold .rg { font-size: 26px; font-weight: 800; letter-spacing: .12em; color: #4a392b; }
+.twin.hold .ct { font-size: 10px; color: #7d9b5d; font-weight: 700; }
+.twin.hold .rule { width: 40px; height: 2px; border-radius: 2px; background: #d29a3a; margin: 3px 0; }
+.twin.badges { background: #fffdf6; box-shadow: inset 0 0 0 1.5px rgba(120,90,50,.45), 0 4px 10px rgba(70,45,15,.28);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 8px; }
+.twin.badges .bh { font-size: 7.5px; letter-spacing: .2em; text-transform: uppercase; color: #97826a; }
+.shelf { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; }
+.coin { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #d8c49a; background: #f4ecd8; }
+.coin.earned { background: radial-gradient(circle at 36% 30%, #ffe9b0, #d29a3a); border-color: #b07c22; box-shadow: 0 0 8px rgba(210,154,58,.6); }
+.twin.badges .bl { font-size: 8.3px; color: #6d5a45; text-align: center; line-height: 1.4; }
+.twin.badges .bl b { color: #4a392b; }
+
+/* ---------- swatches ---------- */
+.swatches { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 10px; }
+.sw { width: 118px; border-radius: 10px; overflow: hidden; background: #fffdf6; box-shadow: 0 4px 10px rgba(90,62,35,.15); }
+.sw i { display: block; height: 44px; }
+.sw span { display: block; padding: 6px 8px 7px; font-size: 8.6px; line-height: 1.45; color: #6d5a45; }
+.sw span b { display: block; font-size: 9.3px; color: #4a392b; }
+footer { margin-top: 44px; font-size: 11px; color: #97826a; text-align: center; }
+.caption { margin-top: 12px; font-size: 12px; color: #6d5a45; max-width: 880px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .steam, .fairy i { animation: none; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">Ash's Journey · Visual direction 1 of 4</div>
+  <h1>The Lofi Desk</h1>
+  <p class="rationale">The most literal reading of the brief: the binder is a real object on a real desk in a warm, inhabited room — plants at the edge, a mug going cold, honeyed window light by day and a lamp pool by night. Chrome floats like a soft shelf above the scene; everything is rounded, grained, and tactile. It fits because the product's ritual (open the cover, turn the pages, sleeve the card) already belongs on a desk like this one.</p>
+</header>
+
+<!-- ================= HERO — DAY ================= -->
+<div class="sectionhead">Hero · home spread · light mode (sunlit day desk)</div>
+<div class="scene day">
+  <div class="plant"><i class="leaf a"></i><i class="leaf b"></i><i class="leaf c"></i><i class="leaf d"></i><i class="pot"></i></div>
+  <div class="mug"><i class="steam"></i><i class="steam s2"></i><i class="cup"></i><i class="handle"></i></div>
+  <div class="note"><b>The Hunt</b>1 Slot Chasing —<br>Bulbasaur · Ultra Rare</div>
+  <div class="pencil"></div>
+
+  <div class="hudbar">
+    <div class="searchbox"><span class="glass">⌕</span><span class="ph">Search the binder — name, Region, Milestone, Rank, status:chasing</span></div>
+    <span class="chip on">Region: Kanto</span>
+    <span class="chip">Rank ▾</span>
+    <span class="chip">Milestone ▾</span>
+    <span class="chip">The Hunt</span>
+    <div class="progress">Kanto — 12 of 31 sleeved<small>Only Filled counts</small></div>
+    <div class="toggle day"><span>☀</span><span class="track"><span class="knob"></span></span><span style="opacity:.45">☾</span></div>
+  </div>
+
+  <div class="binder">
+    <div class="cover">
+      <div class="pageL">
+        <div class="pagehead"><span>Kanto · Entries № 001–003</span><span>Chapter I</span></div>
+        <div class="grid">
+          <div class="pocket"><div class="card"><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Base Set · 1999</div></div></div><div class="tag"><b>Bulbasaur</b><span class="rk">⚫ Common · Filled</span></div></div>
+          <div class="pocket"><div class="card"><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Shining Legends · 2017</div></div></div><div class="tag"><b>Bulbasaur</b><span class="rk">Uncommon · Filled</span></div></div>
+          <div class="pocket"><div class="card"><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Pokémon GO · 2022</div></div></div><div class="tag"><b>Bulbasaur</b><span class="rk">Rare · Filled</span></div></div>
+          <div class="pocket"><div class="card ghost"><span class="chasepill">CHASING</span><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Scarlet &amp; Violet — 151 · 2023</div></div></div><div class="tag"><b>Bulbasaur</b><span class="rk chasing">Ultra Rare · Chasing</span></div></div>
+          <div class="pocket"><div class="card"><div class="art art-ivy"></div><div class="plate"><div class="nm">Ivysaur</div><div class="set">Jungle · 1999</div></div></div><div class="tag"><b>Ivysaur</b><span class="rk">⚫ Common · Filled</span></div></div>
+          <div class="pocket"><div class="card empty"><span class="emptyglyph">★</span><span class="emptyrank">Uncommon</span><span class="emptywaits">this sleeve waits</span></div><div class="tag"><b>Ivysaur</b><span class="rk">Uncommon · open</span></div></div>
+          <div class="pocket"><div class="card"><div class="art art-venu"></div><div class="plate"><div class="nm">Venusaur</div><div class="set">Base Set · 1999</div></div></div><div class="tag"><b>Venusaur</b><span class="rk">Rare · Filled</span></div></div>
+          <div class="pocket"><div class="card empty"><span class="emptyglyph">★</span><span class="emptyrank">Illustration Rare</span><span class="emptywaits">this sleeve waits</span></div><div class="tag"><b>Venusaur</b><span class="rk">Illustration Rare · open</span></div></div>
+          <div class="pocket"><div class="card empty"><span class="emptyglyph">★</span><span class="emptyrank">Special Illustration Rare</span><span class="emptywaits">this sleeve waits</span></div><div class="tag"><b>Venusaur</b><span class="rk">Special Illustration Rare · open</span></div></div>
+        </div>
+        <div class="pageno">p. 04</div>
+      </div>
+      <div class="rings"><i></i><i></i><i></i></div>
+      <div class="pageR">
+        <div class="pagehead"><span>Kanto · Entries № 010–025</span><span>Chapter I</span></div>
+        <div class="grid">
+          <div class="pocket"><div class="card"><div class="art art-cater"></div><div class="plate"><div class="nm">Caterpie</div><div class="set">Base Set · 1999</div></div></div><div class="tag"><b>Caterpie</b><span class="rk">⚫ Common · Filled</span></div></div>
+          <div class="pocket"><div class="card"><div class="art art-butter"></div><div class="plate"><div class="nm">Butterfree</div><div class="set">Jungle · 1999</div></div></div><div class="tag"><b>Butterfree</b><span class="rk">Uncommon · Filled</span></div></div>
+          <div class="pocket"><div class="card empty"><span class="emptyglyph">★</span><span class="emptyrank">Rare</span><span class="emptywaits">this sleeve waits</span></div><div class="tag"><b>Butterfree</b><span class="rk">Rare · open</span></div></div>
+          <div class="pocket"><div class="card"><div class="art art-pika"></div><div class="plate"><div class="nm">Pikachu</div><div class="set">Base Set · 1999</div></div></div><div class="tag"><b>Pikachu</b><span class="rk">⚫ Common · Filled</span></div></div>
+          <div class="pocket"><div class="card"><div class="art art-pika"></div><div class="plate"><div class="nm">Pikachu</div><div class="set">Legendary Collection · 2002</div></div></div><div class="tag"><b>Pikachu</b><span class="rk">Uncommon · Filled</span></div></div>
+          <div class="pocket"><div class="card"><div class="art art-pika"></div><div class="plate"><div class="nm">Pikachu</div><div class="set">XY Evolutions · 2016</div></div></div><div class="tag"><b>Pikachu</b><span class="rk">Rare · Filled</span></div></div>
+          <div class="pocket"><div class="card empty"><span class="emptyglyph">★</span><span class="emptyrank">Ultra Rare</span><span class="emptywaits">this sleeve waits</span></div><div class="tag"><b>Pikachu</b><span class="rk">Ultra Rare · open</span></div></div>
+          <div class="pocket"><div class="card empty"><span class="emptyglyph">★</span><span class="emptyrank">Illustration Rare</span><span class="emptywaits">this sleeve waits</span></div><div class="tag"><b>Pikachu</b><span class="rk">Illustration Rare · open</span></div></div>
+          <div class="pocket"><div class="card empty"><span class="emptyglyph">★</span><span class="emptyrank">Hyper Rare</span><span class="emptywaits">this sleeve waits</span></div><div class="tag"><b>Pikachu</b><span class="rk">Hyper Rare · open</span></div></div>
+        </div>
+        <div class="pageno">p. 05</div>
+      </div>
+    </div>
+  </div>
+</div>
+<p class="caption">Day: window light falls from the upper left; the CHASING ghost sits translucent in Bulbasaur's Ultra Rare sleeve; empty sleeves state the Rank they demand. The sticky note is ambient, not chrome — the search bar is the only control surface.</p>
+
+<!-- ================= DARK STRIP — NIGHT ================= -->
+<div class="sectionhead">Dark mode strip · the same page at night (lamp-lit desk) · toggle in night position</div>
+<div class="scene night">
+  <div class="moonwin"></div>
+  <div class="fairy"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="lamp"><i class="arm"></i><i class="shade"></i><i class="cone"></i></div>
+  <div class="mug" style="top:150px"><i class="steam"></i><i class="cup"></i><i class="handle"></i></div>
+
+  <div class="hudbar">
+    <div class="searchbox"><span class="glass">⌕</span><span class="ph">Search the binder — name, Region, Milestone, Rank, status:chasing</span></div>
+    <span class="chip on">Region: Kanto</span>
+    <span class="chip">The Hunt</span>
+    <div class="progress">Kanto — 12 of 31 sleeved<small>Only Filled counts</small></div>
+    <div class="toggle nightpos"><span style="opacity:.45">☀</span><span class="track"><span class="knob"></span></span><span>☾</span></div>
+  </div>
+
+  <div class="binder">
+    <div class="cover">
+      <div class="pageL" style="border-radius:12px">
+        <div class="pagehead"><span>Kanto · Entries № 001–003</span><span>Chapter I</span></div>
+        <div class="grid">
+          <div class="pocket"><div class="card"><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Base Set · 1999</div></div></div><div class="tag"><b>Bulbasaur</b><span class="rk">⚫ Common · Filled</span></div></div>
+          <div class="pocket"><div class="card"><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Shining Legends · 2017</div></div></div><div class="tag"><b>Bulbasaur</b><span class="rk">Uncommon · Filled</span></div></div>
+          <div class="pocket"><div class="card"><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Pokémon GO · 2022</div></div></div><div class="tag"><b>Bulbasaur</b><span class="rk">Rare · Filled</span></div></div>
+          <div class="pocket"><div class="card ghost"><span class="chasepill">CHASING</span><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Scarlet &amp; Violet — 151 · 2023</div></div></div><div class="tag"><b>Bulbasaur</b><span class="rk chasing">Ultra Rare · Chasing</span></div></div>
+          <div class="pocket"><div class="card"><div class="art art-ivy"></div><div class="plate"><div class="nm">Ivysaur</div><div class="set">Jungle · 1999</div></div></div><div class="tag"><b>Ivysaur</b><span class="rk">⚫ Common · Filled</span></div></div>
+          <div class="pocket"><div class="card empty"><span class="emptyglyph">★</span><span class="emptyrank">Uncommon</span><span class="emptywaits">this sleeve waits</span></div><div class="tag"><b>Ivysaur</b><span class="rk">Uncommon · open</span></div></div>
+          <div class="pocket"><div class="card"><div class="art art-venu"></div><div class="plate"><div class="nm">Venusaur</div><div class="set">Base Set · 1999</div></div></div><div class="tag"><b>Venusaur</b><span class="rk">Rare · Filled</span></div></div>
+          <div class="pocket"><div class="card empty"><span class="emptyglyph">★</span><span class="emptyrank">Illustration Rare</span><span class="emptywaits">this sleeve waits</span></div><div class="tag"><b>Venusaur</b><span class="rk">Illustration Rare · open</span></div></div>
+          <div class="pocket"><div class="card empty"><span class="emptyglyph">★</span><span class="emptyrank">Special Illustration Rare</span><span class="emptywaits">this sleeve waits</span></div><div class="tag"><b>Venusaur</b><span class="rk">Special Illustration Rare · open</span></div></div>
+        </div>
+        <div class="pageno">p. 04</div>
+      </div>
+    </div>
+  </div>
+</div>
+<p class="caption">Night: the same room after dark — lamp pool from the upper right, fairy lights, moon in the window. The page warms under the lamp; card art dims a shade; the ghost keeps its terracotta CHASING mark.</p>
+
+<!-- ================= SECONDARY EXHIBIT — REGION TITLE CARD ================= -->
+<div class="sectionhead">Secondary exhibit · the Kanto region title card (chapter opener, day)</div>
+<div class="exhibit">
+  <div class="singlecover">
+    <div class="titlepage">
+      <div class="pagehead"><span>Kanto · Chapter opener</span><span>Region title card</span></div>
+      <div class="titlegrid">
+        <div class="twin"></div><div class="twin"></div><div class="twin"></div>
+        <div class="twin"></div>
+        <div class="twin hold"><span class="ch">Chapter I</span><span class="rg">KANTO</span><span class="rule"></span><span class="ct">12 of 31 sleeved</span></div>
+        <div class="twin"></div>
+        <div class="twin"></div>
+        <div class="twin badges">
+          <span class="bh">Region badges</span>
+          <span class="shelf"><i class="coin earned"></i><i class="coin"></i><i class="coin"></i><i class="coin"></i><i class="coin"></i><i class="coin"></i><i class="coin"></i></span>
+          <span class="bl"><b>The Catch — earned</b><br>every ⚫ base Slot of Kanto Filled<br><span style="opacity:.7">1 of 7 badge types</span></span>
+        </div>
+        <div class="twin"></div>
+      </div>
+      <div class="pageno" style="left:17px">Kanto · title card</div>
+    </div>
+  </div>
+</div>
+<p class="caption">The Kanto vignette (sun, hills, field) spreads behind all nine sleeves — the grid is never broken; the title and the badge shelf each live inside a card frame. Earned badges glow honey; the other six wait as blank coins.</p>
+
+<!-- ================= PALETTE ================= -->
+<div class="sectionhead">Palette · every color used</div>
+<div class="swatches">
+  <div class="sw"><i style="background:#ecdcbf"></i><span><b>#ecdcbf</b>room wall (day)</span></div>
+  <div class="sw"><i style="background:#ffe9b8"></i><span><b>#ffe9b8</b>window light</span></div>
+  <div class="sw"><i style="background:#a06b46"></i><span><b>#a06b46</b>desk wood (day)</span></div>
+  <div class="sw"><i style="background:#7b523a"></i><span><b>#7b523a</b>binder leather</span></div>
+  <div class="sw"><i style="background:#fbf4e3"></i><span><b>#fbf4e3</b>page (day)</span></div>
+  <div class="sw"><i style="background:#f1e7d0"></i><span><b>#f1e7d0</b>sleeve (day)</span></div>
+  <div class="sw"><i style="background:#4a392b"></i><span><b>#4a392b</b>ink</span></div>
+  <div class="sw"><i style="background:#97826a"></i><span><b>#97826a</b>soft ink</span></div>
+  <div class="sw"><i style="background:#7d9b5d"></i><span><b>#7d9b5d</b>accent — plant green</span></div>
+  <div class="sw"><i style="background:#d29a3a"></i><span><b>#d29a3a</b>rank accent — honey</span></div>
+  <div class="sw"><i style="background:#c2713f"></i><span><b>#c2713f</b>chase — terracotta</span></div>
+  <div class="sw"><i style="background:#251d17"></i><span><b>#251d17</b>room (night)</span></div>
+  <div class="sw"><i style="background:#ffbe69"></i><span><b>#ffbe69</b>lamp glow (night)</span></div>
+  <div class="sw"><i style="background:#f0e2c2"></i><span><b>#f0e2c2</b>page (night, lamp-lit)</span></div>
+  <div class="sw"><i style="background:#e4d4ae"></i><span><b>#e4d4ae</b>sleeve (night)</span></div>
+  <div class="sw"><i style="background:#533826"></i><span><b>#533826</b>desk wood (night)</span></div>
+  <div class="sw"><i style="background:#ffd98a"></i><span><b>#ffd98a</b>fairy light</span></div>
+  <div class="sw"><i style="background:linear-gradient(150deg,#a9c286,#6b9457)"></i><span><b>#a9c286→#6b9457</b>card art — Bulbasaur</span></div>
+  <div class="sw"><i style="background:linear-gradient(150deg,#f4d766,#dda93e)"></i><span><b>#f4d766→#dda93e</b>card art — Pikachu</span></div>
+</div>
+
+<footer>Direction study — The Lofi Desk · Ash's Journey · no JS, no external assets · motion honors prefers-reduced-motion</footer>
+</div>
+</body>
+</html>

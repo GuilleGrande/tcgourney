@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ash's Journey — Direction 2: The Watercolor Chronicle</title>
+<style>
+/* ============================================================
+   DIRECTION 2 — "THE WATERCOLOR CHRONICLE"
+   Palette documentation (hex):
+   DAY   backdrop (linen)   #ece3d0
+         paper              #f8f2e2
+         wash · sage        #a9bd94
+         wash · butter      #ead9a4
+         wash · terracotta  #d9a68b
+         wash · sky         #b8c9c4
+         ink (sepia)        #443c2f
+         muted ink          #7d7260
+         hairline rule      #cbbfa4
+         accent · moss      #708a58
+         rank · sienna      #a8623c
+         photo corner       #8d7c5e
+   NIGHT backdrop (study)   #262019
+         lamp halo          #d9a24f
+         paper (candlelit)  #efe4c8
+         ink                #3a3125
+         muted ink          #857863
+         hairline           #bfae8a
+         accent · moss      #7a9163
+         rank · sienna      #b06f46
+   CARD ART (pigment placeholders)
+         bulbasaur  #9db98a → #5f7f52     ivysaur #86a878 → #4e7248 (+#d9a4ae)
+         venusaur   #6f9464 → #3c5f3f     caterpie #cfd193 → #93a862
+         butterfree #c6c3da → #8a97b8     pikachu  #ecd27c → #cfa14a
+   ============================================================ */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: Georgia, "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
+  background: #ece3d0; color: #443c2f; line-height: 1.55;
+  padding: 48px 24px 72px;
+}
+.wrap { max-width: 1400px; margin: 0 auto; }
+header .kicker { font-size: 10.5px; letter-spacing: .3em; text-transform: uppercase; color: #7d7260; margin-bottom: 8px; }
+header h1 { font-size: 30px; font-weight: 400; font-style: italic; letter-spacing: .01em; }
+.rationale { margin: 12px 0 0; max-width: 860px; font-size: 14.5px; color: #5f5544; }
+.sectionhead { margin: 54px 0 16px; font-size: 10.5px; letter-spacing: .3em; text-transform: uppercase; color: #7d7260;
+  display: flex; align-items: center; gap: 14px; }
+.sectionhead::after { content: ""; flex: 1; height: 1px; background: #cbbfa4; }
+
+/* ---------- chronicle chassis ---------- */
+.study {
+  --paper: #f8f2e2; --ink: #443c2f; --muted: #7d7260; --rule: #cbbfa4;
+  --moss: #708a58; --sienna: #a8623c; --corner: #8d7c5e;
+  position: relative; border-radius: 6px; padding: 40px 36px 48px;
+  background: #ece3d0;
+  box-shadow: inset 0 0 0 1px #d8cdb4, inset 0 0 60px rgba(150,130,95,.18);
+}
+.study.night {
+  --paper: #efe4c8; --ink: #3a3125; --muted: #857863; --rule: #bfae8a;
+  --moss: #7a9163; --sienna: #b06f46; --corner: #7c6c4e;
+  background:
+    radial-gradient(680px 420px at 50% 30%, rgba(217,162,79,.28), rgba(217,162,79,0) 68%),
+    #262019;
+  box-shadow: inset 0 0 0 1px #3a3126, inset 0 0 80px rgba(0,0,0,.5);
+}
+
+/* ---------- the index line (search bar as a study index) ---------- */
+.indexline {
+  max-width: 1080px; margin: 0 auto 34px; display: flex; align-items: baseline; gap: 18px; flex-wrap: wrap;
+  border-bottom: 1px solid var(--rule); padding-bottom: 10px; color: var(--ink);
+}
+.study.night .indexline { color: #d8c9a8; border-bottom-color: #57492f; }
+.indexline .q { flex: 1 1 340px; min-width: 260px; font-style: italic; font-size: 14.5px; color: var(--muted); }
+.study.night .indexline .q { color: #a39273; }
+.indexline .q::before { content: "⌕  "; font-style: normal; opacity: .7; }
+.filt { font-size: 10.5px; letter-spacing: .22em; text-transform: uppercase; white-space: nowrap; color: var(--muted); }
+.filt.on { color: var(--moss); border-bottom: 2px solid var(--moss); padding-bottom: 2px; }
+.study.night .filt.on { color: #9db77e; border-bottom-color: #9db77e; }
+.indexline .count { font-size: 13px; font-style: italic; white-space: nowrap; }
+.modetog { display: inline-flex; align-items: baseline; gap: 8px; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; white-space: nowrap; }
+.modetog .m { color: var(--muted); }
+.modetog .m.cur { color: var(--sienna); border-bottom: 2px solid var(--sienna); padding-bottom: 2px; }
+.study.night .modetog .m.cur { color: #c98d5e; border-bottom-color: #c98d5e; }
+
+/* ---------- the open chronicle (two leaves, sewn spine) ---------- */
+.book { display: flex; justify-content: center; }
+.leaves { display: flex; position: relative; filter: drop-shadow(0 18px 26px rgba(90,75,45,.35)); }
+.study.night .leaves { filter: drop-shadow(0 18px 30px rgba(0,0,0,.6)); }
+.leaf {
+  width: 600px; max-width: 46vw; padding: 26px 28px 40px; position: relative;
+  background:
+    radial-gradient(340px 220px at 12% 6%, rgba(169,189,148,.20), rgba(169,189,148,0) 62%),
+    radial-gradient(300px 200px at 92% 12%, rgba(234,217,164,.30), rgba(234,217,164,0) 60%),
+    radial-gradient(320px 240px at 85% 94%, rgba(217,166,139,.16), rgba(217,166,139,0) 58%),
+    radial-gradient(260px 200px at 8% 92%, rgba(184,201,196,.16), rgba(184,201,196,0) 60%),
+    var(--paper);
+}
+.leaf.l { border-radius: 8px 2px 2px 8px; box-shadow: inset -26px 0 32px -28px rgba(110,90,55,.55); }
+.leaf.r { border-radius: 2px 8px 8px 2px; box-shadow: inset 26px 0 32px -28px rgba(110,90,55,.55); }
+.spineseam { width: 0; position: relative; }
+.spineseam::before { content: ""; position: absolute; top: 14px; bottom: 14px; left: -1px; width: 2px;
+  background: repeating-linear-gradient(180deg, var(--corner) 0 9px, transparent 9px 20px); opacity: .65; }
+.folio {
+  display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px;
+  font-size: 11px; letter-spacing: .24em; text-transform: uppercase; color: var(--muted);
+}
+.folio .chap { font-style: italic; text-transform: none; letter-spacing: .04em; font-size: 13px; }
+.leafrule { height: 1px; background: var(--rule); margin-bottom: 20px; }
+.leafno { position: absolute; bottom: 14px; font-size: 11px; font-style: italic; color: var(--muted); }
+.leaf.l .leafno { left: 28px; } .leaf.r .leafno { right: 28px; }
+
+/* ---------- mounts (sleeves) & specimens (cards) ---------- */
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px 16px; }
+.mount { position: relative; }
+.spec {
+  aspect-ratio: 63/88; position: relative; display: flex; flex-direction: column; overflow: visible;
+  background: #fffdf4; box-shadow: 0 1px 0 rgba(110,90,55,.25), 0 5px 12px rgba(110,90,55,.22);
+}
+.study.night .spec { background: #f7edd4; }
+.spec .art { flex: 1; }
+.study.night .spec .art { filter: brightness(.94) saturate(.92); }
+.spec .plate { padding: 5px 8px 6px; border-top: 1px solid var(--rule); }
+.spec .nm { font-size: 12px; line-height: 1.2; color: var(--ink); }
+.spec .set { font-size: 9.5px; font-style: italic; color: var(--muted); }
+/* photo corners */
+.spec i.pc { position: absolute; width: 0; height: 0; border-style: solid; z-index: 3; }
+.spec i.tl { top: -3px; left: -3px; border-width: 13px 13px 0 0; border-color: var(--corner) transparent transparent transparent; }
+.spec i.tr { top: -3px; right: -3px; border-width: 0 13px 13px 0; border-color: transparent var(--corner) transparent transparent; }
+.spec i.bl { bottom: -3px; left: -3px; border-width: 13px 0 0 13px; border-color: transparent transparent transparent var(--corner); }
+.spec i.br { bottom: -3px; right: -3px; border-width: 0 0 13px 13px; border-color: transparent transparent var(--corner) transparent; }
+.caplabel { margin-top: 8px; text-align: center; font-size: 10.5px; color: var(--muted); line-height: 1.45; }
+.caplabel b { display: block; font-weight: 400; font-size: 12px; color: var(--ink); font-style: italic; }
+.caplabel .rk { letter-spacing: .18em; text-transform: uppercase; font-size: 8.6px; }
+.caplabel .rk.chase { color: var(--sienna); }
+
+/* pigment placeholders for card art */
+.art-bulba  { background: radial-gradient(circle at 30% 30%, rgba(248,242,226,.5), rgba(248,242,226,0) 45%), linear-gradient(160deg, #9db98a, #5f7f52); }
+.art-ivy    { background: radial-gradient(circle at 68% 26%, rgba(217,164,174,.6), rgba(217,164,174,0) 40%), linear-gradient(160deg, #86a878, #4e7248); }
+.art-venu   { background: radial-gradient(circle at 50% 24%, rgba(234,217,164,.45), rgba(234,217,164,0) 48%), linear-gradient(160deg, #6f9464, #3c5f3f); }
+.art-cater  { background: radial-gradient(circle at 34% 34%, rgba(248,242,226,.5), rgba(248,242,226,0) 46%), linear-gradient(160deg, #cfd193, #93a862); }
+.art-butter { background: radial-gradient(circle at 64% 28%, rgba(248,244,232,.55), rgba(248,244,232,0) 44%), linear-gradient(160deg, #c6c3da, #8a97b8); }
+.art-pika   { background: radial-gradient(circle at 38% 28%, rgba(252,246,224,.6), rgba(252,246,224,0) 46%), linear-gradient(160deg, #ecd27c, #cfa14a); }
+
+/* CHASING ghost: a pale pressed impression */
+.spec.ghost { background: rgba(255,253,244,.45); box-shadow: inset 0 0 0 1px var(--rule); }
+.spec.ghost .art { opacity: .38; }
+.spec.ghost .plate { opacity: .75; }
+.ghostmark { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); z-index: 4;
+  font-size: 9px; letter-spacing: .3em; text-transform: uppercase; color: var(--sienna);
+  border-top: 1px solid var(--sienna); border-bottom: 1px solid var(--sienna); padding: 2px 6px 1px; background: rgba(248,242,226,.85); }
+
+/* empty mount: the page names what it awaits */
+.spec.blank { background: transparent; box-shadow: inset 0 0 0 1px var(--rule); align-items: center; justify-content: center; gap: 6px; }
+.spec.blank::before { content: ""; position: absolute; inset: 8px; border: 1px solid var(--rule); }
+.blank .blot { width: 34px; height: 34px; border-radius: 52% 48% 44% 56% / 56% 44% 56% 44%;
+  background: radial-gradient(circle at 38% 34%, rgba(168,98,60,.32), rgba(168,98,60,.10) 70%); display: flex; align-items: center; justify-content: center;
+  font-size: 13px; color: var(--sienna); }
+.blank .awaiting { font-style: italic; font-size: 11px; color: var(--muted); }
+.blank .rkname { font-size: 11.5px; letter-spacing: .2em; text-transform: uppercase; color: var(--sienna); text-align: center; padding: 0 10px; line-height: 1.5; }
+.blank.base .blot { color: var(--ink); background: radial-gradient(circle at 38% 34%, rgba(68,60,47,.28), rgba(68,60,47,.08) 70%); }
+.blank.base .rkname { color: var(--ink); }
+
+/* ---------- secondary exhibit: the throne plate ---------- */
+.platewrap { display: flex; justify-content: center; }
+.throneleaf {
+  width: 640px; max-width: 94vw; padding: 26px 30px 40px; position: relative; border-radius: 6px;
+  background:
+    radial-gradient(300px 200px at 14% 8%, rgba(169,189,148,.20), rgba(169,189,148,0) 62%),
+    radial-gradient(280px 190px at 90% 90%, rgba(217,166,139,.18), rgba(217,166,139,0) 58%),
+    #f8f2e2;
+  filter: drop-shadow(0 14px 22px rgba(90,75,45,.32));
+}
+.thronerow { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 8px; }
+.turn { font-size: 20px; color: #7d7260; opacity: .7; }
+.mspec { width: 132px; }
+.mspec .spec { box-shadow: 0 1px 0 rgba(110,90,55,.2), 0 4px 9px rgba(110,90,55,.18); }
+.motifart { flex: 1; position: relative; background: #f4edd9; }
+.motifart.dots { background-image: radial-gradient(rgba(141,124,94,.45) 1px, transparent 1.6px); background-size: 12px 12px; }
+.motifart.rules { background-image: repeating-linear-gradient(0deg, rgba(141,124,94,.35) 0 1px, transparent 1px 11px); }
+.motiflbl { position: absolute; left: 8px; right: 8px; bottom: 8px; text-align: center;
+  font-size: 8.6px; font-style: italic; color: #7d7260; background: rgba(248,242,226,.85); padding: 2px 4px; }
+.enthroned { width: 196px; position: relative; z-index: 2; }
+.enthroned .spec { box-shadow: 0 0 0 1px #a8623c, 0 0 0 6px #f8f2e2, 0 0 0 7px #cbbfa4, 0 14px 24px rgba(110,90,55,.38); }
+.filledmark { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); z-index: 4;
+  font-size: 8.6px; letter-spacing: .3em; text-transform: uppercase; color: #f8f2e2; background: #443c2f; padding: 3px 9px 2px; }
+.plaque { margin-top: 24px; text-align: center; }
+.plaque .t { font-size: 15px; font-style: italic; }
+.plaque .s { font-size: 10.5px; letter-spacing: .24em; text-transform: uppercase; color: #7d7260; margin-top: 4px; }
+.plaque .r { width: 60px; height: 1px; background: #cbbfa4; margin: 10px auto 0; }
+
+/* very slow pigment breath behind the chapter heading */
+.chapterbloom { position: absolute; top: -8px; left: 50%; transform: translateX(-50%); width: 300px; height: 90px; pointer-events: none;
+  background: radial-gradient(ellipse at center, rgba(169,189,148,.35), rgba(169,189,148,0) 70%);
+  animation: bloom 9s ease-in-out infinite; }
+@keyframes bloom { 0%,100% { opacity: .5; transform: translateX(-50%) scale(1); } 50% { opacity: .9; transform: translateX(-50%) scale(1.08); } }
+@media (prefers-reduced-motion: reduce) { .chapterbloom { animation: none; } }
+
+/* ---------- swatches ---------- */
+.swatches { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 10px; }
+.sw { width: 122px; background: #f8f2e2; box-shadow: 0 3px 8px rgba(110,90,55,.18); }
+.sw i { display: block; height: 44px; }
+.sw span { display: block; padding: 6px 9px 8px; font-size: 8.8px; line-height: 1.5; color: #5f5544; }
+.sw span b { display: block; font-size: 9.6px; color: #443c2f; }
+footer { margin-top: 52px; text-align: center; font-size: 12px; font-style: italic; color: #7d7260; }
+.caption { margin-top: 14px; font-size: 13px; font-style: italic; color: #5f5544; max-width: 880px; }
+.study.night .caption { color: #a39273; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">Ash's Journey · Visual direction 2 of 4</div>
+  <h1>The Watercolor Chronicle</h1>
+  <p class="rationale">The Orca card's watercolor language becomes the interface itself: pages are cold-press paper with pigment washes bleeding at the corners, cards are mounted specimens held by photo corners, and every label reads like a line from a field guide. Quiet, literary, museum-calm — the chronicle register made visible. It fits because the product's own vision statement calls the binder "a retelling," and a retelling deserves a book.</p>
+</header>
+
+<!-- ================= HERO — DAY ================= -->
+<div class="sectionhead">Hero · home spread · light mode (the chronicle by daylight)</div>
+<div class="study day">
+  <div class="indexline">
+    <span class="q">Search the chronicle — name, Region, Milestone, Rank, status:chasing</span>
+    <span class="filt on">Region · Kanto</span>
+    <span class="filt">Rank</span>
+    <span class="filt">Milestone</span>
+    <span class="filt">The Hunt</span>
+    <span class="count">Kanto — 12 of 31 sleeved</span>
+    <span class="modetog"><span class="m cur">☼ Day</span><span style="color:var(--rule)">·</span><span class="m">☾ Night</span></span>
+  </div>
+
+  <div class="book">
+    <div class="leaves">
+      <div class="leaf l">
+        <div class="chapterbloom"></div>
+        <div class="folio"><span>Chapter I — Kanto</span><span class="chap">Entries № 001–003</span></div>
+        <div class="leafrule"></div>
+        <div class="grid">
+          <div class="mount"><div class="spec"><i class="pc tl"></i><i class="pc tr"></i><i class="pc bl"></i><i class="pc br"></i><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Base Set · 1999</div></div></div><div class="caplabel"><b>Bulbasaur</b><span class="rk">⚫ Common · Filled</span></div></div>
+          <div class="mount"><div class="spec"><i class="pc tl"></i><i class="pc tr"></i><i class="pc bl"></i><i class="pc br"></i><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Shining Legends · 2017</div></div></div><div class="caplabel"><b>Bulbasaur</b><span class="rk">Uncommon · Filled</span></div></div>
+          <div class="mount"><div class="spec"><i class="pc tl"></i><i class="pc tr"></i><i class="pc bl"></i><i class="pc br"></i><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Pokémon GO · 2022</div></div></div><div class="caplabel"><b>Bulbasaur</b><span class="rk">Rare · Filled</span></div></div>
+          <div class="mount"><div class="spec ghost"><span class="ghostmark">Chasing</span><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Scarlet &amp; Violet — 151 · 2023</div></div></div><div class="caplabel"><b>Bulbasaur</b><span class="rk chase">Ultra Rare · Chasing</span></div></div>
+          <div class="mount"><div class="spec"><i class="pc tl"></i><i class="pc tr"></i><i class="pc bl"></i><i class="pc br"></i><div class="art art-ivy"></div><div class="plate"><div class="nm">Ivysaur</div><div class="set">Jungle · 1999</div></div></div><div class="caplabel"><b>Ivysaur</b><span class="rk">⚫ Common · Filled</span></div></div>
+          <div class="mount"><div class="spec blank"><span class="blot">★</span><span class="awaiting">awaiting its</span><span class="rkname">Uncommon</span></div><div class="caplabel"><b>Ivysaur</b><span class="rk">Uncommon · open</span></div></div>
+          <div class="mount"><div class="spec"><i class="pc tl"></i><i class="pc tr"></i><i class="pc bl"></i><i class="pc br"></i><div class="art art-venu"></div><div class="plate"><div class="nm">Venusaur</div><div class="set">Base Set · 1999</div></div></div><div class="caplabel"><b>Venusaur</b><span class="rk">Rare · Filled</span></div></div>
+          <div class="mount"><div class="spec blank"><span class="blot">★</span><span class="awaiting">awaiting its</span><span class="rkname">Illustration Rare</span></div><div class="caplabel"><b>Venusaur</b><span class="rk">Illustration Rare · open</span></div></div>
+          <div class="mount"><div class="spec blank"><span class="blot">★</span><span class="awaiting">awaiting its</span><span class="rkname">Special Illustration Rare</span></div><div class="caplabel"><b>Venusaur</b><span class="rk">Special Illustration Rare · open</span></div></div>
+        </div>
+        <div class="leafno">folio 4</div>
+      </div>
+      <div class="spineseam"></div>
+      <div class="leaf r">
+        <div class="folio"><span>Chapter I — Kanto</span><span class="chap">Entries № 010–025</span></div>
+        <div class="leafrule"></div>
+        <div class="grid">
+          <div class="mount"><div class="spec"><i class="pc tl"></i><i class="pc tr"></i><i class="pc bl"></i><i class="pc br"></i><div class="art art-cater"></div><div class="plate"><div class="nm">Caterpie</div><div class="set">Base Set · 1999</div></div></div><div class="caplabel"><b>Caterpie</b><span class="rk">⚫ Common · Filled</span></div></div>
+          <div class="mount"><div class="spec"><i class="pc tl"></i><i class="pc tr"></i><i class="pc bl"></i><i class="pc br"></i><div class="art art-butter"></div><div class="plate"><div class="nm">Butterfree</div><div class="set">Jungle · 1999</div></div></div><div class="caplabel"><b>Butterfree</b><span class="rk">Uncommon · Filled</span></div></div>
+          <div class="mount"><div class="spec blank"><span class="blot">★</span><span class="awaiting">awaiting its</span><span class="rkname">Rare</span></div><div class="caplabel"><b>Butterfree</b><span class="rk">Rare · open</span></div></div>
+          <div class="mount"><div class="spec"><i class="pc tl"></i><i class="pc tr"></i><i class="pc bl"></i><i class="pc br"></i><div class="art art-pika"></div><div class="plate"><div class="nm">Pikachu</div><div class="set">Base Set · 1999</div></div></div><div class="caplabel"><b>Pikachu</b><span class="rk">⚫ Common · Filled</span></div></div>
+          <div class="mount"><div class="spec"><i class="pc tl"></i><i class="pc tr"></i><i class="pc bl"></i><i class="pc br"></i><div class="art art-pika"></div><div class="plate"><div class="nm">Pikachu</div><div class="set">Legendary Collection · 2002</div></div></div><div class="caplabel"><b>Pikachu</b><span class="rk">Uncommon · Filled</span></div></div>
+          <div class="mount"><div class="spec"><i class="pc tl"></i><i class="pc tr"></i><i class="pc bl"></i><i class="pc br"></i><div class="art art-pika"></div><div class="plate"><div class="nm">Pikachu</div><div class="set">XY Evolutions · 2016</div></div></div><div class="caplabel"><b>Pikachu</b><span class="rk">Rare · Filled</span></div></div>
+          <div class="mount"><div class="spec blank"><span class="blot">★</span><span class="awaiting">awaiting its</span><span class="rkname">Ultra Rare</span></div><div class="caplabel"><b>Pikachu</b><span class="rk">Ultra Rare · open</span></div></div>
+          <div class="mount"><div class="spec blank"><span class="blot">★</span><span class="awaiting">awaiting its</span><span class="rkname">Illustration Rare</span></div><div class="caplabel"><b>Pikachu</b><span class="rk">Illustration Rare · open</span></div></div>
+          <div class="mount"><div class="spec blank"><span class="blot">★</span><span class="awaiting">awaiting its</span><span class="rkname">Hyper Rare</span></div><div class="caplabel"><b>Pikachu</b><span class="rk">Hyper Rare · open</span></div></div>
+        </div>
+        <div class="leafno">folio 5</div>
+      </div>
+    </div>
+  </div>
+  <p class="caption" style="margin-left:auto;margin-right:auto;max-width:1080px">Filled cards are mounted with photo corners; the CHASING ghost is a pale pressed impression with a letterpress mark; empty mounts state, in the chronicle's own voice, the Rank they await. The index line above the book is the only chrome.</p>
+</div>
+
+<!-- ================= DARK STRIP — NIGHT ================= -->
+<div class="sectionhead">Dark mode strip · the evening study (lamp halo, candlelit paper) · toggle in night position</div>
+<div class="study night">
+  <div class="indexline">
+    <span class="q">Search the chronicle — name, Region, Milestone, Rank, status:chasing</span>
+    <span class="filt on">Region · Kanto</span>
+    <span class="filt">The Hunt</span>
+    <span class="count">Kanto — 12 of 31 sleeved</span>
+    <span class="modetog"><span class="m">☼ Day</span><span style="opacity:.4">·</span><span class="m cur">☾ Night</span></span>
+  </div>
+  <div class="book">
+    <div class="leaves">
+      <div class="leaf l" style="border-radius:8px">
+        <div class="folio"><span>Chapter I — Kanto</span><span class="chap">Entries № 001–003</span></div>
+        <div class="leafrule"></div>
+        <div class="grid">
+          <div class="mount"><div class="spec"><i class="pc tl"></i><i class="pc tr"></i><i class="pc bl"></i><i class="pc br"></i><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Base Set · 1999</div></div></div><div class="caplabel"><b>Bulbasaur</b><span class="rk">⚫ Common · Filled</span></div></div>
+          <div class="mount"><div class="spec"><i class="pc tl"></i><i class="pc tr"></i><i class="pc bl"></i><i class="pc br"></i><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Shining Legends · 2017</div></div></div><div class="caplabel"><b>Bulbasaur</b><span class="rk">Uncommon · Filled</span></div></div>
+          <div class="mount"><div class="spec"><i class="pc tl"></i><i class="pc tr"></i><i class="pc bl"></i><i class="pc br"></i><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Pokémon GO · 2022</div></div></div><div class="caplabel"><b>Bulbasaur</b><span class="rk">Rare · Filled</span></div></div>
+          <div class="mount"><div class="spec ghost"><span class="ghostmark">Chasing</span><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Scarlet &amp; Violet — 151 · 2023</div></div></div><div class="caplabel"><b>Bulbasaur</b><span class="rk chase">Ultra Rare · Chasing</span></div></div>
+          <div class="mount"><div class="spec"><i class="pc tl"></i><i class="pc tr"></i><i class="pc bl"></i><i class="pc br"></i><div class="art art-ivy"></div><div class="plate"><div class="nm">Ivysaur</div><div class="set">Jungle · 1999</div></div></div><div class="caplabel"><b>Ivysaur</b><span class="rk">⚫ Common · Filled</span></div></div>
+          <div class="mount"><div class="spec blank"><span class="blot">★</span><span class="awaiting">awaiting its</span><span class="rkname">Uncommon</span></div><div class="caplabel"><b>Ivysaur</b><span class="rk">Uncommon · open</span></div></div>
+          <div class="mount"><div class="spec"><i class="pc tl"></i><i class="pc tr"></i><i class="pc bl"></i><i class="pc br"></i><div class="art art-venu"></div><div class="plate"><div class="nm">Venusaur</div><div class="set">Base Set · 1999</div></div></div><div class="caplabel"><b>Venusaur</b><span class="rk">Rare · Filled</span></div></div>
+          <div class="mount"><div class="spec blank"><span class="blot">★</span><span class="awaiting">awaiting its</span><span class="rkname">Illustration Rare</span></div><div class="caplabel"><b>Venusaur</b><span class="rk">Illustration Rare · open</span></div></div>
+          <div class="mount"><div class="spec blank"><span class="blot">★</span><span class="awaiting">awaiting its</span><span class="rkname">Special Illustration Rare</span></div><div class="caplabel"><b>Venusaur</b><span class="rk">Special Illustration Rare · open</span></div></div>
+        </div>
+        <div class="leafno">folio 4</div>
+      </div>
+    </div>
+  </div>
+  <p class="caption" style="margin-left:auto;margin-right:auto;max-width:1080px">Night is the same paper by lamplight: the room falls to deep umber, a warm halo holds the open folio, pigment washes deepen, and the sienna marks glow a little warmer. Nothing changes register — the chronicle simply keeps later hours.</p>
+</div>
+
+<!-- ================= SECONDARY EXHIBIT — THE THRONE PLATE ================= -->
+<div class="sectionhead">Secondary exhibit · slot details, row 2 — the enthroned card (⚫ base Common, Filled) · day</div>
+<div class="platewrap">
+  <div class="throneleaf">
+    <div class="folio"><span>Kanto · Entry № 001 — Bulbasaur</span><span class="chap">Slot 1 of 4 — ⚫ base Common · Filled</span></div>
+    <div class="leafrule"></div>
+    <div class="thronerow">
+      <span class="turn">‹</span>
+      <div class="mspec"><div class="spec"><div class="motifart dots"><span class="motiflbl">Common motif — quiet dotted wash</span></div><div class="plate"><div class="nm" style="font-style:italic;color:#7d7260">Common motif card</div><div class="set">rank element set</div></div></div></div>
+      <div class="enthroned"><div class="spec"><span class="filledmark">Filled · Sleeved</span><div class="art art-bulba"></div><div class="plate"><div class="nm">Bulbasaur</div><div class="set">Base Set · 1999 · ⚫ base Common</div></div></div></div>
+      <div class="mspec"><div class="spec"><div class="motifart rules"><span class="motiflbl">Common motif — thin ruled wash</span></div><div class="plate"><div class="nm" style="font-style:italic;color:#7d7260">Common motif card</div><div class="set">rank element set</div></div></div></div>
+      <span class="turn">›</span>
+    </div>
+    <div class="plaque">
+      <div class="t">"Bulbasaur and the Hidden Village" — the Catch, EP010</div>
+      <div class="s">physically sleeved · only Filled counts toward progress</div>
+      <div class="r"></div>
+    </div>
+    <div class="leafno" style="left:30px">Bulbasaur · slot detail</div>
+  </div>
+</div>
+<p class="caption">The strict three-sleeve carousel as a museum plate: the sleeved card enthroned in a sienna-and-paper double frame, flanked by Common motif cards from the rank's element set. Side arrows are quiet serif marks — the page stays a page.</p>
+
+<!-- ================= PALETTE ================= -->
+<div class="sectionhead">Palette · every color used</div>
+<div class="swatches">
+  <div class="sw"><i style="background:#ece3d0"></i><span><b>#ece3d0</b>backdrop — linen (day)</span></div>
+  <div class="sw"><i style="background:#f8f2e2"></i><span><b>#f8f2e2</b>paper (day)</span></div>
+  <div class="sw"><i style="background:#a9bd94"></i><span><b>#a9bd94</b>wash — sage</span></div>
+  <div class="sw"><i style="background:#ead9a4"></i><span><b>#ead9a4</b>wash — butter</span></div>
+  <div class="sw"><i style="background:#d9a68b"></i><span><b>#d9a68b</b>wash — terracotta</span></div>
+  <div class="sw"><i style="background:#b8c9c4"></i><span><b>#b8c9c4</b>wash — sky</span></div>
+  <div class="sw"><i style="background:#443c2f"></i><span><b>#443c2f</b>ink — sepia</span></div>
+  <div class="sw"><i style="background:#7d7260"></i><span><b>#7d7260</b>muted ink</span></div>
+  <div class="sw"><i style="background:#cbbfa4"></i><span><b>#cbbfa4</b>hairline rule</span></div>
+  <div class="sw"><i style="background:#708a58"></i><span><b>#708a58</b>accent — moss</span></div>
+  <div class="sw"><i style="background:#a8623c"></i><span><b>#a8623c</b>rank accent — sienna</span></div>
+  <div class="sw"><i style="background:#8d7c5e"></i><span><b>#8d7c5e</b>photo corner</span></div>
+  <div class="sw"><i style="background:#262019"></i><span><b>#262019</b>backdrop — study (night)</span></div>
+  <div class="sw"><i style="background:#d9a24f"></i><span><b>#d9a24f</b>lamp halo (night)</span></div>
+  <div class="sw"><i style="background:#efe4c8"></i><span><b>#efe4c8</b>paper — candlelit (night)</span></div>
+  <div class="sw"><i style="background:linear-gradient(160deg,#9db98a,#5f7f52)"></i><span><b>#9db98a→#5f7f52</b>pigment — Bulbasaur</span></div>
+  <div class="sw"><i style="background:linear-gradient(160deg,#ecd27c,#cfa14a)"></i><span><b>#ecd27c→#cfa14a</b>pigment — Pikachu</span></div>
+  <div class="sw"><i style="background:linear-gradient(160deg,#c6c3da,#8a97b8)"></i><span><b>#c6c3da→#8a97b8</b>pigment — Butterfree</span></div>
+</div>
+
+<footer>Direction study — The Watercolor Chronicle · Ash's Journey · no JS, no external assets · the one animation (chapter bloom) honors prefers-reduced-motion</footer>
+</div>
+</body>
+</html>
