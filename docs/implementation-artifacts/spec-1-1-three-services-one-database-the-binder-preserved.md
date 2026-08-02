@@ -2,8 +2,9 @@
 title: 'Story 1.1 — Three Services, One Database, the Binder Preserved'
 type: 'refactor'
 created: '2026-08-02'
-status: 'in-review'
+status: 'done'
 baseline_revision: 'fc1c99f5feecdb9b72dd30eadc21cd9d36452bc6'
+final_revision: '6ea0a57a06d314be5fadd934852306700f81c461'
 review_loop_iteration: 0
 followup_review_recommended: false # 13 patches, but zero touched production code — tests and documents only, and the tests pass
 context:
