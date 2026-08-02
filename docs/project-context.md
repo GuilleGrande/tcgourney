@@ -1,7 +1,7 @@
 ---
 project_name: 'tcgourney'
 user_name: 'Guille'
-date: '2026-08-01'
+date: '2026-08-02'
 sections_completed:
   [
     'technology_stack',
@@ -14,7 +14,7 @@ sections_completed:
   ]
 existing_patterns_found: 14
 status: 'complete'
-rule_count: 54
+rule_count: 57
 optimized_for_llm: true
 ---
 
@@ -77,6 +77,11 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - Endpoints are exported `api(...)` values discovered by static analysis — there is no route
   registration anywhere. `expose: true` makes an endpoint public; the default is
   service-internal.
+- Endpoint paths are service-scoped: `charting` serves `/charting/*` (`POST
+  /charting/sources/discover`, `GET /charting/sources` as of Story 1.2). `collection`'s
+  `GET /binder` is the standing exception, left at the root because renaming a live
+  endpoint for symmetry is a client-breaking change nobody asked for. Export names are the
+  generated client's method names (`charting.discoverSources`) — don't rename them casually.
 - Request/response types are plain TS interfaces — that's what Encore validates and what
   client generation reads. Path params via `:name`; `Query<T>` / `Header<"Name">` from
   `encore.dev/api` for the rest.
@@ -119,10 +124,16 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - Backend/service tests run with `encore test`, NEVER bare `vitest` — Encore provisions
   test-mode infrastructure (separate test databases, fsync off) before delegating to the
   `test` script. Extra flags pass through (`encore test --fileParallelism=true`). The one
-  sanctioned exception (ratified in Story 1.1): a module inside a service folder that
-  imports neither Encore nor the database — `collection/binder-view.ts` — is tested under
-  bare `vitest`, because it needs no infrastructure and root `vitest run` collects it anyway.
-  The rule stands for every test that touches the database.
+  sanctioned exception (ratified in Story 1.1, extended in Story 1.2): a module inside a
+  service folder that imports neither Encore nor the database — `collection/binder-view.ts`
+  and `charting/source-view.ts` — is tested under bare `vitest`, because it needs no
+  infrastructure and root `vitest run` collects it anyway. The rule stands for every test
+  that touches the database. Until the harness gap is closed, a `.test.ts` must not be
+  colocated with a module that imports Encore or `shared/db.ts` (`charting/bulbapedia.ts`,
+  `charting/sources.ts`), because bare `npm test` collects it and CI has no Docker. This is
+  a workaround, not the destination: the real fix is a `test.exclude` or naming convention
+  so `encore test` can own those suites, and it is logged in `deferred-work.md`. The Encore
+  CLI now runs in WSL, so `encore test` is available the moment that lands.
 - The `~encore` → `./encore.gen` alias in root `vite.config.ts` exists for this harness —
   don't remove it, don't duplicate it per-service.
 - `npm test` at the root is `vitest run` and has no `test.include`, so it collects every
@@ -203,6 +214,16 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - NEVER call pokemontcg.io (or any live API) in a request path. Card data comes from the
   ingested `pokemon-tcg-data` dump; images are fetched once by the catalog service, cached
   to disk, and served from disk (AD-7).
+- Bulbapedia's MediaWiki API is asked for ENUMERATION ONLY until Story 1.4 opens the
+  approval gate — titles, page ids, and URLs are metadata about which pages exist, not the
+  evidence inside them. Allowed: `list=`/`generator=categorymembers`, `prop=info&inprop=url`,
+  `action=query&titles=…&redirects=1`. Forbidden until an approved Source is being ingested:
+  `prop=extracts`, `prop=revisions` with `rvprop=content`, `action=parse`, `action=raw`. No
+  column, file, or log line holds page prose before the Collector has ruled (FR-002,
+  ADR-0001). Every call is built inside `charting/bulbapedia.ts` from a fixed parameter set
+  so the boundary stays greppable — no caller passes `prop`. The wiki's `fullurl` is taken
+  verbatim, never rebuilt from a title: MediaWiki's encoding is authoritative and non-obvious
+  (`Noland%27s_Articuno`, but `Articuno_(Johto)`).
 - NEVER auto-delete orphaned chase rows when a roster fix removes a Slot — they surface
   through the errata flow (AD-4).
 - The `charting` service is card-agnostic: it never reads `catalog_*` or `collection_*`.

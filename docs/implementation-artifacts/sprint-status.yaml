@@ -51,7 +51,7 @@ development_status:
   # Epic 1: The Journey Charted — Sources, Proposals, and Drafted Explainers
   epic-1: in-progress
   1-1-three-services-one-database-the-binder-preserved: done
-  1-2-propose-the-reading-list: backlog
+  1-2-propose-the-reading-list: done
   1-3-approve-or-decline-each-page: backlog
   1-4-ingest-approved-sources-with-provenance: backlog
   1-5-draft-proposals-across-all-seven-types: backlog
