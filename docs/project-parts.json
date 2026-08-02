@@ -1,0 +1,131 @@
+{
+  "repository_type": "monorepo",
+  "workspace_tool": "npm workspaces",
+  "generated": "2026-07-25",
+  "scan_level": "exhaustive",
+  "parts": [
+    {
+      "part_id": "backend",
+      "display_name": "Encore.ts Backend",
+      "project_type_id": "backend",
+      "root_path": ".",
+      "service_paths": ["roster/"],
+      "entry_points": [
+        "roster/encore.service.ts",
+        "roster/binder.ts"
+      ],
+      "primary_language": "TypeScript",
+      "framework": "Encore.ts",
+      "framework_version": "^1.57.10",
+      "architecture_pattern": "single-service, layered, infra-from-code",
+      "requires_api_scan": true,
+      "requires_data_models": true,
+      "requires_state_management": false,
+      "requires_ui_components": false,
+      "requires_deployment_config": true,
+      "has_database": false,
+      "has_auth": false,
+      "has_tests": false,
+      "docs": [
+        "architecture-backend.md",
+        "api-contracts-backend.md",
+        "data-models-backend.md",
+        "development-guide-backend.md"
+      ]
+    },
+    {
+      "part_id": "rank-engine",
+      "display_name": "Rank Engine (domain library)",
+      "project_type_id": "library",
+      "root_path": "packages/rank-engine",
+      "package_name": "@tcgourney/rank-engine",
+      "entry_points": [
+        "packages/rank-engine/src/rank-engine.ts"
+      ],
+      "primary_language": "TypeScript",
+      "framework": null,
+      "architecture_pattern": "pure functional core",
+      "runtime_dependencies": 0,
+      "build_step": false,
+      "requires_api_scan": false,
+      "requires_data_models": false,
+      "requires_state_management": false,
+      "requires_ui_components": false,
+      "requires_deployment_config": false,
+      "has_tests": true,
+      "test_count": 14,
+      "docs": [
+        "architecture-rank-engine.md",
+        "development-guide-rank-engine.md"
+      ]
+    }
+  ],
+  "integration_points": [
+    {
+      "from": "backend",
+      "to": "rank-engine",
+      "type": "in-process TypeScript import",
+      "status": "implemented",
+      "details": {
+        "import_site": "roster/binder.ts:2",
+        "surface": ["computeLine", "Milestone", "StageInput"],
+        "resolution": [
+          "npm workspaces: packages/* symlinked into node_modules",
+          "tsconfig paths: @tcgourney/rank-engine -> packages/rank-engine/src/rank-engine.ts",
+          "package exports: \".\" -> ./src/rank-engine.ts (raw TypeScript, no build artifact)"
+        ],
+        "direction": "one-way; the library imports nothing from the backend"
+      }
+    },
+    {
+      "from": "frontend",
+      "to": "backend",
+      "type": "Encore-generated TypeScript request client (REST)",
+      "status": "planned",
+      "details": {
+        "command": "npm run gen:client",
+        "output": "./frontend/src/client.ts",
+        "blocker": "no frontend/ directory exists; the script fails today",
+        "local_ports": { "api": 4000, "dashboard": 9400, "vite_dev": 5173 },
+        "cors": "open locally; global_cors must be added to encore.app for deployed frontends"
+      }
+    },
+    {
+      "from": "backend",
+      "to": "pokemontcg.io v2",
+      "type": "outbound REST (third party)",
+      "status": "planned",
+      "details": {
+        "base_url": "https://api.pokemontcg.io/v2",
+        "auth_header": "X-Api-Key",
+        "secret_name": "PokemonTcgApiKey",
+        "rate_limits": { "with_key_per_day": 20000, "without_key_per_day": 1000, "without_key_per_minute": 30 },
+        "page_size_max": 250,
+        "research": "docs/research/pokemontcg-api.md"
+      }
+    },
+    {
+      "from": "backend",
+      "to": "postgres",
+      "type": "Encore SQLDatabase",
+      "status": "planned",
+      "details": {
+        "blocker": "no SQLDatabase declared, no migrations/ directory",
+        "note": "encore run does not currently require Docker because no database exists"
+      }
+    }
+  ],
+  "missing_from_disk": [
+    { "path": "frontend/", "referenced_by": "package.json gen:client script, README stack section" },
+    { "path": "roster/migrations/", "referenced_by": "README, docs/research/encore-ts-setup.md" },
+    { "path": ".github/workflows/", "referenced_by": null, "note": "no CI configured" },
+    { "path": "CONTRIBUTING.md", "referenced_by": null, "note": "no documented contribution process" }
+  ],
+  "existing_documentation": [
+    { "path": "README.md", "type": "readme" },
+    { "path": "CONTEXT.md", "type": "domain-glossary" },
+    { "path": "ashs-journey-ruleset.md", "type": "specification", "note": "uncommitted local edits at scan time" },
+    { "path": "docs/research/encore-ts-setup.md", "type": "research" },
+    { "path": "docs/research/pokemontcg-api.md", "type": "research" }
+  ]
+}
