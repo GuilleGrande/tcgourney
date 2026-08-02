@@ -28,16 +28,17 @@ _This file contains critical rules and patterns that AI agents must follow when 
 
 **Installed today** (root + `packages/rank-engine` npm workspaces):
 - TypeScript ^7.0.2 · Node.js 24+ · Encore.ts ^1.57.10 (app id `tcgourney-46xi`) · Vitest ^4.1.10
+- Postgres via Encore + Docker Desktop — the one `tcgourney` `SQLDatabase` is live as of Story 1.1.
 - `typescript` and `vitest` are pinned separately in root and rank-engine `package.json` — keep versions in sync manually when bumping.
 
 **Mandated by the architecture spine for upcoming work** (verified 2026-08-01 — do not silently downgrade or substitute):
 - React ^19.2 · Vite ^8.2 (Rolldown) · @react-three/fiber ^9.6 · three r185 (0.185.x) · @react-three/drei ^10.7 · @tanstack/react-query ^5.101
 - @anthropic-ai/sdk (latest), model `claude-opus-5`
-- Postgres via Encore + Docker Desktop; `pokemon-tcg-data` GitHub bulk JSON dump (never live pokemontcg.io calls)
+- `pokemon-tcg-data` GitHub bulk JSON dump (never live pokemontcg.io calls)
 
 **Version constraints:**
 - Encore.ts + Postgres is deliberate despite the single-user mismatch — do NOT "fix" it to SQLite/files (ADR-0002).
-- Docker Desktop becomes a hard prerequisite the moment a `SQLDatabase` is declared; today `encore run` works without it.
+- Docker Desktop is a hard prerequisite: the `SQLDatabase` is declared, so `encore run` needs Docker running.
 - `npm run gen:client` targets `./frontend/src/client.ts` and fails until `frontend/` exists — expected, not a bug to fix.
 
 ## Critical Implementation Rules
@@ -69,19 +70,24 @@ _This file contains critical rules and patterns that AI agents must follow when 
 
 **Encore.ts:**
 - A folder becomes a service by containing `encore.service.ts` with
-  `export default new Service("name")` — service names lowercase singular. Target services:
-  `charting`, `catalog`, `collection`. (Today's `roster/` service is temporary: it dissolves
-  into `collection` when Postgres lands, and `SEED_LINES` dies with it.)
+  `export default new Service("name")` — service names lowercase singular. The services are
+  `charting`, `catalog`, `collection`. (The temporary `roster/` service dissolved into
+  `collection` in Story 1.1, and `SEED_LINES` died with it. `shared/` is a plain module
+  folder, deliberately NOT a service — never give it an `encore.service.ts`.)
 - Endpoints are exported `api(...)` values discovered by static analysis — there is no route
   registration anywhere. `expose: true` makes an endpoint public; the default is
   service-internal.
 - Request/response types are plain TS interfaces — that's what Encore validates and what
   client generation reads. Path params via `:name`; `Query<T>` / `Header<"Name">` from
   `encore.dev/api` for the rest.
-- Services NEVER import each other. Each service is the sole writer of tables with its
-  prefix (`roster_`, `catalog_`, `collection_`); cross-domain access is read-only SQL.
-- One `SQLDatabase` is declared in a shared module and imported by all three services —
-  Encore isolates per-service databases by default, so this is deliberate (AD-3).
+- Services NEVER import each other. Each service is the sole writer of one table prefix:
+  `charting` writes `roster_*` (the prefix outlived the dissolved `roster` service),
+  `catalog` writes `catalog_*`, `collection` writes `collection_*`. Cross-domain access is
+  read-only SQL — `collection` reads `roster_*` to build the Binder and never writes it.
+- One `SQLDatabase` named `tcgourney` is declared in `charting/db.ts` (which anchors
+  `charting/migrations/`); all three services take their handle from `shared/db.ts`, which
+  is `SQLDatabase.named("tcgourney")`. Encore isolates per-service databases by default, so
+  this is deliberate (AD-3).
 - Migrations: per service, sequential `migrations/1_name.up.sql`, `2_...`. Query with tagged
   templates (`db.queryRow`, `db.queryAll`, `db.exec`) — never string-concatenated SQL.
 - Secrets via `secret("Name")` from `encore.dev/config`, read by calling it. The Claude API
@@ -112,13 +118,19 @@ _This file contains critical rules and patterns that AI agents must follow when 
   boundary too (`expect(() => rankForStars(7)).toThrow()`).
 - Backend/service tests run with `encore test`, NEVER bare `vitest` — Encore provisions
   test-mode infrastructure (separate test databases, fsync off) before delegating to the
-  `test` script. Extra flags pass through (`encore test --fileParallelism=true`).
+  `test` script. Extra flags pass through (`encore test --fileParallelism=true`). The one
+  sanctioned exception (ratified in Story 1.1): a module inside a service folder that
+  imports neither Encore nor the database — `collection/binder-view.ts` — is tested under
+  bare `vitest`, because it needs no infrastructure and root `vitest run` collects it anyway.
+  The rule stands for every test that touches the database.
 - The `~encore` → `./encore.gen` alias in root `vite.config.ts` exists for this harness —
   don't remove it, don't duplicate it per-service.
-- `npm test` at the root is `vitest run` (workspace-wide, engine only today);
+- `npm test` at the root is `vitest run` and has no `test.include`, so it collects every
+  `*.test.ts` in the repo — the engine suite and any pure module test alongside it;
   `npm run typecheck` is the other half of the gate. Run both before considering any
-  change done. CI (GitHub Actions on push) is typecheck + all tests — the only remote
-  automation this project will ever have.
+  change done. `.github/workflows/ci.yml` runs exactly those two on push and pull request —
+  the only remote automation this project will ever have. It gets no Docker, so nothing it
+  runs may need a database.
 
 ### Code Quality & Style Rules
 
@@ -149,8 +161,21 @@ _This file contains critical rules and patterns that AI agents must follow when 
   GET /binder via the rank engine").
 - Dev loop: `encore run` serves the API on :4000 and the local dev dashboard on :9400
   (API explorer + request traces — use it to poke endpoints). The Vite dev server (:5173)
-  joins once `frontend/` exists. Encore CLI lives at `~/.encore/bin`; if it misbehaves,
-  restart the daemon with `encore daemon`. This is a Windows/PowerShell machine.
+  joins once `frontend/` exists. If the CLI misbehaves, restart the daemon with
+  `encore daemon` — the daemon is long-lived, so one started before Docker was reachable
+  keeps insisting "The docker daemon is not running" even while `docker ps` works.
+- **The Encore CLI does not run on the Windows host.** Smart App Control / Device Guard is
+  enforcing and `encore.exe` is unsigned, so it is blocked machine-wide. Encore work happens
+  in the `Ubuntu-24.04` WSL2 distro (Encore v1.57.13, Node 24), against the checkout at
+  `~/tcgourney`. Windows still runs `npm test` and `npm run typecheck` fine.
+- **`encore run` rewrites `package.json` and `package-lock.json`** — it bumps `encore.dev`
+  to match the CLI version and strips the trailing newline. This violates the pin, and a
+  desynced lockfile fails `npm ci` in CI. Check `git status` after every run and
+  `git checkout -- package.json package-lock.json` — revert BOTH together or neither.
+- **A stale `encore.gen/` breaks `tsc --noEmit`.** It is gitignored generated code that hard-
+  imports service files by path, and the root `tsconfig.json` has no `exclude`, so it is
+  typechecked. After any service is renamed, moved, or deleted, delete `encore.gen/` and let
+  `encore run` regenerate it. Its absence is normal — CI never has it.
 - `npm install` at the root installs everything and symlinks `packages/*` — never
   `npm install` inside a workspace package.
 - Endpoint changed → `npm run gen:client` before touching frontend code. Schema changed →
@@ -228,8 +253,8 @@ _This file contains critical rules and patterns that AI agents must follow when 
 **For Humans:**
 
 - Keep this file lean and focused on agent needs.
-- Update when the technology stack changes or when the `frontend/` and Postgres
-  migrations land (several "planned" notes here become "live" then).
+- Update when the technology stack changes or when `frontend/` lands (several "planned"
+  notes here become "live" then).
 - Remove rules that become obvious over time.
 
-Last Updated: 2026-08-01
+Last Updated: 2026-08-02

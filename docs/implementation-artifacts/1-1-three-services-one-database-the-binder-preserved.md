@@ -1,6 +1,6 @@
 # Story 1.1: Three Services, One Database, the Binder Preserved
 
-Status: ready-for-dev
+Status: done
 
 Epic: 1 — The Journey Charted — Sources, Proposals, and Drafted Explainers
 Story key: `1-1-three-services-one-database-the-binder-preserved`
@@ -386,28 +386,28 @@ Migrations are `<number>_<name>.up.sql`, applied in sequence; Encore creates and
 
 ## Tasks / Subtasks
 
-- [ ] **Task 1 — Shared database and the charting service** (AC: 1, 4)
-  - [ ] `charting/encore.service.ts`: `export default new Service("charting")`.
-  - [ ] `charting/db.ts` declaring `new SQLDatabase("tcgourney", { migrations: "./migrations" })`.
-  - [ ] `charting/migrations/1_roster.up.sql` with the exact DDL above.
-  - [ ] `shared/db.ts` exporting `SQLDatabase.named("tcgourney")`. No `encore.service.ts` in this folder.
-  - [ ] Start Docker Desktop, run `encore run`, confirm the migration applies cleanly.
-- [ ] **Task 2 — The catalog service skeleton** (AC: 1)
-  - [ ] `catalog/encore.service.ts` only. No tables (Epic 3 owns `catalog_*`), no endpoints.
-  - [ ] Confirm via `encore run` that services with **no exported `api()` endpoint boot** — this applies to `charting` as well as `catalog`, since neither has an endpoint in this story. If Encore rejects them, add exactly one internal endpoint per affected service: `expose: false`, no path colliding with `/binder`, then re-run the D5 client-generation check to confirm the public client surface still shows only `collection.getBinder`. Record the deviation.
-- [ ] **Task 3 — Port the binder into the collection service** (AC: 2, 3)
-  - [ ] `collection/encore.service.ts`.
-  - [ ] `collection/binder-view.ts` — wire types plus the pure `composeBinder` (no Encore import, no DB import, directly or transitively).
-  - [ ] `collection/binder.ts` — `export const getBinder = api(...)` using the exact queries above via `shared/db.ts`.
-  - [ ] Delete the entire `roster/` folder (`binder.ts` **and** `encore.service.ts`). `SEED_LINES` dies with it.
-  - [ ] Delete `encore.gen/`, then `encore run` to regenerate it. See the `encore.gen` trap.
-- [ ] **Task 4 — Tests** (AC: 2, 3, 5)
-  - [ ] `collection/binder-view.test.ts` covering the six cases above.
-  - [ ] `npm test` and `npm run typecheck` from the repo root — both pass.
-- [ ] **Task 5 — CI** (AC: 5)
-  - [ ] `.github/workflows/ci.yml` exactly as given above.
-- [ ] **Task 6 — Verify the seam end to end** (AC: 1, 3, 5)
-  - [ ] With `encore run` up, call `GET /binder` against the empty roster; confirm `200 {"entries":[]}`.
+- [x] **Task 1 — Shared database and the charting service** (AC: 1, 4)
+  - [x] `charting/encore.service.ts`: `export default new Service("charting")`.
+  - [x] `charting/db.ts` declaring `new SQLDatabase("tcgourney", { migrations: "./migrations" })`.
+  - [x] `charting/migrations/1_roster.up.sql` with the exact DDL above.
+  - [x] `shared/db.ts` exporting `SQLDatabase.named("tcgourney")`. No `encore.service.ts` in this folder.
+  - [x] Start Docker Desktop, run `encore run`, confirm the migration applies cleanly.
+- [x] **Task 2 — The catalog service skeleton** (AC: 1)
+  - [x] `catalog/encore.service.ts` only. No tables (Epic 3 owns `catalog_*`), no endpoints.
+  - [x] Confirm via `encore run` that services with **no exported `api()` endpoint boot** — this applies to `charting` as well as `catalog`, since neither has an endpoint in this story. If Encore rejects them, add exactly one internal endpoint per affected service: `expose: false`, no path colliding with `/binder`, then re-run the D5 client-generation check to confirm the public client surface still shows only `collection.getBinder`. Record the deviation. **Both booted with zero endpoints — no fallback needed.**
+- [x] **Task 3 — Port the binder into the collection service** (AC: 2, 3)
+  - [x] `collection/encore.service.ts`.
+  - [x] `collection/binder-view.ts` — wire types plus the pure `composeBinder` (no Encore import, no DB import, directly or transitively).
+  - [x] `collection/binder.ts` — `export const getBinder = api(...)` using the exact queries above via `shared/db.ts`.
+  - [x] Delete the entire `roster/` folder (`binder.ts` **and** `encore.service.ts`). `SEED_LINES` dies with it.
+  - [x] Delete `encore.gen/`, then `encore run` to regenerate it. See the `encore.gen` trap.
+- [x] **Task 4 — Tests** (AC: 2, 3, 5)
+  - [x] `collection/binder-view.test.ts` covering the six cases above, plus four added in review: cross-Line grouping over the full retired seed (7 Entries / 29 Slots), stage ordering independent of row order, a caught Entry with no Stars, and the ⚫ rung's position.
+  - [x] `npm test` and `npm run typecheck` from the repo root — both pass (24 tests).
+- [x] **Task 5 — CI** (AC: 5)
+  - [x] `.github/workflows/ci.yml` exactly as given above.
+- [x] **Task 6 — Verify the seam end to end** (AC: 1, 3, 5)
+  - [x] With `encore run` up, call `GET /binder` against the empty roster; confirm `200 {"entries":[]}`.
   - [ ] Open `encore db shell tcgourney` and insert the fixture rows (every column is `NOT NULL`, so improvised inserts will fail):
     ```sql
     INSERT INTO roster_entry (slug, display_name, dex_number, line_slug, stage_order) VALUES
@@ -423,12 +423,12 @@ Migrations are `<number>_<name>.up.sql`, applied in sequence; Encore creates and
       ('charizard','glory','Orange Islands','EP082'), ('charizard','opponent','Kanto','EP046'),
       ('meowth','encounter','Kanto','EP002'), ('meowth','bond','Kanto','EP002');
     ```
-  - [ ] Call `GET /binder` again; confirm 4 entries and 15 Slots — Charmander 2★ Double Rare / 3 Slots, Charmeleon 2★ / 3, Charizard 6★ Hyper Rare / 7, Meowth 2★ / 2 with no ⚫.
-  - [ ] `DELETE FROM roster_milestone; DELETE FROM roster_entry;` — this story ships an empty roster.
-  - [ ] Run the D5 scratch-path client generation while `encore run` is up; confirm `collection.getBinder` exists and `roster` is gone.
-  - [ ] Record observed responses in the Dev Agent Record.
-- [ ] **Task 7 — Refresh `docs/project-context.md`** (AC: 2)
-  - [ ] Update the four now-false statements listed under "Docs this story invalidates."
+  - [x] Call `GET /binder` again; confirm 4 entries and 15 Slots — Charmander 2★ Double Rare / 3 Slots, Charmeleon 2★ / 3, Charizard 6★ Hyper Rare / 7, Meowth 2★ / 2 with no ⚫.
+  - [x] `DELETE FROM roster_milestone; DELETE FROM roster_entry;` — this story ships an empty roster.
+  - [x] Run the D5 scratch-path client generation while `encore run` is up; confirm `collection.getBinder` exists and `roster` is gone.
+  - [x] Record observed responses in the Dev Agent Record.
+- [x] **Task 7 — Refresh `docs/project-context.md`** (AC: 2)
+  - [x] Update the four now-false statements listed under "Docs this story invalidates." Three further statements were falsified and also corrected — see the Dev Agent Record.
 
 ---
 
@@ -459,16 +459,64 @@ Migrations are `<number>_<name>.up.sql`, applied in sequence; Encore creates and
 
 ### Agent Model Used
 
-_To be filled by the dev agent._
+claude-opus-5, via the `bmad-dev-auto` workflow. Working spec:
+`spec-1-1-three-services-one-database-the-binder-preserved.md`.
 
 ### Debug Log References
 
+- **The Encore CLI cannot run on the Windows host.** Smart App Control is enforcing
+  (`VerifiedAndReputablePolicyState = 1`) and `encore.exe` is unsigned, so Device Guard blocks it under
+  PowerShell, cmd and bash alike. SAC has no per-app allowlist and disabling it is irreversible without a
+  Windows reinstall, so it was left on. Encore now runs in a WSL2 `Ubuntu-24.04` distro (Encore v1.57.13,
+  Node 24.18.1) against a second checkout at `~/tcgourney`.
+- **The Encore daemon caches its environment.** A daemon started before Docker Desktop's WSL integration was
+  enabled kept reporting "The docker daemon is not running" while `docker ps` succeeded. `encore daemon`
+  restarts it and clears the state.
+- **`encore run` rewrites `package.json` and `package-lock.json`**, bumping `encore.dev` `^1.57.10` →
+  `^1.57.13` to match the CLI and stripping the trailing newline. This violates the story's "do not bump
+  `encore.dev`" rule and would fail `npm ci` in CI. Both files were reverted; recorded in `project-context.md`
+  as a recurring hazard.
+
 ### Completion Notes List
 
-- [ ] D3 verified: did all three services import `shared/db.ts` successfully under `encore run`, or was the per-service `SQLDatabase.named()` fallback needed?
-- [ ] Task 2 verified: do services with no exported `api()` endpoint boot?
-- [ ] `encore.gen/` regenerated after deleting `roster/`; `npm run typecheck` green again.
-- [ ] D5 verified: client generation output contains `collection.getBinder` and no `roster`.
-- [ ] Task 6: observed `GET /binder` responses, empty and with fixture rows.
+- [x] D3 verified: **`shared/db.ts` works as written.** All services reach the one database through it and the
+      app boots; the per-service `SQLDatabase.named()` fallback was NOT needed. Note the literal AC 1 wording
+      ("imported by all three") is not met — `charting` and `catalog` have no database code yet, so importing
+      the handle would be dead code. The single declaration and the shared module both exist as specified.
+- [x] Task 2 verified: **services with no exported `api()` endpoint boot.** `encore.gen/internal/entrypoints/services/`
+      lists `catalog`, `charting`, `collection`. No filler `expose: false` endpoints were needed.
+- [x] `encore.gen/` regenerated after deleting `roster/`; `npm run typecheck` green again — on Windows and on
+      Linux, and also with `encore.gen/` absent, which is the CI condition.
+- [x] D5 verified: generated client's only service namespace is `public readonly collection: collection.ServiceClient`,
+      `getBinder` present, no `roster` match anywhere in the file.
+- [x] Task 6: observed responses — empty roster `200 {"entries":[]}`; fixture roster `200` with **4 entries /
+      15 Slots**: Charmander 2★ Double Rare 3 Slots (⚫ first), Charmeleon 2★ 3, Charizard 6★ Hyper Rare 7,
+      Meowth 2★ 2 with no ⚫. `owned` false on every Slot; `milestones` serialized as a JSON array. Rows then
+      deleted — the story ships an empty roster.
 
 ### File List
+
+**New:** `charting/encore.service.ts`, `charting/db.ts`, `charting/migrations/1_roster.up.sql`,
+`shared/db.ts`, `catalog/encore.service.ts`, `collection/encore.service.ts`, `collection/binder-view.ts`,
+`collection/binder.ts`, `collection/binder-view.test.ts`, `.github/workflows/ci.yml`.
+
+**Deleted:** `roster/binder.ts`, `roster/encore.service.ts`.
+
+**Modified:** `docs/project-context.md`.
+
+**Workflow artifacts:** `docs/implementation-artifacts/spec-1-1-three-services-one-database-the-binder-preserved.md`,
+`docs/implementation-artifacts/epic-1-context.md`, `docs/implementation-artifacts/sprint-status.yaml`.
+
+### Deviations
+
+1. **AC 5 remains partially met, as the story anticipated.** No `frontend/` exists until Epic 4, so "the
+   frontend compiles" cannot be satisfied. The testable half — client generation succeeds and exposes the
+   moved endpoint — is verified.
+2. **The filter test uses the Pidgey → Pidgeotto → Pidgeot Line**, not one of the named fixtures. Inheritance
+   runs forward, so the only stage that can be neither caught nor starred is a base stage with no Milestone
+   rows, and Charmander, Meowth and Pikachu all have one. Ash's Line genuinely begins at Pidgeotto.
+3. **Three `project-context.md` edits beyond the four listed**, plus three more added in review: D4's
+   bare-`vitest` exception ratified; the "engine only today" description of `npm test`; the For-Humans update
+   trigger; the sole-writer prefix rule (it still named a `roster` service); and the three hazards above.
+4. **`charting/db.ts` exports a `db` nothing imports** — required by D3, which keeps the declaration in
+   charting while every consumer goes through `shared/db.ts`.
