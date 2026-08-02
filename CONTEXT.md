@@ -92,6 +92,28 @@ _Avoid_: Prize, cup, title
 A leg of the journey (Kanto, Johto, … Galar). An Entry's *original* Region is where it first entered Ash's story; earning a Milestone in any later Region is what makes it Loyal.
 _Avoid_: Generation, arc
 
+## Charting the Journey
+
+**Collector**:
+The person retracing the journey. The only one who can settle what a Pokémon earned — sources advise, the Collector decides.
+_Avoid_: User, player, owner
+
+**Source**:
+An external work the roster is drawn from — an encyclopedia page, a battle record, a card catalogue. A Source can propose; it can never decide.
+_Avoid_: Reference, provider, feed
+
+**Proposal**:
+A Milestone the app puts forward for an Entry, drawn from a Source and awaiting the Collector's ruling. A Proposal is not a Milestone until it is accepted.
+_Avoid_: Suggestion, candidate, draft
+
+**Verdict**:
+The Collector's ruling on a Proposal — accepted or rejected. A Verdict outlives the Proposal that prompted it: re-reading the Source never overturns one.
+_Avoid_: Decision, approval, review
+
+**Citation**:
+The passage and episode that justify a Proposal — the evidence a Verdict is passed on. A Proposal without one cannot be judged.
+_Avoid_: Quote, reference, footnote
+
 ## Cards & the Chase
 
 **Card**:
