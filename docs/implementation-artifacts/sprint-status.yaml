@@ -1,0 +1,108 @@
+# generated: 2026-08-02
+# last_updated: 2026-08-02
+# project: tcgourney
+# project_key: NOKEY
+# tracking_system: file-system
+# story_location: {project-root}/docs/implementation-artifacts
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Epic Status Transitions:
+#   - backlog → in-progress: Automatically when first story is created (via create-story)
+#   - in-progress → done: Manually when all stories reach 'done' status
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created in stories folder
+#   - in-progress: Developer actively working on implementation
+#   - review: Ready for code review (via Dev's code-review workflow)
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+#
+# Action Item Status:
+#   - open: Committed during a retrospective, not yet addressed
+#   - in-progress: Actively being worked on
+#   - done: Completed
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when first story is created
+# - Stories can be worked in parallel if team capacity allows
+# - Developer typically creates next story after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+# - Retrospective appends its action items to action_items; sprint-status surfaces open ones
+
+generated: 2026-08-02
+last_updated: 2026-08-02
+project: tcgourney
+project_key: NOKEY
+tracking_system: file-system
+story_location: "{project-root}/docs/implementation-artifacts"
+
+development_status:
+  # Epic 1: The Journey Charted — Sources, Proposals, and Drafted Explainers
+  epic-1: in-progress
+  1-1-three-services-one-database-the-binder-preserved: ready-for-dev
+  1-2-propose-the-reading-list: backlog
+  1-3-approve-or-decline-each-page: backlog
+  1-4-ingest-approved-sources-with-provenance: backlog
+  1-5-draft-proposals-across-all-seven-types: backlog
+  epic-1-retrospective: optional
+
+  # Epic 2: The Record Settled — Review, Verdicts, and the Frozen Roster
+  epic-2: backlog
+  2-1-the-review-queue-ordered-by-type-citation-first: backlog
+  2-2-pass-verdicts-accept-reject-or-edit-then-accept: backlog
+  2-3-keyboard-driven-resumable-review: backlog
+  2-4-bulk-accept-within-a-type: backlog
+  2-5-the-loyal-warning: backlog
+  2-6-manual-milestones-with-off-wiki-citations: backlog
+  2-7-export-the-roster-to-committed-json: backlog
+  2-8-sticky-verdicts-against-re-ingestion: backlog
+  2-9-revise-any-settled-verdict: backlog
+  2-10-progress-and-the-completion-gate: backlog
+  epic-2-retrospective: optional
+
+  # Epic 3: Every Slot Findable — The Catalog and the Rarity Translation Map
+  epic-3: backlog
+  3-1-ingest-the-card-catalog-from-the-bulk-dump: backlog
+  3-2-the-map-seven-ranks-as-groups-of-rarities: backlog
+  3-3-eligibility-through-the-current-map: backlog
+  3-4-unmapped-rarities-reported-and-held-out: backlog
+  3-5-edit-the-map-version-it-re-derive-eligibility: backlog
+  3-6-unfillable-slot-detection: backlog
+  3-7-card-images-from-the-local-cache: backlog
+  epic-3-retrospective: optional
+
+  # Epic 4: Opening the Binder — The World, the Chapters, the Chronicle
+  epic-4: backlog
+  4-1-the-stage-one-canvas-the-tokens-day-and-night: backlog
+  4-2-the-cover-and-the-opening-ritual: backlog
+  4-3-spreads-pockets-and-the-page-flip-ritual: backlog
+  4-4-region-chapters-the-home-binder: backlog
+  4-5-the-progress-spread: backlog
+  4-6-slot-details-the-soul-and-the-story: backlog
+  4-7-search-filters-and-the-re-deal: backlog
+  4-8-the-errata-slip: backlog
+  4-9-the-accessibility-floor-and-the-field-guide-voice: backlog
+  epic-4-retrospective: optional
+
+  # Epic 5: The Chase — Choosing, Hunting, Sleeving
+  epic-5: backlog
+  5-1-browse-the-shortlist-the-carousel: backlog
+  5-2-choose-a-card-the-slot-turns-chasing: backlog
+  5-3-the-sleeving-ritual-mark-it-filled: backlog
+  5-4-the-throne-and-its-motif-court: backlog
+  5-5-un-fill-the-binder-reflects-reality: backlog
+  5-6-the-hunt-the-binder-re-dealt-to-its-ghosts: backlog
+  5-7-foley-and-the-audio-toggle: backlog
+  5-8-badges-on-the-trophy-shelf: backlog
+  epic-5-retrospective: optional
