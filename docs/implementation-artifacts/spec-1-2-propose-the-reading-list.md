@@ -2,10 +2,11 @@
 title: 'Story 1.2 — Propose the Reading List'
 type: 'feature'
 created: '2026-08-02'
-status: 'in-review'
+status: 'done'
 review_loop_iteration: 0
 followup_review_recommended: true # 9 patches, one high; six landed in the two files that have no test file at all
 baseline_revision: 'b85be63884380a57942ba2f42fc72710679ad88e'
+final_revision: '5ad3d3a69ea8c58ede0df95b79c6b2d63ec2a9d7'
 context:
   - '{project-root}/docs/implementation-artifacts/1-2-propose-the-reading-list.md'
   - '{project-root}/docs/implementation-artifacts/epic-1-context.md'
